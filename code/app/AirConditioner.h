@@ -1,23 +1,16 @@
 /*
- * AirCond.h
+ * AirConditioner.h
  *
- * Заголовочный файл класса AirCond, описывающего кондиционер, как целостное устройство.
+ * Заголовочный файл класса AirConditioner, описывающего кондиционер, как целостное устройство.
  *
  */
 
-#ifndef APP_AIRCOND_H_
-#define APP_AIRCOND_H_
+#ifndef APP_AirConditioner_H_
+#define APP_AirConditioner_H_
 
 #include "Definitions.h"
+#include "Thermometer.h"
 #include <SmingCore/SmingCore.h>
-
-
-/* Определение выводов контроллера для управления */
-// TODO: Изменить номера GPIO на соответствующие железу!
-#define PowerPin		0
-#define LowSpeedPin		0
-#define MedSpeedPin		0
-#define	HiSpeedPin		0
 
 /* Определение состояния питания кондиционера */
 #define PowerOn			true
@@ -43,9 +36,8 @@
 #define delta_temp_max	5
 #define delta_temp_def	3
 
-
 /* Описание класса "кондиционер", как конечного устройства */
-class AirCond {
+class AirConditioner {
 private:
 	bool power;			/* Питание прибора:
 						 *		Включен		= true
@@ -75,6 +67,14 @@ private:
 					 	 *		  происходит включение вентилятора.
 					 	 */
 
+	float cur_temp;		/* Текущая температура окружающей среды */
+
+	/* Определение выводов контроллера для управления */
+	byte PowerPin;		/* Вывод управления питанием кондиционера */
+	byte LowSpeedPin;	/* Вывод включения вентилятора на низкой скорости */
+	byte MedSpeedPin;	/* Вывод включения вентилятора на средней скорости */
+	byte HiSpeedPin;	/* Вывод включения вентилятора на высокой скорости */
+
 	/* Методы управления кондиционером */
 	void setPower(bool power);
 	void setMode(bool mode);
@@ -85,17 +85,23 @@ private:
 	/* Метод применения конфигурации к аппаратной части */
 	void applySettings();
 
-	// TODO: Создать класс-обертку для датчика температуры.
-	// TODO: Интегрировать методы для работы с оберткой датчика температуры.
+	/* Таймеры для отсчета времени */
+	//Timer getTemperature, executeThermostat;
 
+	/* Интеграция датчиа температуры */
+	Thermometer *sensor;
+	void getTemp();
+
+	/* Реализация функционала внутреннего термостата */
+	void execThermostat();
 
 public:
 	/* Конструктор по-умолчанию */
-	AirCond();
+	AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin, byte HiSpeedPin, byte SensorPin, byte SensorResolution);
 
 	/* Методы получения и сохранения конфигурации */
 	String getSettings();
 	void setSettings(String settings);
 };
 
-#endif /* APP_AIRCOND_H_ */
+#endif /* APP_AirConditioner_H_ */

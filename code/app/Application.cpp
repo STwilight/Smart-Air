@@ -4,8 +4,8 @@
 #include <SmingCore/SmingCore.h>
 
 /* TEST Ó×ÀÑÒÎÊ */
-#include "Thermo.h"
-#include "AirCond.h"
+#include "Thermometer.h"
+#include "AirConditioner.h"
 /* TEST Ó×ÀÑÒÎÊ */
 
 void init()
@@ -15,11 +15,8 @@ void init()
 
 	/* TEST Ó×ÀÑÒÎÊ */
 
-		Thermo sensor(0, 0x5F);
-		float temp = sensor.getTemp();
-
-		AirCond airCond;
-		String settings = airCond.getSettings();
+		AirConditioner AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+		String settings = AirConditioner.getSettings();
 
 	/* TEST Ó×ÀÑÒÎÊ */
 }

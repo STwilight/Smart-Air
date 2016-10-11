@@ -1,17 +1,16 @@
 /*
- * Thermo.h
+ * Thermometer.h
  *
- * Заголовочный файл класса Thermo, описывающего термометр, как целостное устройство.
+ * Заголовочный файл класса Thermometer, описывающего термометр, как целостное устройство.
  *
  */
 
-#ifndef APP_THERMO_H_
-#define APP_THERMO_H_
+#ifndef APP_Thermometer_H_
+#define APP_Thermometer_H_
 
 #include <Libraries/OneWire/OneWire.h>
 
-
-class Thermo {
+class Thermometer {
 private:
 	byte addr[8];		/* Адрес датчика температуры, 8 байт */
 	byte type_s;		/* Тип датчика температуры */
@@ -23,20 +22,20 @@ private:
 	 	 	 	 	 	 *  	 9 бит (93.75 мс, 0.5):    RES = 0x1F
 	 	 	 	 	 	 */
 
-	bool sensor_error;	/* Флаг ошибки обмена данными с датчиком */
 	OneWire *sensor;	/* Ссылка на объект для шины 1-Wire */
 
 	/* Методы для настройки датчика */
 	void searchSensor();
-	void setResolution();
-
+	void setResolution(byte bitResolution);
 
 public:
+	bool sensor_error;	/* Флаг ошибки обмена данными с датчиком */
+
 	/* Конструктор по-умолчанию */
-	Thermo(byte TempSensorPin, byte SensorResolution);
+	Thermometer(byte TempSensorPin, byte SensorResolution);
 
 	/* Метод получения температуры */
 	float getTemp();
 };
 
-#endif /* APP_THERMO_H_ */
+#endif /* APP_Thermometer_H_ */

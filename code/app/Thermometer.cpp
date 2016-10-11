@@ -1,29 +1,34 @@
 /*
- * Thermo.cpp
+ * Thermometer.cpp
  *
  * Класс, описывающий термометр на основе IC DS18B20+.
  *
  */
 
-#include "Thermo.h"
+#include "Thermometer.h"
 
-Thermo::Thermo(byte TempSensorPin, byte SensorResolution) {
+Thermometer::Thermometer(byte TempSensorPin, byte SensorResolution) {
 	/* Конструктор по-умолчанию.
+	 *
 	 * На вход принимается номер вывода,
-	 * к которому подключен датчик температуры. */
+	 * к которому подключен датчик температуры,
+	 * и разрешение получаемых измерений (точность) в битах.
+	 *
+	 */
 
 	this->addr[8]		= {0};
 	this->type_s		= 0x00;
-	this->sens_res		= SensorResolution;
+	this->sens_res		= 0x7F;
 	this->sensor_error	= false;
 
 	this->sensor = new OneWire(TempSensorPin);
 	this->sensor->begin();
 
 	this->searchSensor();
+	this->setResolution(SensorResolution);
 }
 
-void Thermo::searchSensor() {
+void Thermometer::searchSensor() {
 	/* Поиск и обнаружение датчика на шине 1-Wire */
 
 	/* Счетчик попыток чтения адреса датчика */
@@ -75,27 +80,48 @@ void Thermo::searchSensor() {
 				default:
 					break;
 			}
-			this->setResolution();
 		}
 	}
 }
-void Thermo::setResolution() {
+void Thermometer::setResolution(byte SensorResolution) {
 	/* Смена разрешения датчика */
 
-	WDT.enable(false);
+	switch (SensorResolution) {
+		case 9:
+			this->sens_res = 0x1F;
+			break;
+		case 10:
+			this->sens_res = 0x3F;
+			break;
+		case 11:
+			this->sens_res = 0x5F;
+			break;
+		default:
+			this->sens_res = 0x7F;
+			break;
+	}
 
-	this->sensor->reset();
-	this->sensor->select(this->addr);
-	this->sensor->write(0x4E);
-	this->sensor->write(0x00);
-	this->sensor->write(0x00);
-	this->sensor->write(this->sens_res);
-	this->sensor->reset();
+	/* Разрешение датчика температуры:
+	 * 		12 бит (750 мс,   0.0625): RES = 0x7F
+	 * 		11 бит (375 мс,   0.125):  RES = 0x5F
+	 * 		10 бит (187.5 мс, 0.25):   RES = 0x3F
+	 *  	 9 бит (93.75 мс, 0.5):    RES = 0x1F
+	 */
 
-    WDT.alive();
+	if(!this->sensor_error) {
+		WDT.enable(false);
+		this->sensor->reset();
+		this->sensor->select(this->addr);
+		this->sensor->write(0x4E);
+		this->sensor->write(0x00);
+		this->sensor->write(0x00);
+		this->sensor->write(this->sens_res);
+		this->sensor->reset();
+		WDT.alive();
+	}
 }
 
-float Thermo::getTemp() {
+float Thermometer::getTemp() {
 	/* Получения температуры (в градусах Цельсия) от дачтика */
 
 	float temp = 0;
