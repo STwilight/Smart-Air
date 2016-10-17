@@ -7,6 +7,18 @@
 
 #include "AirConditioner.h"
 
+/* Декларирование static-переменных класса AirConditioner */
+			bool AirConditioner::power;
+			bool AirConditioner::mode;
+			byte AirConditioner::speed;
+			byte AirConditioner::set_temp;
+			byte AirConditioner::delta_temp;
+		   float AirConditioner::cur_temp;
+			byte AirConditioner::LowSpeedPin;
+			byte AirConditioner::MedSpeedPin;
+			byte AirConditioner::HiSpeedPin;
+	Thermometer* AirConditioner::sensor;
+
 AirConditioner::AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin, byte HiSpeedPin, byte SensorPin, byte SensorResolution) {
 	/* Конструктор по-умолчанию
 	 * На вход принимается следующие парамтеры:
@@ -32,8 +44,7 @@ AirConditioner::AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin
 
 	this->sensor		= new Thermometer(SensorPin, SensorResolution);
 
-	//this->getTemperature.initializeMs(1000, this->getTemp).start();
-	//this->executeThermostat.initializeMs(60000, this->execThermostat).start();
+	AirConditioner::executeConditioner.initializeMs(1000, AirConditioner::execConditioner).start();
 }
 
 void AirConditioner::setPower(bool power) {
@@ -54,24 +65,24 @@ void AirConditioner::setSpeed(byte speed) {
 
 	switch (speed) {
 		case 0x01:
-			digitalWrite(LowSpeedPin, On);
-			digitalWrite(MedSpeedPin, Off);
-			digitalWrite(HiSpeedPin,  Off);
+			digitalWrite(AirConditioner::LowSpeedPin, On);
+			digitalWrite(AirConditioner::MedSpeedPin, Off);
+			digitalWrite(AirConditioner::HiSpeedPin,  Off);
 			break;
 		case 0x02:
-			digitalWrite(LowSpeedPin, Off);
-			digitalWrite(MedSpeedPin, On);
-			digitalWrite(HiSpeedPin,  Off);
+			digitalWrite(AirConditioner::LowSpeedPin, Off);
+			digitalWrite(AirConditioner::MedSpeedPin, On);
+			digitalWrite(AirConditioner::HiSpeedPin,  Off);
 			break;
 		case 0x03:
-			digitalWrite(LowSpeedPin, Off);
-			digitalWrite(MedSpeedPin, Off);
-			digitalWrite(HiSpeedPin,  On);
+			digitalWrite(AirConditioner::LowSpeedPin, Off);
+			digitalWrite(AirConditioner::MedSpeedPin, Off);
+			digitalWrite(AirConditioner::HiSpeedPin,  On);
 			break;
 		default:
-			digitalWrite(LowSpeedPin, Off);
-			digitalWrite(MedSpeedPin, Off);
-			digitalWrite(HiSpeedPin,  Off);
+			digitalWrite(AirConditioner::LowSpeedPin, Off);
+			digitalWrite(AirConditioner::MedSpeedPin, Off);
+			digitalWrite(AirConditioner::HiSpeedPin,  Off);
 			break;
 	}
 }
@@ -89,26 +100,31 @@ void AirConditioner::setDeltaTemp(byte temp) {
 void AirConditioner::getTemp() {
 	/* Получение температуры с датчика */
 
-	this->cur_temp = this->sensor->getTemp();
+	AirConditioner::cur_temp = AirConditioner::sensor->getTemp();
 }
-
 void AirConditioner::execThermostat() {
-	/* Осуществление поддержания постоянной температуры (термостат) */
+	/* Осуществление поддержания постоянной температуры (функционал термостат) */
 
-	if(this->power == PowerOn && !this->sensor->sensor_error) {
-		if(this->mode == Cooling){
-			if(this->cur_temp >= this->set_temp + this->delta_temp)
-				this->setSpeed(this->speed);
+	if(AirConditioner::power == PowerOn && !AirConditioner::sensor->sensor_error) {
+		if(AirConditioner::mode == Cooling){
+			if(AirConditioner::cur_temp >= AirConditioner::set_temp + AirConditioner::delta_temp)
+				AirConditioner::setSpeed(AirConditioner::speed);
 			else
-				this->setSpeed(Stopped);
+				AirConditioner::setSpeed(Stopped);
 		}
-		if(this->mode == Heating) {
-			if(this->cur_temp <= this->set_temp - this->delta_temp)
-				this->setSpeed(this->speed);
+		if(AirConditioner::mode == Heating) {
+			if(AirConditioner::cur_temp <= AirConditioner::set_temp - AirConditioner::delta_temp)
+				AirConditioner::setSpeed(AirConditioner::speed);
 			else
-				this->setSpeed(Stopped);
+				AirConditioner::setSpeed(Stopped);
 		}
 	}
+}
+void AirConditioner::execConditioner() {
+	/* Основной исполняемый метод, реализующий функционал кондиционера */
+
+	AirConditioner::getTemp();
+	AirConditioner::execThermostat();
 }
 
 String AirConditioner::getSettings() {
