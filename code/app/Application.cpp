@@ -12,8 +12,8 @@
 void init()
 {
 	/* Монтирование файловой системы */
-	spiffs_mount();
+	// spiffs_mount();
 
 	AirConditioner AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
-	String settings = AirConditioner.getSettings();
+	// String settings = AirConditioner.getSettings();
 }

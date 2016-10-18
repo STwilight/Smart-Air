@@ -75,6 +75,9 @@ private:
 	static byte MedSpeedPin;	/* Вывод включения вентилятора на средней скорости */
 	static byte HiSpeedPin;		/* Вывод включения вентилятора на высокой скорости */
 
+	/* Метод инициализации периферии GPIO */
+	void initGPIO();
+
 	/* Методы управления кондиционером */
 	void setPower(bool power);
 	void setMode(bool mode);

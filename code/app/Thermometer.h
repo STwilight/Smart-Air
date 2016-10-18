@@ -32,7 +32,7 @@ public:
 	bool sensor_error;	/* Флаг ошибки обмена данными с датчиком */
 
 	/* Конструктор по-умолчанию */
-	Thermometer(byte TempSensorPin, byte SensorResolution);
+	Thermometer(byte SensorPin, byte SensorResolution);
 
 	/* Метод получения температуры */
 	float getTemp();

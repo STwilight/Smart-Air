@@ -7,7 +7,7 @@
 
 #include "Thermometer.h"
 
-Thermometer::Thermometer(byte TempSensorPin, byte SensorResolution) {
+Thermometer::Thermometer(byte SensorPin, byte SensorResolution) {
 	/* Конструктор по-умолчанию.
 	 *
 	 * На вход принимается номер вывода,
@@ -21,7 +21,7 @@ Thermometer::Thermometer(byte TempSensorPin, byte SensorResolution) {
 	this->sens_res		= 0x7F;
 	this->sensor_error	= false;
 
-	this->sensor = new OneWire(TempSensorPin);
+	this->sensor = new OneWire(SensorPin);
 	this->sensor->begin();
 
 	this->searchSensor();
@@ -109,7 +109,7 @@ void Thermometer::setResolution(byte SensorResolution) {
 	 */
 
 	if(!this->sensor_error) {
-		WDT.enable(false);
+		WDT.alive();
 		this->sensor->reset();
 		this->sensor->select(this->addr);
 		this->sensor->write(0x4E);
@@ -117,7 +117,6 @@ void Thermometer::setResolution(byte SensorResolution) {
 		this->sensor->write(0x00);
 		this->sensor->write(this->sens_res);
 		this->sensor->reset();
-		WDT.alive();
 	}
 }
 

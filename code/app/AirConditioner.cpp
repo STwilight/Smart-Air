@@ -30,6 +30,15 @@ AirConditioner::AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin
 	 * 		Ц разрешение датчика температуры;
 	 */
 
+	this->PowerPin		= PowerPin;
+	this->LowSpeedPin	= LowSpeedPin;
+	this->MedSpeedPin	= MedSpeedPin;
+	this->HiSpeedPin	= HiSpeedPin;
+
+	this->initGPIO();
+
+	this->sensor		= new Thermometer(SensorPin, SensorResolution);
+
 	this->power			= PowerOff;
 	this->mode			= Cooling;
 	this->speed			= Stopped;
@@ -37,14 +46,25 @@ AirConditioner::AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin
 	this->delta_temp	= delta_temp_def;
 	this->cur_temp		= 0;
 
-	this->PowerPin		= PowerPin;
-	this->LowSpeedPin	= LowSpeedPin;
-	this->MedSpeedPin	= MedSpeedPin;
-	this->HiSpeedPin	= HiSpeedPin;
-
-	this->sensor		= new Thermometer(SensorPin, SensorResolution);
-
 	AirConditioner::executeConditioner.initializeMs(1000, AirConditioner::execConditioner).start();
+}
+
+void AirConditioner::initGPIO() {
+	pinMode(this->PowerPin, OUTPUT);
+	noPullup(this->PowerPin);
+	digitalWrite(this->PowerPin, Off);
+
+	pinMode(this->LowSpeedPin, OUTPUT);
+	noPullup(this->LowSpeedPin);
+	digitalWrite(this->LowSpeedPin, Off);
+
+	pinMode(this->MedSpeedPin, OUTPUT);
+	noPullup(this->MedSpeedPin);
+	digitalWrite(this->MedSpeedPin, Off);
+
+	pinMode(this->HiSpeedPin, OUTPUT);
+	noPullup(this->HiSpeedPin);
+	digitalWrite(this->HiSpeedPin, Off);
 }
 
 void AirConditioner::setPower(bool power) {
