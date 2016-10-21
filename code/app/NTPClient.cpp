@@ -1,7 +1,7 @@
-/*
+п»ї/*
  * NTPClient.cpp
  *
- *  Created on: 11 окт. 2016 г.
+ *  Created on: 11 РѕРєС‚. 2016 Рі.
  *      Author: Symrak
  */
 

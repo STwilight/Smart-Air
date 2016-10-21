@@ -1,13 +1,13 @@
-/*
+ï»¿/*
  * AirConditioner.cpp
  *
- * Êëàññ, îïèñûâàþùèé ôóíêöèè óïðàâëåíèÿ êîíäèöèîíåðîì.
+ * ÐšÐ»Ð°ÑÑ, Ð¾Ð¿Ð¸ÑÑ‹Ð²Ð°ÑŽÑ‰Ð¸Ð¹ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ ÐºÐ¾Ð½Ð´Ð¸Ñ†Ð¸Ð¾Ð½ÐµÑ€Ð¾Ð¼.
  *
  */
 
 #include "AirConditioner.h"
 
-/* Äåêëàðèðîâàíèå static-ïåðåìåííûõ êëàññà AirConditioner */
+/* Ð”ÐµÐºÐ»Ð°Ñ€Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ static-Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ñ‹Ñ… ÐºÐ»Ð°ÑÑÐ° AirConditioner */
 			bool AirConditioner::power;
 			bool AirConditioner::mode;
 			byte AirConditioner::speed;
@@ -20,14 +20,14 @@
 	Thermometer* AirConditioner::sensor;
 
 AirConditioner::AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin, byte HiSpeedPin, byte SensorPin, byte SensorResolution) {
-	/* Êîíñòðóêòîð ïî-óìîë÷àíèþ
-	 * Íà âõîä ïðèíèìàåòñÿ ñëåäóþùèå ïàðàìòåðû:
-	 * 		– íîìåðà âûâîäà äëÿ óïðàâëåíèÿ ïèòàíèåì;
-	 * 		– íîìåð âûâîäà äëÿ âûáîðà ìàëîé ñêîðîñòè âåíòèëÿòîðà;
-	 * 		– íîìåð âûâîäà äëÿ âûáîðà ñðåäíåé ñêîðîñòè âåíòèëÿòîðà;
-	 * 		– íîìåð âûâîäà äëÿ âûáîðà âûñîêîé ñêîðîñòè âåíòèëÿòîðà;
-	 * 		– íîìåð âûâîäà äëÿ ïîäêëþ÷åíèÿ äàò÷èêà òåìïåðàòóðû;
-	 * 		– ðàçðåøåíèå äàò÷èêà òåìïåðàòóðû;
+	/* ÐšÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ Ð¿Ð¾-ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ
+	 * ÐÐ° Ð²Ñ…Ð¾Ð´ Ð¿Ñ€Ð¸Ð½Ð¸Ð¼Ð°ÐµÑ‚ÑÑ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ðµ Ð¿Ð°Ñ€Ð°Ð¼Ñ‚ÐµÑ€Ñ‹:
+	 * 		â€“ Ð½Ð¾Ð¼ÐµÑ€Ð° Ð²Ñ‹Ð²Ð¾Ð´Ð° Ð´Ð»Ñ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ Ð¿Ð¸Ñ‚Ð°Ð½Ð¸ÐµÐ¼;
+	 * 		â€“ Ð½Ð¾Ð¼ÐµÑ€ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ð´Ð»Ñ Ð²Ñ‹Ð±Ð¾Ñ€Ð° Ð¼Ð°Ð»Ð¾Ð¹ ÑÐºÐ¾Ñ€Ð¾ÑÑ‚Ð¸ Ð²ÐµÐ½Ñ‚Ð¸Ð»ÑÑ‚Ð¾Ñ€Ð°;
+	 * 		â€“ Ð½Ð¾Ð¼ÐµÑ€ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ð´Ð»Ñ Ð²Ñ‹Ð±Ð¾Ñ€Ð° ÑÑ€ÐµÐ´Ð½ÐµÐ¹ ÑÐºÐ¾Ñ€Ð¾ÑÑ‚Ð¸ Ð²ÐµÐ½Ñ‚Ð¸Ð»ÑÑ‚Ð¾Ñ€Ð°;
+	 * 		â€“ Ð½Ð¾Ð¼ÐµÑ€ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ð´Ð»Ñ Ð²Ñ‹Ð±Ð¾Ñ€Ð° Ð²Ñ‹ÑÐ¾ÐºÐ¾Ð¹ ÑÐºÐ¾Ñ€Ð¾ÑÑ‚Ð¸ Ð²ÐµÐ½Ñ‚Ð¸Ð»ÑÑ‚Ð¾Ñ€Ð°;
+	 * 		â€“ Ð½Ð¾Ð¼ÐµÑ€ Ð²Ñ‹Ð²Ð¾Ð´Ð° Ð´Ð»Ñ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ð´Ð°Ñ‚Ñ‡Ð¸ÐºÐ° Ñ‚ÐµÐ¼Ð¿ÐµÑ€Ð°Ñ‚ÑƒÑ€Ñ‹;
+	 * 		â€“ Ñ€Ð°Ð·Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð´Ð°Ñ‚Ñ‡Ð¸ÐºÐ° Ñ‚ÐµÐ¼Ð¿ÐµÑ€Ð°Ñ‚ÑƒÑ€Ñ‹;
 	 */
 
 	this->PowerPin		= PowerPin;
@@ -68,12 +68,12 @@ void AirConditioner::initGPIO() {
 }
 
 void AirConditioner::setPower(bool power) {
-	/* Ïðèìåíåíèå ïàðàìåòðà "Ïèòàíèå" */
+	/* ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð° "ÐŸÐ¸Ñ‚Ð°Ð½Ð¸Ðµ" */
 
 	digitalWrite(PowerPin, power);
 }
 void AirConditioner::setMode(bool mode) {
-	/* Ïðèìåíåíèå ïàðàìåòðà "Ðåæèì ðàáîòû" */
+	/* ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð° "Ð ÐµÐ¶Ð¸Ð¼ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹" */
 
 	if(mode)
 		this->mode = Heating;
@@ -81,7 +81,7 @@ void AirConditioner::setMode(bool mode) {
 		this->mode = Cooling;
 }
 void AirConditioner::setSpeed(byte speed) {
-	/* Ïðèìåíåíèå ïàðàìåòðà "Ñêîðîñòü âðàùåíèÿ âåíòèëÿòîðà" */
+	/* ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð° "Ð¡ÐºÐ¾Ñ€Ð¾ÑÑ‚ÑŒ Ð²Ñ€Ð°Ñ‰ÐµÐ½Ð¸Ñ Ð²ÐµÐ½Ñ‚Ð¸Ð»ÑÑ‚Ð¾Ñ€Ð°" */
 
 	switch (speed) {
 		case 0x01:
@@ -107,23 +107,23 @@ void AirConditioner::setSpeed(byte speed) {
 	}
 }
 void AirConditioner::setSetTemp(byte temp) {
-	/* Ïðèìåíåíèå ïàðàìåòðà "Çàäàííàÿ òåìïåðàòóðà" */
+	/* ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð° "Ð—Ð°Ð´Ð°Ð½Ð½Ð°Ñ Ñ‚ÐµÐ¼Ð¿ÐµÑ€Ð°Ñ‚ÑƒÑ€Ð°" */
 
 	this->set_temp = temp;
 }
 void AirConditioner::setDeltaTemp(byte temp) {
-	/* Ïðèìåíåíèå ïàðàìåòðà "Îòêëîíåíèå òåìïåðàòóðû" */
+	/* ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð° "ÐžÑ‚ÐºÐ»Ð¾Ð½ÐµÐ½Ð¸Ðµ Ñ‚ÐµÐ¼Ð¿ÐµÑ€Ð°Ñ‚ÑƒÑ€Ñ‹" */
 
 	this->delta_temp = temp;
 }
 
 void AirConditioner::getTemp() {
-	/* Ïîëó÷åíèå òåìïåðàòóðû ñ äàò÷èêà */
+	/* ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ñ‚ÐµÐ¼Ð¿ÐµÑ€Ð°Ñ‚ÑƒÑ€Ñ‹ Ñ Ð´Ð°Ñ‚Ñ‡Ð¸ÐºÐ° */
 
 	AirConditioner::cur_temp = AirConditioner::sensor->getTemp();
 }
 void AirConditioner::execThermostat() {
-	/* Îñóùåñòâëåíèå ïîääåðæàíèÿ ïîñòîÿííîé òåìïåðàòóðû (ôóíêöèîíàë òåðìîñòàò) */
+	/* ÐžÑÑƒÑ‰ÐµÑÑ‚Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð°Ð½Ð¸Ñ Ð¿Ð¾ÑÑ‚Ð¾ÑÐ½Ð½Ð¾Ð¹ Ñ‚ÐµÐ¼Ð¿ÐµÑ€Ð°Ñ‚ÑƒÑ€Ñ‹ (Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¾Ð½Ð°Ð» Ñ‚ÐµÑ€Ð¼Ð¾ÑÑ‚Ð°Ñ‚) */
 
 	if(AirConditioner::power == PowerOn && !AirConditioner::sensor->sensor_error) {
 		if(AirConditioner::mode == Cooling){
@@ -141,14 +141,14 @@ void AirConditioner::execThermostat() {
 	}
 }
 void AirConditioner::execConditioner() {
-	/* Îñíîâíîé èñïîëíÿåìûé ìåòîä, ðåàëèçóþùèé ôóíêöèîíàë êîíäèöèîíåðà */
+	/* ÐžÑÐ½Ð¾Ð²Ð½Ð¾Ð¹ Ð¸ÑÐ¿Ð¾Ð»Ð½ÑÐµÐ¼Ñ‹Ð¹ Ð¼ÐµÑ‚Ð¾Ð´, Ñ€ÐµÐ°Ð»Ð¸Ð·ÑƒÑŽÑ‰Ð¸Ð¹ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¾Ð½Ð°Ð» ÐºÐ¾Ð½Ð´Ð¸Ñ†Ð¸Ð¾Ð½ÐµÑ€Ð° */
 
 	AirConditioner::getTemp();
 	AirConditioner::execThermostat();
 }
 
 String AirConditioner::getSettings() {
-	/* Ïîëó÷åíèå êîíôèãóðàöèè êîíäèöèîíåðà â ôîðìàòå JSON-ñòðîêè */
+	/* ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸ ÐºÐ¾Ð½Ð´Ð¸Ñ†Ð¸Ð¾Ð½ÐµÑ€Ð° Ð² Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚Ðµ JSON-ÑÑ‚Ñ€Ð¾ÐºÐ¸ */
 
 	DynamicJsonBuffer jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
@@ -172,7 +172,7 @@ String AirConditioner::getSettings() {
 	return jsonString;
 }
 void AirConditioner::setSettings(String jsonString) {
-	/* Ñîõðàíåíèå êîíôèãóðàöèè êîíäèöèîíåðà èç ôîðìàòà JSON-ñòðîêè è åå ïðèìåíåíèå */
+	/* Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸ ÐºÐ¾Ð½Ð´Ð¸Ñ†Ð¸Ð¾Ð½ÐµÑ€Ð° Ð¸Ð· Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚Ð° JSON-ÑÑ‚Ñ€Ð¾ÐºÐ¸ Ð¸ ÐµÐµ Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ */
 
 	DynamicJsonBuffer jsonBuffer;
 
@@ -198,7 +198,7 @@ void AirConditioner::setSettings(String jsonString) {
 		this->delta_temp = delta_temp_def;
 }
 void AirConditioner::applySettings() {
-	/* Ïðèìåíåíèå êîíôèãóðàöèè êîíäèöèîíåðà ê àïïàðàòíîé ÷àñòè */
+	/* ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸ ÐºÐ¾Ð½Ð´Ð¸Ñ†Ð¸Ð¾Ð½ÐµÑ€Ð° Ðº Ð°Ð¿Ð¿Ð°Ñ€Ð°Ñ‚Ð½Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸ */
 
 	this->setPower(this->power);
 	this->setMode(this->mode);
