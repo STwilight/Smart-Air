@@ -1,4 +1,4 @@
-﻿/*
+/*
  * NTPClient.h
  *
  *  Created on: 11 окт. 2016 г.

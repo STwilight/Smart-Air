@@ -1,4 +1,4 @@
-﻿/*
+/*
  * AirConditioner.h
  *
  * Заголовочный файл класса AirConditioner, описывающего кондиционер, как целостное устройство.
@@ -70,7 +70,7 @@ private:
 	static float cur_temp;	/* Текущая температура окружающей среды */
 
 	/* Определение выводов контроллера для управления */
-	byte PowerPin;				/* Вывод управления питанием кондиционера */
+	static byte PowerPin;		/* Вывод управления питанием кондиционера */
 	static byte LowSpeedPin;	/* Вывод включения вентилятора на низкой скорости */
 	static byte MedSpeedPin;	/* Вывод включения вентилятора на средней скорости */
 	static byte HiSpeedPin;		/* Вывод включения вентилятора на высокой скорости */
@@ -79,7 +79,7 @@ private:
 	void initGPIO();
 
 	/* Методы управления кондиционером */
-	void setPower(bool power);
+	static void setPower(bool power);
 	void setMode(bool mode);
 	static void setSpeed(byte speed);
 	void setSetTemp(byte temp);
