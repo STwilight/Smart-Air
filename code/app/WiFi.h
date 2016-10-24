@@ -27,7 +27,8 @@ private:
 	   static String ap_wifi_def_ssid;
 	   static String ap_wifi_def_pwd;
 	static AUTH_MODE ap_wifi_def_auth_mode;
-    	 static bool ap_wifi_def_state;
+	     static byte ap_wifi_def_channel;
+	     static bool ap_wifi_def_state;
 
 	/* Определение значений для режима "Клиент Wi-Fi сети" */
 	   String st_wifi_ssid;
@@ -49,20 +50,29 @@ public:
 	   * По-умолчанию оба режима отключены.
 	   *
 	   * Параметры по-умолчанию для режима "Точка доступа Wi-Fi":
+	   * 		– SSID точки доступа не задан
 	   * 		– пароль для подключения не задан;
 	   * 		– шифрование отсутствует;
 	   * 		– скрытие SSID отключено;
 	   * 		– задан 6-й канал вещания;
 	   * 		– IP-адрес точки доступа равен 10.0.0.1;
-	   * 		– точка доступа отключена.
+	   * 		– режим точки доступа отключен.
+	   *
+	   * Параметры по-умолчанию для режима "Точка доступа Wi-Fi по-умолчанию":
+	   * 		– пароль для подключения не задан;
+	   * 		– шифрование отсутствует;
+	   * 		– режим точки доступа по-умолчанию включен.
 	   *
 	   * Параметры по-умолчанию для режима "Клиент Wi-Fi сети":
+	   * 		– SSID для подключения не задан;
+	   * 		– пароль для подключения не задан;
 	   * 		– автоматическое подключение к сохраненной точке доступа;
+	   * 		– тайм-аут подключения к точке доступа – 20 секунд;
 	   * 		– флаг ошибки сброшен (нет ошибки подключения);
-	   * 		– режим клиента отключен;
+	   * 		– режим клиента отключен.
 	   *
 	   */
-	  WiFi(String ap_wifi_ssid, String ap_wifi_pwd = "", AUTH_MODE ap_wifi_auth_mode = AUTH_OPEN, bool ap_wifi_hidden = false, byte ap_wifi_channel = 6, String ap_wifi_ip_address = "10.0.0.1", bool ap_wifi_state = Off, String ap_wifi_def_pwd = "", AUTH_MODE ap_wifi_def_auth_mode = AUTH_OPEN, bool ap_wifi_def_state = Off, String st_wifi_ssid = "", String st_wifi_pwd = "", bool st_wifi_autoconnect = true, byte st_wifi_conn_timeout = 20, bool st_wifi_err = false, bool st_wifi_state = Off);
+	  WiFi(String ap_wifi_ssid, String ap_wifi_pwd = "", AUTH_MODE ap_wifi_auth_mode = AUTH_OPEN, bool ap_wifi_hidden = false, byte ap_wifi_channel = 6, String ap_wifi_ip_address = "10.0.0.1", bool ap_wifi_state = Off, String ap_wifi_def_pwd = "", AUTH_MODE ap_wifi_def_auth_mode = AUTH_OPEN, bool ap_wifi_def_state = Off, String st_wifi_ssid = "", String st_wifi_pwd = "", bool st_wifi_autoconnect = true, byte st_wifi_conn_timeout = 20, bool st_wifi_err = false, bool st_wifi_state = On);
 
 	  /* Метод подключения к точке доступа в режиме "Клиент Wi-Fi сети" */
 	  void wifiConnect(String st_wifi_ssid, String st_wifi_pwd);

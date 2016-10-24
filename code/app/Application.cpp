@@ -20,18 +20,22 @@ void repeatAction() {
 
 void init()
 {
+	/* Инициализация UART */
+	/* DEBUG */ Serial.systemDebugOutput(true);
+	/* DEBUG */ Serial.begin(115200);
+
 	/* Установка рабочей частоты процессора на 160 МГц */
 	System.setCpuFrequency(eCF_160MHz);
 
 	/* Монтирование файловой системы */
 	// spiffs_mount();
 
-	/* Инициализация UART */
-	/* DEBUG */ Serial.systemDebugOutput(false);
-	/* DEBUG */ aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
-	/* DEBUG */ Serial.begin(115200);
-	/* DEBUG */ repeater.initializeMs(1000, repeatAction).start(true);
+	/* Инициализация Wi-Fi модуля */
+	WiFi WiFi(PROJECT_NAME, "", AUTH_OPEN, false, 6, "10.0.0.1", Off, "", AUTH_OPEN, Off, "", "", true, 20, false, On);
 
-	/* Создание объекта типа "Кондиционер" */
-	// AirConditioner AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+	/* Инициализация кондиционера */
+	AirConditioner AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+
+	/* DEBUG */ // aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+	/* DEBUG */ // repeater.initializeMs(1000, repeatAction).start(true);
 }
