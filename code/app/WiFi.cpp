@@ -17,6 +17,7 @@
 	   bool WiFi::ap_wifi_def_state;
 	   bool WiFi::st_wifi_err;
 
+// TODO: Навести порядок в классе и определить необходимость методов инициализации и реинициализации модуля
 WiFi::WiFi(String ap_wifi_ssid, String ap_wifi_pwd, AUTH_MODE ap_wifi_auth_mode, bool ap_wifi_hidden, byte ap_wifi_channel, String ap_wifi_ip_address, bool ap_wifi_state, String ap_wifi_def_pwd, AUTH_MODE ap_wifi_def_auth_mode, bool ap_wifi_def_state, String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_autoconnect, byte st_wifi_conn_timeout, bool st_wifi_err, bool st_wifi_state) {
 	/* Конструктор по-умолчанию
 	 * На вход принимается следующие парамтеры:
@@ -73,6 +74,82 @@ WiFi::WiFi(String ap_wifi_ssid, String ap_wifi_pwd, AUTH_MODE ap_wifi_auth_mode,
 	this->wifiInit();
 }
 
+String WiFi::getSettings() {
+	/* Получение конфигурации Wi-Fi модуля в формате JSON-строки */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+				   JsonObject& ap_mode = jsonBuffer.createObject();
+					   root["ap_mode"] = ap_mode;
+
+			   ap_mode["ap_wifi_ssid"] = this->ap_wifi_ssid;
+			    ap_mode["ap_wifi_pwd"] = this->ap_wifi_pwd;
+		  ap_mode["ap_wifi_auth_mode"] = convertAuthModeToString(this->ap_wifi_auth_mode);
+		     ap_mode["ap_wifi_hidden"] = (bool) this->ap_wifi_hidden;
+		    ap_mode["ap_wifi_channel"] = (byte) this->ap_wifi_channel;
+	     ap_mode["ap_wifi_ip_address"] = this->ap_wifi_ip_address;
+			  ap_mode["ap_wifi_state"] = (bool) WiFi::ap_wifi_state;
+
+			   JsonObject& ap_def_mode = jsonBuffer.createObject();
+		 	 	   root["ap_def_mode"] = ap_def_mode;
+
+		ap_def_mode["ap_wifi_def_pwd"] = WiFi::ap_wifi_def_pwd;
+  ap_def_mode["ap_wifi_def_auth_mode"] = convertAuthModeToString(WiFi::ap_wifi_def_auth_mode);
+  	  ap_def_mode["ap_wifi_def_state"] = (bool) WiFi::ap_wifi_def_state;
+
+  	  	  	   JsonObject& client_mode = jsonBuffer.createObject();
+	   	      	   root["client_mode"] = client_mode;
+
+	 	   client_mode["st_wifi_ssid"] = this->st_wifi_ssid;
+		    client_mode["st_wifi_pwd"] = this->st_wifi_pwd;
+	client_mode["st_wifi_autoconnect"] = (bool) this->st_wifi_autoconnect;
+   client_mode["st_wifi_conn_timeout"] = (byte) this->st_wifi_conn_timeout;
+			client_mode["st_wifi_err"] = (bool) WiFi::st_wifi_err;
+		  client_mode["st_wifi_state"] = (bool) this->st_wifi_state;
+
+	String jsonString;
+	root.printTo(jsonString);
+
+	return jsonString;
+}
+void WiFi::setSettings(String jsonString) {
+	/* Сохранение конфигурации Wi-Fi модуля из формата JSON-строки и ее применение */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.parseObject(jsonString);
+
+		 JsonObject& ap_mode = root["ap_mode"];
+
+		  this->ap_wifi_ssid = ap_mode["ap_wifi_ssid"].asString();
+		   this->ap_wifi_pwd = ap_mode["ap_wifi_pwd"].asString();
+	 this->ap_wifi_auth_mode = convertStringToAuthMode(ap_mode["ap_wifi_auth_mode"].asString());
+		this->ap_wifi_hidden = ap_mode["ap_wifi_hidden"];
+	   this->ap_wifi_channel = ap_mode["ap_wifi_channel"];
+	this->ap_wifi_ip_address = ap_mode["ap_wifi_ip_address"].asString();
+		 WiFi::ap_wifi_state = ap_mode["ap_wifi_state"];
+
+	 JsonObject& ap_def_mode = root["ap_def_mode"];
+
+	   WiFi::ap_wifi_def_pwd = ap_def_mode["ap_wifi_def_pwd"].asString();
+ WiFi::ap_wifi_def_auth_mode = convertStringToAuthMode(ap_def_mode["ap_wifi_def_auth_mode"].asString());
+	 WiFi::ap_wifi_def_state = ap_def_mode["ap_wifi_def_state"];
+
+	 JsonObject& client_mode = root["client_mode"];
+
+		  this->st_wifi_ssid = client_mode["st_wifi_ssid"].asString();
+		   this->st_wifi_pwd = client_mode["st_wifi_pwd"].asString();
+   this->st_wifi_autoconnect = client_mode["st_wifi_autoconnect"];
+  this->st_wifi_conn_timeout = client_mode["st_wifi_conn_timeout"];
+		   WiFi::st_wifi_err = client_mode["st_wifi_err"];
+		 this->st_wifi_state = client_mode["st_wifi_state"];
+}
+void WiFi::applySettings() {
+	/* Метод применения конфигурации к аппаратной части */
+
+	// TODO: Написать метод применения параметров Wi-Fi модуля
+}
+
 void WiFi::wifiConnectOK() {
 	/* Метод, выполняющийся при успешном подключении к Wi-Fi точке доступа */
 
@@ -101,10 +178,10 @@ void WiFi::wifiConnectFail() {
 void WiFi::wifiConnect(String st_wifi_ssid, String st_wifi_pwd) {
 	/* Метод подключения к точке доступа с указанными параметрами */
 
-		if(!WifiStation.isEnabled())
-			WifiStation.enable(On);
-		WifiStation.config(st_wifi_ssid, st_wifi_pwd);
-		WifiStation.waitConnection(WiFi::wifiConnectOK, WiFi::st_wifi_conn_timeout, WiFi::wifiConnectFail);
+	if(!WifiStation.isEnabled())
+		WifiStation.enable(On);
+	WifiStation.config(st_wifi_ssid, st_wifi_pwd);
+	WifiStation.waitConnection(WiFi::wifiConnectOK, WiFi::st_wifi_conn_timeout, WiFi::wifiConnectFail);
 }
 
 void WiFi::wifiInit() {
@@ -125,4 +202,21 @@ void WiFi::wifiReInit() {
 	/* Метод повторной инициализации Wi-Fi модуля */
 
 	// TODO: Написать метод повторной инициализации Wi-Fi модуля
+}
+
+AUTH_MODE WiFi::convertStringToAuthMode(String data) {
+	/* Метод преобразования строки в тип шифрования точки доступа */
+
+	// TODO: Написать метод преобразования строки в тип метода авторизации
+
+	AUTH_MODE auth_mode;
+	return auth_mode;
+}
+String WiFi::convertAuthModeToString(AUTH_MODE auth_mode) {
+	/* Метод преобразования типа шифрования точки доступа в строку */
+
+	// TODO: Написать метод преобразования типа метода авторизации в строку
+
+	String data;
+	return data;
 }

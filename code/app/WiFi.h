@@ -43,6 +43,13 @@ private:
 	    static void wifiConnectOK();
 		static void wifiConnectFail();
 
+		/* Метод применения конфигурации к аппаратной части */
+		void applySettings();
+
+		/* Методы преобразования типа шифрования точки доступа */
+		String convertAuthModeToString(AUTH_MODE auth_mode);
+		AUTH_MODE convertStringToAuthMode(String data);
+
 public:
 	  /* Конструктор для режимов "Точка доступа Wi-Fi" и "Клиент Wi-Fi сети".
 	   * Режим зависит от переданных в конструктор параметров.
@@ -72,14 +79,18 @@ public:
 	   * 		– режим клиента отключен.
 	   *
 	   */
-	  WiFi(String ap_wifi_ssid, String ap_wifi_pwd = "", AUTH_MODE ap_wifi_auth_mode = AUTH_OPEN, bool ap_wifi_hidden = false, byte ap_wifi_channel = 6, String ap_wifi_ip_address = "10.0.0.1", bool ap_wifi_state = Off, String ap_wifi_def_pwd = "", AUTH_MODE ap_wifi_def_auth_mode = AUTH_OPEN, bool ap_wifi_def_state = Off, String st_wifi_ssid = "", String st_wifi_pwd = "", bool st_wifi_autoconnect = true, byte st_wifi_conn_timeout = 20, bool st_wifi_err = false, bool st_wifi_state = On);
+		WiFi(String ap_wifi_ssid, String ap_wifi_pwd = "", AUTH_MODE ap_wifi_auth_mode = AUTH_OPEN, bool ap_wifi_hidden = false, byte ap_wifi_channel = 6, String ap_wifi_ip_address = "10.0.0.1", bool ap_wifi_state = Off, String ap_wifi_def_pwd = "", AUTH_MODE ap_wifi_def_auth_mode = AUTH_OPEN, bool ap_wifi_def_state = Off, String st_wifi_ssid = "", String st_wifi_pwd = "", bool st_wifi_autoconnect = true, byte st_wifi_conn_timeout = 20, bool st_wifi_err = false, bool st_wifi_state = On);
 
-	  /* Метод подключения к точке доступа в режиме "Клиент Wi-Fi сети" */
-	  void wifiConnect(String st_wifi_ssid, String st_wifi_pwd);
+		/* Методы получения и сохранения конфигурации */
+		String getSettings();
+		void setSettings(String settings);
 
-	  /* Методы инициализации и переинициализации Wi-Fi модуля */
-	  void wifiInit();
-	  void wifiReInit();
+		/* Метод подключения к точке доступа в режиме "Клиент Wi-Fi сети" */
+		void wifiConnect(String st_wifi_ssid, String st_wifi_pwd);
+
+		/* Методы инициализации и переинициализации Wi-Fi модуля */
+		void wifiInit();
+		void wifiReInit();
 };
 
 #endif /* APP_WIFI_H_ */
