@@ -87,4 +87,54 @@ String convertSN(String macAddress)
 	return convertHEX(tmp);
 }
 
+AUTH_MODE convertStringToAuthMode(String data) {
+	/* Метод преобразования строки в тип шифрования точки доступа */
+
+	AUTH_MODE auth_mode;
+	if(data.equals("AUTH_OPEN"))
+		auth_mode = AUTH_OPEN;
+	else if(data.equals("AUTH_WEP"))
+		auth_mode = AUTH_WEP;
+	else if(data.equals("AUTH_WPA_PSK"))
+		auth_mode = AUTH_WPA_PSK;
+	else if(data.equals("AUTH_WPA2_PSK"))
+		auth_mode = AUTH_WPA2_PSK;
+	else if(data.equals("AUTH_WPA_WPA2_PSK"))
+		auth_mode = AUTH_WPA_WPA2_PSK;
+	else if(data.equals("AUTH_MAX"))
+		auth_mode = AUTH_MAX;
+	else
+		auth_mode = AUTH_OPEN;
+	return auth_mode;
+}
+String convertAuthModeToString(AUTH_MODE auth_mode) {
+	/* Метод преобразования типа шифрования точки доступа в строку */
+
+	String data;
+	switch (auth_mode) {
+		case AUTH_OPEN:
+			data = "AUTH_OPEN";
+			break;
+		case AUTH_WEP:
+			data = "AUTH_WEP";
+			break;
+		case AUTH_WPA_PSK:
+			data = "AUTH_WPA_PSK";
+			break;
+		case AUTH_WPA2_PSK:
+			data = "AUTH_WPA2_PSK";
+			break;
+		case AUTH_WPA_WPA2_PSK:
+			data = "AUTH_WPA_WPA2_PSK";
+			break;
+		case AUTH_MAX:
+			data = "AUTH_MAX";
+			break;
+		default:
+			data = "AUTH_OPEN";
+			break;
+	}
+	return data;
+}
+
 #endif /* APP_FUNCTIONS_H_ */

@@ -43,21 +43,15 @@ private:
 	    static void wifiConnectOK();
 		static void wifiConnectFail();
 
-		/* Метод применения конфигурации к аппаратной части */
-		void applySettings();
-
-		/* Методы преобразования типа шифрования точки доступа */
-		String convertAuthModeToString(AUTH_MODE auth_mode);
-		AUTH_MODE convertStringToAuthMode(String data);
+		/* Метод инициализации Wi-Fi модуля */
+		void wifiInit();
 
 public:
 	  /* Конструктор для режимов "Точка доступа Wi-Fi" и "Клиент Wi-Fi сети".
-	   * Режим зависит от переданных в конструктор параметров.
-	   * Допускается тспользование нескольких режимов одновременно.
-	   * По-умолчанию оба режима отключены.
+	   * Допускается использование нескольких режимов одновременно.
 	   *
 	   * Параметры по-умолчанию для режима "Точка доступа Wi-Fi":
-	   * 		– SSID точки доступа не задан
+	   * 		– SSID точки доступа содержит название проекта и 3 последних байта MAC-адреса;
 	   * 		– пароль для подключения не задан;
 	   * 		– шифрование отсутствует;
 	   * 		– скрытие SSID отключено;
@@ -66,9 +60,11 @@ public:
 	   * 		– режим точки доступа отключен.
 	   *
 	   * Параметры по-умолчанию для режима "Точка доступа Wi-Fi по-умолчанию":
+	   * 		– SSID точки доступа содержит название проекта и 3 последних байта MAC-адреса;
 	   * 		– пароль для подключения не задан;
 	   * 		– шифрование отсутствует;
-	   * 		– режим точки доступа по-умолчанию включен.
+	   * 		– задан 6-й канал вещания;
+	   * 		– режим точки доступа по-умолчанию отключен.
 	   *
 	   * Параметры по-умолчанию для режима "Клиент Wi-Fi сети":
 	   * 		– SSID для подключения не задан;
@@ -76,21 +72,20 @@ public:
 	   * 		– автоматическое подключение к сохраненной точке доступа;
 	   * 		– тайм-аут подключения к точке доступа – 20 секунд;
 	   * 		– флаг ошибки сброшен (нет ошибки подключения);
-	   * 		– режим клиента отключен.
+	   * 		– режим клиента включен.
 	   *
 	   */
-		WiFi(String ap_wifi_ssid, String ap_wifi_pwd = "", AUTH_MODE ap_wifi_auth_mode = AUTH_OPEN, bool ap_wifi_hidden = false, byte ap_wifi_channel = 6, String ap_wifi_ip_address = "10.0.0.1", bool ap_wifi_state = Off, String ap_wifi_def_pwd = "", AUTH_MODE ap_wifi_def_auth_mode = AUTH_OPEN, bool ap_wifi_def_state = Off, String st_wifi_ssid = "", String st_wifi_pwd = "", bool st_wifi_autoconnect = true, byte st_wifi_conn_timeout = 20, bool st_wifi_err = false, bool st_wifi_state = On);
+		WiFi();
 
 		/* Методы получения и сохранения конфигурации */
 		String getSettings();
 		void setSettings(String settings);
 
-		/* Метод подключения к точке доступа в режиме "Клиент Wi-Fi сети" */
-		void wifiConnect(String st_wifi_ssid, String st_wifi_pwd);
+		/* Метод применения конфигурации к аппаратной части */
+		void applySettings();
 
-		/* Методы инициализации и переинициализации Wi-Fi модуля */
-		void wifiInit();
-		void wifiReInit();
+		/* Метод подключения к точке доступа в режиме "Клиент Wi-Fi сети" */
+		void wifiConnect(String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_autoconnect, bool store_settings);
 };
 
 #endif /* APP_WIFI_H_ */

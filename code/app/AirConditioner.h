@@ -85,9 +85,6 @@ private:
 	void setSetTemp(byte temp);
 	void setDeltaTemp(byte temp);
 
-	/* Метод применения конфигурации к аппаратной части */
-	void applySettings();
-
 	/* Таймеры для отсчета времени */
 	Timer executeConditioner;
 
@@ -108,6 +105,9 @@ public:
 	/* Методы получения и сохранения конфигурации */
 	String getSettings();
 	void setSettings(String settings);
+
+	/* Метод применения конфигурации к аппаратной части */
+	void applySettings();
 };
 
 #endif /* APP_AirConditioner_H_ */

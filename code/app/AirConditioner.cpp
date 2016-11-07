@@ -213,7 +213,7 @@ String AirConditioner::getSettings() {
 	return jsonString;
 }
 void AirConditioner::setSettings(String jsonString) {
-	/* Сохранение конфигурации кондиционера из формата JSON-строки и ее применение */
+	/* Сохранение конфигурации кондиционера из формата JSON-строки */
 
 	DynamicJsonBuffer jsonBuffer;
 
