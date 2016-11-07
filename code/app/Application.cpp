@@ -18,9 +18,11 @@
 AirConditioner *aircond;
 WiFi *wifi;
 
-/* DEBUG */ void repeatAction() {
-	/* DEBUG */ Serial.println(aircond->getSettings());
-/* DEBUG */ }
+/* DEBUG */ /*
+void repeatAction() {
+	Serial.println(aircond->getSettings());
+}
+*/ /* DEBUG */
 
 void init()
 {
@@ -45,4 +47,4 @@ void init()
 	wifi->applySettings();
 
 	/* DEBUG */ // repeater.initializeMs(1000, repeatAction).start(true);
-}
+};

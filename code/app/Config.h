@@ -17,4 +17,7 @@
 /* Определение версии программного обеспечения */
 #define FIRMWARE_VER "1.0 Alpha"
 
+/* Определения портов для серверов */
+#define WEB_SERVER_PORT 80
+
 #endif /* APP_CONFIG_H_ */
