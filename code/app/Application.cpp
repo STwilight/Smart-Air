@@ -7,7 +7,10 @@
 #include "Config.h"
 #include "Boards.h"
 
-/* Подключение заголовочного файла для модуля управления кондиционером */
+/* Подключение заголовочного файла хранилища настроек */
+#include "Settings.h"
+
+/* Подключение заголовочных файлов модулей */
 #include "AirConditioner.h"
 #include "WiFi.h"
 
@@ -15,9 +18,9 @@
 AirConditioner *aircond;
 WiFi *wifi;
 
-void repeatAction() {
+/* DEBUG */ void repeatAction() {
 	/* DEBUG */ Serial.println(aircond->getSettings());
-}
+/* DEBUG */ }
 
 void init()
 {
@@ -29,16 +32,16 @@ void init()
 	System.setCpuFrequency(eCF_160MHz);
 
 	/* Монтирование файловой системы */
-	// spiffs_mount();
+	spiffs_mount();
 
 	/* Инициализация модуля кондиционера */
 	aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
-	// aircond->setSettings();
+	aircond->setSettings(Settings.load(APP_SETTINGS));
 	aircond->applySettings();
 
 	/* Инициализация Wi-Fi модуля */
 	wifi = new WiFi();
-	// wifi->setSettings();
+	wifi->setSettings(Settings.load(WIFI_SETTINGS));
 	wifi->applySettings();
 
 	/* DEBUG */ // repeater.initializeMs(1000, repeatAction).start(true);

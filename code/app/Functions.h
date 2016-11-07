@@ -1,8 +1,8 @@
 /*
  * Functions.h
  *
- *  Created on: 24 окт. 2016 г.
- *      Author: Symrak
+ * Заголовочный файл, содержащий реализацию специфических функций
+ *
  */
 
 #ifndef APP_FUNCTIONS_H_
@@ -91,6 +91,7 @@ AUTH_MODE convertStringToAuthMode(String data) {
 	/* Метод преобразования строки в тип шифрования точки доступа */
 
 	AUTH_MODE auth_mode;
+
 	if(data.equals("AUTH_OPEN"))
 		auth_mode = AUTH_OPEN;
 	else if(data.equals("AUTH_WEP"))
@@ -105,12 +106,14 @@ AUTH_MODE convertStringToAuthMode(String data) {
 		auth_mode = AUTH_MAX;
 	else
 		auth_mode = AUTH_OPEN;
+
 	return auth_mode;
 }
 String convertAuthModeToString(AUTH_MODE auth_mode) {
 	/* Метод преобразования типа шифрования точки доступа в строку */
 
 	String data;
+
 	switch (auth_mode) {
 		case AUTH_OPEN:
 			data = "AUTH_OPEN";
@@ -134,6 +137,7 @@ String convertAuthModeToString(AUTH_MODE auth_mode) {
 			data = "AUTH_OPEN";
 			break;
 	}
+
 	return data;
 }
 
