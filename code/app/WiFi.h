@@ -46,6 +46,17 @@ private:
 		/* Метод инициализации Wi-Fi модуля */
 		void wifiInit();
 
+		/* Методы преобразования типа шифрования */
+		AUTH_MODE convertStringToAuthMode(String data);
+		String convertAuthModeToString(AUTH_MODE auth_mode);
+
+		/* Метод преобразования MAC-адреса с разделением двоеточием */
+		String convertMAC(String macAddress, bool fullMAC = true);
+
+		/* Методы преобразования RAW MAC-адреса в серийный номер устройства */
+		String convertHEX(String hexSN);
+		String convertSN(String macAddress);
+
 public:
 	  /* Конструктор для режимов "Точка доступа Wi-Fi" и "Клиент Wi-Fi сети".
 	   * Допускается использование нескольких режимов одновременно.
@@ -84,8 +95,18 @@ public:
 		/* Метод применения конфигурации к аппаратной части */
 		void applySettings();
 
+		/* Методы получения MAC-адресов точки доступа и клиента Wi-Fi модуля */
+		String getAccessPointMAC(bool raw = false);
+		String getStationMAC(bool raw = false);
+
+		/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
+		String getSN();
+
 		/* Метод подключения к точке доступа в режиме "Клиент Wi-Fi сети" */
 		void wifiConnect(String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_autoconnect, bool store_settings);
+
+		/* Метод сканирования доступных точек доступа */
+		String wifiScan();
 };
 
 #endif /* APP_WIFI_H_ */

@@ -8,7 +8,7 @@
 #include "Scheduler.h"
 
 Scheduler::Scheduler() {
-	// TODO Auto-generated constructor stub
+	// TODO Реализовать класс "Планировщик"
 
 }
 

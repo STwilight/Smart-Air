@@ -90,7 +90,7 @@ private:
 
 	/* Интеграция датчиа температуры */
 	static Thermometer *sensor;
-	static void getTemp();
+	static void updateTemp();
 
 	/* Реализация функционала внутреннего термостата */
 	static void execThermostat();
@@ -101,6 +101,9 @@ private:
 public:
 	/* Конструктор по-умолчанию */
 	AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin, byte HiSpeedPin, byte SensorPin, byte SensorResolution);
+
+	/* Метод получения текущей температуры */
+	float getTemp();
 
 	/* Методы получения и сохранения конфигурации */
 	String getSettings();

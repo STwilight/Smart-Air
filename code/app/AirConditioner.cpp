@@ -154,7 +154,7 @@ void AirConditioner::setDeltaTemp(byte temp) {
 	this->delta_temp = temp;
 }
 
-void AirConditioner::getTemp() {
+void AirConditioner::updateTemp() {
 	/* Получение температуры с датчика */
 
 	AirConditioner::cur_temp = AirConditioner::sensor->getTemp();
@@ -184,8 +184,14 @@ void AirConditioner::execThermostat() {
 void AirConditioner::execConditioner() {
 	/* Основной исполняемый метод, реализующий функционал кондиционера */
 
-	AirConditioner::getTemp();
+	AirConditioner::updateTemp();
 	AirConditioner::execThermostat();
+}
+
+float AirConditioner::getTemp() {
+	/* Получение текущей температурыа */
+
+	return AirConditioner::cur_temp;
 }
 
 String AirConditioner::getSettings() {

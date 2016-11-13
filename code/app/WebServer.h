@@ -5,32 +5,37 @@
  *
  */
 
-#ifndef WEBSERVER_H_
-#define WEBSERVER_H_
+#ifndef APP_WEBSERVER_H_
+#define APP_WEBSERVER_H_
 
-#include "Config.h"
 #include <SmingCore/SmingCore.h>
 
 class WebServer {
 private:
 	HttpServer webServer;
 
-	/* Методы для выдачи Status-страницы и ее содержимого */
-	void onStatus(HttpRequest &request, HttpResponse &response);
-	void onAjaxStatus(HttpRequest &request, HttpResponse &response);
+	/* Методы для выдачи страницы мониторинга и ее содержимого */
+	static void onStatus(HttpRequest &request, HttpResponse &response);
+	static void onAjaxStatus(HttpRequest &request, HttpResponse &response);
 
 	/* Методы для выдачи системных страниц */
-	void onConfig(HttpRequest &request, HttpResponse &response);
-	void onNetwork(HttpRequest &request, HttpResponse &response);
-	void onSecurity(HttpRequest &request, HttpResponse &response);
-	void onUpdate(HttpRequest &request, HttpResponse &response);
-	void onAbout(HttpRequest &request, HttpResponse &response);
+	static void onConfig(HttpRequest &request, HttpResponse &response);
+	static void onNetwork(HttpRequest &request, HttpResponse &response);
+	static void onSecurity(HttpRequest &request, HttpResponse &response);
+	static void onUpdate(HttpRequest &request, HttpResponse &response);
+	static void onBackup(HttpRequest &request, HttpResponse &response);
+	static void onRestore(HttpRequest &request, HttpResponse &response);
+	static void onAbout(HttpRequest &request, HttpResponse &response);
 
 	/* Метод для отправки файла */
-	void onFile(HttpRequest &request, HttpResponse &response);
+	static void onFile(HttpRequest &request, HttpResponse &response);
+
+	/* Метод для создания файла в случае его отсутствия */
+	static void fileNotExist(String filename);
 
 public:
-	WebServer();
+	/* Конструктор по-умолчанию */
+	WebServer(uint16_t port);
 };
 
-#endif /* WEBSERVER_H_ */
+#endif /* APP_WEBSERVER_H_ */

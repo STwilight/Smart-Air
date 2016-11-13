@@ -6,7 +6,6 @@
  */
 
 #include "WiFi.h"
-#include "Functions.h"
 
 /* Декларирование static-переменных класса WiFi */
 	   bool WiFi::ap_wifi_state;
@@ -22,7 +21,7 @@ WiFi::WiFi() {
 
 	String def_ssid = PROJECT_NAME;
 	def_ssid.concat(" [");
-	def_ssid.concat(convertMAC(WifiAccessPoint.getMAC(), false));
+	def_ssid.concat(this->convertMAC(WifiAccessPoint.getMAC(), false));
 	def_ssid.concat("]");
 
 	this->ap_wifi_ssid			= def_ssid;
@@ -105,6 +104,16 @@ void WiFi::wifiConnect(String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_aut
 	}
 }
 
+String WiFi::wifiScan() {
+	/* Метод сканирования доступных точек доступа */
+
+	// TODO: Завершить реализацию метода сканирования доступных точек доступа
+	BssList networks;
+	String jsonString;
+
+	return jsonString;
+}
+
 String WiFi::getSettings() {
 	/* Получение конфигурации Wi-Fi модуля в формате JSON-строки */
 
@@ -116,7 +125,7 @@ String WiFi::getSettings() {
 
 			   ap_mode["ap_wifi_ssid"] = this->ap_wifi_ssid;
 			    ap_mode["ap_wifi_pwd"] = this->ap_wifi_pwd;
-		  ap_mode["ap_wifi_auth_mode"] = convertAuthModeToString(this->ap_wifi_auth_mode);
+		  ap_mode["ap_wifi_auth_mode"] = this->convertAuthModeToString(this->ap_wifi_auth_mode);
 		     ap_mode["ap_wifi_hidden"] = (bool) this->ap_wifi_hidden;
 		    ap_mode["ap_wifi_channel"] = (byte) this->ap_wifi_channel;
 	     ap_mode["ap_wifi_ip_address"] = this->ap_wifi_ip_address;
@@ -126,7 +135,7 @@ String WiFi::getSettings() {
 		 	 	   root["ap_def_mode"] = ap_def_mode;
 
 		ap_def_mode["ap_wifi_def_pwd"] = WiFi::ap_wifi_def_pwd;
-  ap_def_mode["ap_wifi_def_auth_mode"] = convertAuthModeToString(WiFi::ap_wifi_def_auth_mode);
+  ap_def_mode["ap_wifi_def_auth_mode"] = this->convertAuthModeToString(WiFi::ap_wifi_def_auth_mode);
   	  ap_def_mode["ap_wifi_def_state"] = (bool) WiFi::ap_wifi_def_state;
 
   	  	  	   JsonObject& client_mode = jsonBuffer.createObject();
@@ -154,7 +163,7 @@ void WiFi::setSettings(String jsonString) {
 
 		  this->ap_wifi_ssid = ap_mode["ap_wifi_ssid"].asString();
 		   this->ap_wifi_pwd = ap_mode["ap_wifi_pwd"].asString();
-	 this->ap_wifi_auth_mode = convertStringToAuthMode(ap_mode["ap_wifi_auth_mode"].asString());
+	 this->ap_wifi_auth_mode = this->convertStringToAuthMode(ap_mode["ap_wifi_auth_mode"].asString());
 		this->ap_wifi_hidden = ap_mode["ap_wifi_hidden"];
 	   this->ap_wifi_channel = ap_mode["ap_wifi_channel"];
 	this->ap_wifi_ip_address = ap_mode["ap_wifi_ip_address"].asString();
@@ -163,7 +172,7 @@ void WiFi::setSettings(String jsonString) {
 	 JsonObject& ap_def_mode = root["ap_def_mode"];
 
 	   WiFi::ap_wifi_def_pwd = ap_def_mode["ap_wifi_def_pwd"].asString();
- WiFi::ap_wifi_def_auth_mode = convertStringToAuthMode(ap_def_mode["ap_wifi_def_auth_mode"].asString());
+ WiFi::ap_wifi_def_auth_mode = this->convertStringToAuthMode(ap_def_mode["ap_wifi_def_auth_mode"].asString());
 	 WiFi::ap_wifi_def_state = ap_def_mode["ap_wifi_def_state"];
 
 	 JsonObject& client_mode = root["client_mode"];
@@ -200,4 +209,162 @@ void WiFi::applySettings() {
 		spiffs_unmount();
 		System.restart();
 	}
+}
+
+AUTH_MODE WiFi::convertStringToAuthMode(String data) {
+	/* Метод преобразования строки в тип шифрования точки доступа */
+
+	AUTH_MODE auth_mode;
+
+	if(data.equals("AUTH_OPEN"))
+		auth_mode = AUTH_OPEN;
+	else if(data.equals("AUTH_WEP"))
+		auth_mode = AUTH_WEP;
+	else if(data.equals("AUTH_WPA_PSK"))
+		auth_mode = AUTH_WPA_PSK;
+	else if(data.equals("AUTH_WPA2_PSK"))
+		auth_mode = AUTH_WPA2_PSK;
+	else if(data.equals("AUTH_WPA_WPA2_PSK"))
+		auth_mode = AUTH_WPA_WPA2_PSK;
+	else if(data.equals("AUTH_MAX"))
+		auth_mode = AUTH_MAX;
+	else
+		auth_mode = AUTH_OPEN;
+
+	return auth_mode;
+}
+String WiFi::convertAuthModeToString(AUTH_MODE auth_mode) {
+	/* Метод преобразования типа шифрования точки доступа в строку */
+
+	String data;
+
+	switch (auth_mode) {
+		case AUTH_OPEN:
+			data = "AUTH_OPEN";
+			break;
+		case AUTH_WEP:
+			data = "AUTH_WEP";
+			break;
+		case AUTH_WPA_PSK:
+			data = "AUTH_WPA_PSK";
+			break;
+		case AUTH_WPA2_PSK:
+			data = "AUTH_WPA2_PSK";
+			break;
+		case AUTH_WPA_WPA2_PSK:
+			data = "AUTH_WPA_WPA2_PSK";
+			break;
+		case AUTH_MAX:
+			data = "AUTH_MAX";
+			break;
+		default:
+			data = "AUTH_OPEN";
+			break;
+	}
+
+	return data;
+}
+
+String WiFi::getAccessPointMAC(bool raw) {
+	/* Метод получения MAC-адреса точки доступа Wi-Fi модуля */
+
+	String rawMAC = WifiAccessPoint.getMAC();
+
+	if(raw)
+		return rawMAC;
+	else
+		return convertMAC(rawMAC, true);
+}
+String WiFi::getStationMAC(bool raw) {
+	/* Метод получения MAC-адреса клиента Wi-Fi модуля */
+
+	String rawMAC = WifiStation.getMAC();
+
+	if(raw)
+		return rawMAC;
+	else
+		return convertMAC(rawMAC, true);
+}
+String WiFi::getSN() {
+	/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
+
+	return this->convertSN(this->getAccessPointMAC(true));
+}
+
+String WiFi::convertMAC(String macAddress, bool fullMAC) {
+	/* Метод для конвертации MAC адреса с разделением двоеточием.
+	 *
+	 * При значении входного параметра "fullMAC" равному "true",
+	 * 		производится конвертация полного MAC-адреса,
+	 * 		в противном случае конвертируются лишь три последних байта.
+	 *
+	 *  */
+
+	String result = macAddress;
+	result.toUpperCase();
+
+	char macChar[macAddress.length() + 1];
+	result.toCharArray(macChar, macAddress.length() + 1);
+
+	result = "";
+	byte size = sizeof(macChar) - 1;
+
+	int startNUM = 0;
+	if(!fullMAC)
+		startNUM = 6;
+
+	for(int i=startNUM; i<size; i++) {
+		result += macChar[i];
+		if((i%2 != 0) & (i != size-1))
+			result += ":";
+	}
+
+	return result;
+}
+String WiFi::convertHEX(String hexSN)
+{
+	/* Метод конвертации HEX строки вида "1a2b3c" в DEC значение */
+
+	const char symbols[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
+							  '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+	String hexNumber = hexSN;
+	byte hexLength = hexNumber.length();
+	uint32_t decResult = 0;
+
+	hexNumber.toUpperCase();
+	for(int i=0; i<hexLength; i++)
+		for(int j=0; j<sizeof(symbols); j++) {
+			if(hexNumber.charAt(i) == symbols[j])
+				decResult += j << 4*(hexLength-i-1);
+	}
+
+	return String(decResult);
+}
+String WiFi::convertSN(String macAddress)
+{
+	/* Метод конвертации 3 последних байт MAC-адреса в десятичный серийный номер */
+
+	String tmp;
+
+	char macChar[macAddress.length() + 1];
+	macAddress.toCharArray(macChar, macAddress.length() + 1);
+
+	byte size = sizeof(macChar) - 1;
+	for(int i=6; i<size; i++)
+		tmp += macChar[i];
+
+	/* Необходимо использовать конвертацию из String в uint32_t для преобразования HEX > DEC
+	 * 		посредством использования недоступной сейчас в Sming функции sscanf().
+	 *
+	 * Временное решение – самописный конвертер HEX-кода в DEC String значение.
+	 * Функция для вызова: (String) convertHEX(String hexSN).
+	 *
+	 * Правильное решение:
+	 * 		sscanf(tmp.c_str(), "%x", &result);
+	 * 		return (long) result;
+	 *
+	 */
+
+	return convertHEX(tmp);
 }

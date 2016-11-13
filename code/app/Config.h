@@ -19,5 +19,7 @@
 
 /* Определения портов для серверов */
 #define WEB_SERVER_PORT 80
+#define FTP_SERVER_PORT 21
+#define TCP_SERVER_PORT 9000
 
 #endif /* APP_CONFIG_H_ */
