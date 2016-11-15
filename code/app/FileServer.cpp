@@ -42,12 +42,14 @@ String FileServer::getSettings() {
 void FileServer::setSettings(String jsonString) {
 	/* Сохранение конфигурации FTP-сервера из формата JSON-строки */
 
-	DynamicJsonBuffer jsonBuffer;
-	JsonObject& root = jsonBuffer.parseObject(jsonString);
+	if(jsonString.length() != 0) {
+		DynamicJsonBuffer jsonBuffer;
+		JsonObject& root = jsonBuffer.parseObject(jsonString);
 
-	JsonObject& ftp_server = root["ftp_server"];
-	   this->ftpServerName = ftp_server["ftp_server_name"].asString();
-	   this->ftpServerPass = ftp_server["ftp_server_pass"].asString();
+		JsonObject& ftp_server = root["ftp_server"];
+		   this->ftpServerName = ftp_server["ftp_server_name"].asString();
+		   this->ftpServerPass = ftp_server["ftp_server_pass"].asString();
+	}
 }
 void FileServer::applySettings() {
 	/* Метод применения конфигурации */

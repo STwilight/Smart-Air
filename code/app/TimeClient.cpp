@@ -50,13 +50,15 @@ String TimeClient::getSettings() {
 void TimeClient::setSettings(String jsonString) {
 	/* Сохранение конфигурации NTP-клиента из формата JSON-строки */
 
-	DynamicJsonBuffer jsonBuffer;
-	JsonObject& root = jsonBuffer.parseObject(jsonString);
+	if(jsonString.length() != 0) {
+		DynamicJsonBuffer jsonBuffer;
+		JsonObject& root = jsonBuffer.parseObject(jsonString);
 
-	  JsonObject& ntp_client = root["ntp_client"];
-	  this->ntpServerAddress = ntp_client["ntp_server_address"].asString();
-	this->ntpRequestInterval = ntp_client["ntp_request_interval"];
-		   this->ntpTimezone = ntp_client["ntp_timezone"];
+		  JsonObject& ntp_client = root["ntp_client"];
+		  this->ntpServerAddress = ntp_client["ntp_server_address"].asString();
+		this->ntpRequestInterval = ntp_client["ntp_request_interval"];
+			   this->ntpTimezone = ntp_client["ntp_timezone"];
+	}
 }
 void TimeClient::applySettings() {
 	/* Метод применения конфигурации */

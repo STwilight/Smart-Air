@@ -221,28 +221,30 @@ String AirConditioner::getSettings() {
 void AirConditioner::setSettings(String jsonString) {
 	/* Сохранение конфигурации кондиционера из формата JSON-строки */
 
-	DynamicJsonBuffer jsonBuffer;
+	if(jsonString.length() != 0) {
+		DynamicJsonBuffer jsonBuffer;
 
-	JsonObject& root = jsonBuffer.parseObject(jsonString);
-	JsonObject& settings = root["settings"];
+		JsonObject& root = jsonBuffer.parseObject(jsonString);
+		JsonObject& settings = root["settings"];
 
-	this->power = settings["power"];
-	this->mode = settings["mode"];
+		this->power = settings["power"];
+		this->mode = settings["mode"];
 
-	if((settings["speed"] >= Stopped) && (settings["speed"] <= HiSpeed))
-		this->speed = settings["speed"];
-	else
-		this->speed = Stopped;
+		if((settings["speed"] >= Stopped) && (settings["speed"] <= HiSpeed))
+			this->speed = settings["speed"];
+		else
+			this->speed = Stopped;
 
-	if((settings["set_temp"] >= set_temp_min) && (settings["set_temp"] <= set_temp_max))
-		this->set_temp = settings["set_temp"];
-	else
-		this->set_temp = set_temp_def;
+		if((settings["set_temp"] >= set_temp_min) && (settings["set_temp"] <= set_temp_max))
+			this->set_temp = settings["set_temp"];
+		else
+			this->set_temp = set_temp_def;
 
-	if((settings["delta_temp"] >= delta_temp_min) && (settings["delta_temp"] <= delta_temp_max))
-		this->delta_temp = settings["delta_temp"];
-	else
-		this->delta_temp = delta_temp_def;
+		if((settings["delta_temp"] >= delta_temp_min) && (settings["delta_temp"] <= delta_temp_max))
+			this->delta_temp = settings["delta_temp"];
+		else
+			this->delta_temp = delta_temp_def;
+	}
 }
 void AirConditioner::applySettings() {
 	/* Применение конфигурации кондиционера к аппаратной части */
