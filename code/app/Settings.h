@@ -12,13 +12,15 @@
 
 /* Определения названий файлов с настройками */
 #define SYS_SETTINGS_FILE  ".system.conf"
+#define SEC_SETTINGS_FILE  ".security.conf"
 #define APP_SETTINGS_FILE  ".application.conf"
 #define WIFI_SETTINGS_FILE ".wireless.conf"
 
 /* Определения типов настроек */
 #define SYS_SETTINGS  0x00
-#define APP_SETTINGS  0x01
-#define WIFI_SETTINGS 0x02
+#define SEC_SETTINGS  0x01
+#define APP_SETTINGS  0x02
+#define WIFI_SETTINGS 0x03
 
 struct SettingsStorage
 {
@@ -32,6 +34,9 @@ struct SettingsStorage
 		switch (type) {
 			case SYS_SETTINGS:
 				settings = readJSONFile(SYS_SETTINGS_FILE);
+				break;
+			case SEC_SETTINGS:
+				settings = readJSONFile(SEC_SETTINGS_FILE);
 				break;
 			case APP_SETTINGS:
 				settings = readJSONFile(APP_SETTINGS_FILE);
@@ -52,6 +57,9 @@ struct SettingsStorage
 		switch (type) {
 			case SYS_SETTINGS:
 				return writeJSONFile(settings, SYS_SETTINGS_FILE);
+				break;
+			case SEC_SETTINGS:
+				return writeJSONFile(settings, SEC_SETTINGS_FILE);
 				break;
 			case APP_SETTINGS:
 				return writeJSONFile(settings, APP_SETTINGS_FILE);

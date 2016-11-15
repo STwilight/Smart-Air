@@ -8,6 +8,8 @@
 #ifndef APP_AirConditioner_H_
 #define APP_AirConditioner_H_
 
+#include "Settings.h"
+#include "Application.h"
 #include "Definitions.h"
 #include "Thermometer.h"
 #include <SmingCore/SmingCore.h>
@@ -111,6 +113,9 @@ public:
 
 	/* Метод применения конфигурации к аппаратной части */
 	void applySettings();
+
+	/* Метод, выполняющий подготовку модуля кондиционера для перезагрузки системы */
+	void onSystemRestart();
 };
 
 #endif /* APP_AirConditioner_H_ */

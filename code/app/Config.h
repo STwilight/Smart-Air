@@ -14,6 +14,10 @@
 /* Определение имени проекта */
 #define PROJECT_NAME "Smart Air"
 
+/* Определение логина и пароля по-умолчанию */
+#define DEFAULT_LOGIN PROJECT_NAME
+#define DEFAULT_PASS  ""
+
 /* Определение версии программного обеспечения */
 #define FIRMWARE_VER "1.0 Alpha"
 

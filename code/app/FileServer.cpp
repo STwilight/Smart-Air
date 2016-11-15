@@ -7,10 +7,56 @@
 
 #include "FileServer.h"
 
-FileServer::FileServer(String name, String pass, uint16_t port) {
+FileServer::FileServer() {
 	/* Конструктор по-умолчанию */
 
-	ftpServer.addUser(name, pass);
-	ftpServer.listen(port);
+	this->ftpServerName = DEFAULT_LOGIN;
+	this->ftpServerPass = DEFAULT_PASS;
+	this->ftpServerPort = FTP_SERVER_PORT;
 }
 
+void FileServer::ftpInit() {
+	/* Метод инициализации и запуска FTP-сервера */
+
+	ftpServer.addUser(this->ftpServerName, this->ftpServerPass);
+	ftpServer.listen(this->ftpServerPort);
+}
+
+String FileServer::getSettings() {
+	/* Получение конфигурации FTP-сервера в формате JSON-строки */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+		   JsonObject& ftp_server = jsonBuffer.createObject();
+			   root["ftp_server"] = ftp_server;
+
+	ftp_server["ftp_server_name"] = this->ftpServerName;
+	ftp_server["ftp_server_pass"] = this->ftpServerPass;
+
+	String jsonString;
+	root.printTo(jsonString);
+
+	return jsonString;
+}
+void FileServer::setSettings(String jsonString) {
+	/* Сохранение конфигурации FTP-сервера из формата JSON-строки */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.parseObject(jsonString);
+
+	JsonObject& ftp_server = root["ftp_server"];
+	   this->ftpServerName = ftp_server["ftp_server_name"].asString();
+	   this->ftpServerPass = ftp_server["ftp_server_pass"].asString();
+}
+void FileServer::applySettings() {
+	/* Метод применения конфигурации */
+
+	systemRestart();
+}
+
+void FileServer::onSystemRestart() {
+	/* Метод, выполняющий подготовку FTP модуля для перезагрузки системы */
+
+	Settings.save(this->getSettings(), SEC_SETTINGS);
+}

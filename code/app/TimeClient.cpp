@@ -16,7 +16,9 @@ TimeClient::TimeClient(String ntpServerAddress, unsigned int ntpRequestInterval,
 	this->ntpClient = null;
 }
 
-void TimeClient::Init() {
+void TimeClient::ntpInit() {
+	/* Метод инициализации системных часов и запуска NTP-клиента */
+
 	SystemClock.setTimeZone(this->ntpTimezone);
 	this->ntpClient = new NtpClient(this->ntpServerAddress, this->ntpRequestInterval, TimeClient::updateSystemClock);
 }
@@ -55,4 +57,17 @@ void TimeClient::setSettings(String jsonString) {
 	  this->ntpServerAddress = ntp_client["ntp_server_address"].asString();
 	this->ntpRequestInterval = ntp_client["ntp_request_interval"];
 		   this->ntpTimezone = ntp_client["ntp_timezone"];
+}
+void TimeClient::applySettings() {
+	/* Метод применения конфигурации */
+
+	systemRestart();
+}
+
+void TimeClient::onSystemRestart() {
+	/* Метод, выполняющий подготовку NTP модуля для перезагрузки системы */
+
+	this->ntpClient->setAutoQuery(false);
+
+	Settings.save(this->getSettings(), SYS_SETTINGS);
 }

@@ -25,7 +25,7 @@ WiFi::WiFi() {
 	def_ssid.concat("]");
 
 	this->ap_wifi_ssid			= def_ssid;
-	this->ap_wifi_pwd			= "";
+	this->ap_wifi_pwd			= DEFAULT_PASS;
 	this->ap_wifi_auth_mode		= AUTH_OPEN;
 	this->ap_wifi_hidden		= false;
 	this->ap_wifi_channel		= 6;
@@ -33,7 +33,7 @@ WiFi::WiFi() {
 	this->ap_wifi_state			= Off;
 
 	this->ap_wifi_def_ssid		= def_ssid;
-	this->ap_wifi_def_pwd		= "";
+	this->ap_wifi_def_pwd		= DEFAULT_PASS;
 	this->ap_wifi_def_auth_mode = AUTH_OPEN;
 	this->ap_wifi_def_channel	= 6;
 	this->ap_wifi_def_state		= Off;
@@ -44,16 +44,10 @@ WiFi::WiFi() {
 	this->st_wifi_conn_timeout  = 20;
 	this->st_wifi_err			= false;
 	this->st_wifi_state			= On;
-
-	this->wifiInit();
 }
 
 void WiFi::wifiInit() {
 	/* Метод инициализации Wi-Fi модуля */
-
-	/* Настройка режима "Клиент Wi-Fi сети" */
-	WifiStation.enable(this->st_wifi_state);
-	this->wifiConnect(this->st_wifi_ssid, this->st_wifi_pwd, this->st_wifi_autoconnect, false);
 
 	/* Настройка режима "Точка доступа Wi-Fi" */
 	WifiAccessPoint.setIP(IPAddress(this->ap_wifi_ip_address));
@@ -61,6 +55,10 @@ void WiFi::wifiInit() {
 	if(WiFi::ap_wifi_state) {
 		WifiAccessPoint.config(this->ap_wifi_ssid, this->ap_wifi_pwd, this->ap_wifi_auth_mode, this->ap_wifi_hidden, this->ap_wifi_channel);
 	}
+
+	/* Настройка режима "Клиент Wi-Fi сети" */
+	WifiStation.enable(this->st_wifi_state);
+	this->wifiConnect(this->st_wifi_ssid, this->st_wifi_pwd, this->st_wifi_autoconnect, false);
 }
 
 void WiFi::wifiConnectOK() {
@@ -206,8 +204,7 @@ void WiFi::applySettings() {
 	else {
 		/* Необходимый IP адрес в режиме "Точка доступа Wi-Fi" назначается лишь в случае конфигурации при перезапуске системы.
 		 * Временная мера – перезагрузка системы при изменении состояния точки доступа (вкл/выкл). */
-		spiffs_unmount();
-		System.restart();
+		systemRestart();
 	}
 }
 
@@ -367,4 +364,17 @@ String WiFi::convertSN(String macAddress)
 	 */
 
 	return convertHEX(tmp);
+}
+
+void WiFi::onSystemRestart() {
+	/* Метод, выполняющий подготовку Wi-Fi модуля для перезагрузки системы */
+
+	if(WifiAccessPoint.isEnabled())
+		WifiAccessPoint.enable(false);
+	if(WifiStation.isConnected())
+		WifiStation.disconnect();
+	if(WifiStation.isEnabled())
+		WifiStation.enable(false);
+
+	Settings.save(this->getSettings(), WIFI_SETTINGS);
 }

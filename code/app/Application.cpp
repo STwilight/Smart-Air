@@ -1,4 +1,11 @@
 
+/*
+ * Application.h
+ *
+ * Основной файл приложения
+ *
+ */
+
 /* Подключение заголовочных файлов Sming */
 #include <user_config.h>
 #include <SmingCore/SmingCore.h>
@@ -26,6 +33,8 @@ WiFi *wifi;
 
 void init()
 {
+	/* Основной метод */
+
 	/* Инициализация UART */
 	/* DEBUG */ // Serial.systemDebugOutput(true);
 	/* DEBUG */ // Serial.begin(115200);
@@ -46,16 +55,30 @@ void init()
 	/* Создание экземпляра класса и инициализация Wi-Fi модуля */
 	wifi = new WiFi();
 	wifi->setSettings(Settings.load(WIFI_SETTINGS));
-	wifi->applySettings();
+	wifi->wifiInit();
 
 	/* Создание экземпляра класса и инициализация NTP-клиента */
 	ntpclient = new TimeClient();
 	ntpclient->setSettings(Settings.load(SYS_SETTINGS));
-	ntpclient->Init();
+	ntpclient->ntpInit();
 
 	/* Создание экземпляра класса и инициализация FTP-сервера */
-	ftpserver = new FileServer("login", "pass", FTP_SERVER_PORT);
+	ftpserver = new FileServer();
+	ftpserver->setSettings(Settings.load(SEC_SETTINGS));
+	ftpserver->ftpInit();
 
 	/* Создание экземпляра класса и инициализация Web-сервера */
 	webserver = new WebServer(WEB_SERVER_PORT);
 };
+
+extern void systemRestart() {
+	/* Метод, вызываемый внешними модулями при необходимости перезагрузки системы */
+
+	aircond->onSystemRestart();
+	ntpclient->onSystemRestart();
+	wifi->onSystemRestart();
+	ftpserver->onSystemRestart();
+
+	spiffs_unmount();
+	System.restart();
+}

@@ -8,6 +8,8 @@
 #ifndef APP_TIMECLIENT_H_
 #define APP_TIMECLIENT_H_
 
+#include "Settings.h"
+#include "Application.h"
 #include <SmingCore/SmingCore.h>
 
 class TimeClient {
@@ -17,8 +19,6 @@ private:
 	String ntpServerAddress;
 	unsigned int ntpRequestInterval;
 	double ntpTimezone;
-	// REQUESTINTERVAL должен быть в секундах
-	// TIMEZONE должен быть со знаком минус для правильной работы (баг Sming)!
 
 	/* Метод, отвечающий за обновление даты и времени системы */
 	static void updateSystemClock(NtpClient& client, time_t timestamp);
@@ -28,11 +28,17 @@ public:
 	TimeClient(String ntpServerAddress = "pool.ntp.org", unsigned int ntpRequestInterval = 3600, double ntpTimezone = 0);
 
 	/* Метод инициализации системных часов и запуска NTP-клиента */
-	void Init();
+	void ntpInit();
 
 	/* Методы получения и сохранения конфигурации */
 	String getSettings();
 	void setSettings(String settings);
+
+	/* Метод применения конфигурации */
+	void applySettings();
+
+	/* Метод, выполняющий подготовку NTP модуля для перезагрузки системы */
+	void onSystemRestart();
 };
 
 #endif /* APP_TIMECLIENT_H_ */

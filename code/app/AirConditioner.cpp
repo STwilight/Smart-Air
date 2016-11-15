@@ -253,3 +253,15 @@ void AirConditioner::applySettings() {
 	this->setSetTemp(this->set_temp);
 	this->setDeltaTemp(this->delta_temp);
 }
+
+void AirConditioner::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля кондиционера для перезагрузки системы */
+
+	if(this->executeConditioner.isStarted())
+		this->executeConditioner.stop();
+
+	this->setSpeed(Stopped);
+	this->setPower(PowerOff);
+
+	Settings.save(this->getSettings(), APP_SETTINGS);
+}

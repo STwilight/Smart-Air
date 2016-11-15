@@ -9,6 +9,8 @@
 #define APP_WIFI_H_
 
 #include "Config.h"
+#include "Settings.h"
+#include "Application.h"
 #include "Definitions.h"
 #include <SmingCore/SmingCore.h>
 
@@ -42,9 +44,6 @@ private:
 		/* Методы перенастройки Wi-Fi модуля в зависимости от состояния подключения в режиме "Клиент Wi-Fi сети" */
 	    static void wifiConnectOK();
 		static void wifiConnectFail();
-
-		/* Метод инициализации Wi-Fi модуля */
-		void wifiInit();
 
 		/* Методы преобразования типа шифрования */
 		AUTH_MODE convertStringToAuthMode(String data);
@@ -88,6 +87,9 @@ public:
 	   */
 		WiFi();
 
+		/* Метод инициализации Wi-Fi модуля */
+		void wifiInit();
+
 		/* Методы получения и сохранения конфигурации */
 		String getSettings();
 		void setSettings(String settings);
@@ -107,6 +109,9 @@ public:
 
 		/* Метод сканирования доступных точек доступа */
 		String wifiScan();
+
+		/* Метод, выполняющий подготовку Wi-Fi модуля для перезагрузки системы */
+		void onSystemRestart();
 };
 
 #endif /* APP_WIFI_H_ */
