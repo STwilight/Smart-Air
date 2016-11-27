@@ -37,13 +37,13 @@ void init()
 
 	// TODO: Добавить класс UART-интерфейса
 	/* Инициализация UART */
-	/* DEBUG */ // Serial.begin(115200);
-	/* DEBUG */ // Serial.systemDebugOutput(false);
-	/* DEBUG */ // Serial.commandProcessing(false);
+	/* DEBUG */ Serial.begin(115200);
+	/* DEBUG */ Serial.systemDebugOutput(false);
+	/* DEBUG */ Serial.commandProcessing(false);
 
 	// TODO: Добавить установку режима сна в класс Wi-Fi модуля
 	/* Отключение сна для Wi-Fi модуля */
-	/* DEBUG */ // wifi_set_sleep_type(NONE_SLEEP_T);
+	/* DEBUG */ wifi_set_sleep_type(NONE_SLEEP_T);
 
 	// TODO: Изучить доступные события Wi-Fi модуля
 	/* Класс событий Wi-Fi модуля */
