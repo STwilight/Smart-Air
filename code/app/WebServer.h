@@ -12,11 +12,22 @@
 
 class WebServer {
 private:
-	HttpServer webServer;
+	static HttpServer webServer;
 
 	/* Методы для выдачи страницы мониторинга и ее содержимого */
 	static void onStatus(HttpRequest &request, HttpResponse &response);
 	static void onAjaxStatus(HttpRequest &request, HttpResponse &response);
+
+	/* DEBUG - WebSockets */
+		/* Метод выдачи страницы отладки */
+		static void onDebug(HttpRequest &request, HttpResponse &response);
+
+		/* Методы обработки событий WebSocket'ов */
+		static void webSocketConnected(WebSocket& socket);
+		static void webSocketMessageReceived(WebSocket& socket, const String& message);
+		static void webSocketBinaryReceived(WebSocket& socket, uint8_t* data, size_t size);
+		static void webSocketDisconnected(WebSocket& socket);
+	/* DEBUG - WebSockets */
 
 	/* Методы для выдачи системных страниц */
 	static void onConfig(HttpRequest &request, HttpResponse &response);
@@ -31,7 +42,7 @@ private:
 	static void onFile(HttpRequest &request, HttpResponse &response);
 
 	/* Метод для создания файла в случае его отсутствия */
-	static void fileNotExist(String filename);
+	static void fileNotExist(String filename, bool createfile = true);
 
 public:
 	/* Конструктор по-умолчанию */

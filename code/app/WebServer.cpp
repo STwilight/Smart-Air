@@ -7,25 +7,77 @@
 
 #include "WebServer.h"
 
+/* Декларирование static-переменных класса WebServer */
+	HttpServer WebServer::webServer;
+
 WebServer::WebServer(uint16_t port) {
 	/* Конструктор-обертка WEB-сервера по-умолчанию */
 
-	webServer.addPath("/", this->onStatus);
-	webServer.addPath("/ajax/status", this->onAjaxStatus);
+	this->webServer.addPath("/", this->onStatus);
+	this->webServer.addPath("/ajax/status", this->onAjaxStatus);
 
-	webServer.addPath("/config", this->onConfig);
-	webServer.addPath("/network", this->onNetwork);
-	webServer.addPath("/security", this->onSecurity);
-	webServer.addPath("/update", this->onUpdate);
-	webServer.addPath("/about", this->onAbout);
+	this->webServer.addPath("/config", this->onConfig);
+	this->webServer.addPath("/network", this->onNetwork);
+	this->webServer.addPath("/security", this->onSecurity);
+	this->webServer.addPath("/update", this->onUpdate);
+	this->webServer.addPath("/about", this->onAbout);
 
-	webServer.setDefaultHandler(this->onFile);
+	/* DEBUG - WebSockets */
+		this->webServer.addPath("/debug", this->onDebug);
+		this->webServer.enableWebSockets(true);
+		this->webServer.setWebSocketConnectionHandler(this->webSocketConnected);
+		this->webServer.setWebSocketMessageHandler(this->webSocketMessageReceived);
+		this->webServer.setWebSocketBinaryHandler(this->webSocketBinaryReceived);
+		this->webServer.setWebSocketDisconnectionHandler(this->webSocketDisconnected);
+	/* DEBUG - WebSockets */
 
-	webServer.listen(port);
+	this->webServer.setDefaultHandler(this->onFile);
+
+	this->webServer.listen(port);
 }
 
-// TODO: Завершить реализацию методов выдачи страниц в соответствии с их специфическими требованиями
+/* DEBUG - WebSockets */
+	void WebServer::onDebug(HttpRequest &request, HttpResponse &response) {
+		/* Метод для выдачи страницы отладки */
 
+		WebServer::fileNotExist("debug.html");
+		TemplateFileStream *tmpl = new TemplateFileStream("debug.html");
+
+		auto &vars = tmpl->variables();
+		response.sendTemplate(tmpl);
+	}
+
+	// TODO: Завершить реализацию методов обработки событий WebSocket'ов
+	void WebServer::webSocketConnected(WebSocket& socket) {
+		/* Метод обработки события установления нового socket-подключения */
+
+		WebSocketsList &clients = WebServer::webServer.getActiveWebSockets();
+		for(int i=0; i<clients.count(); i++)
+			clients[i].sendString("Connected! Total connections: " + String(WebServer::webServer.getActiveWebSockets().count()));
+	}
+	void WebServer::webSocketMessageReceived(WebSocket& socket, const String& message) {
+		/* Метод обработки полученной информации в текстовом формате */
+
+		String data = message.c_str();
+		String response = "Message received: " + message;
+		socket.sendString(response);
+	}
+	void WebServer::webSocketBinaryReceived(WebSocket& socket, uint8_t* data, size_t size) {
+		/* Метод обработки полученной информации в двоичном формате */
+
+		String response = "Binary data recieved, size: " + size;
+		socket.sendString(response);
+	}
+	void WebServer::webSocketDisconnected(WebSocket& socket) {
+		/* Метод обработки разрыва существующего socket-подключения */
+
+		WebSocketsList &clients = WebServer::webServer.getActiveWebSockets();
+		for (int i=0; i<clients.count(); i++)
+			clients[i].sendString("Disconnected! Total connections: " + String(WebServer::webServer.getActiveWebSockets().count()));
+	}
+/* DEBUG - WebSockets */
+
+// TODO: Завершить реализацию методов выдачи страниц в соответствии с их специфическими требованиями
 void WebServer::onStatus(HttpRequest &request, HttpResponse &response) {
 	/* Метод для выдачи страницы мониторинга */
 
@@ -110,15 +162,15 @@ void WebServer::onFile(HttpRequest &request, HttpResponse &response)
 		response.forbidden();
 	else
 	{
-		WebServer::fileNotExist(file);
+		WebServer::fileNotExist(file, false);
 		response.setCache(86400, true);
 		response.sendFile(file);
 	}
 }
 
-void WebServer::fileNotExist(String name) {
+void WebServer::fileNotExist(String name, bool createfile) {
 	/* Метод для создания файла в случае его отсутствия */
 
-	if(!fileExist(name))
+	if(!fileExist(name) && createfile)
 		fileSetContent(name, "404 Not Found");
 }
