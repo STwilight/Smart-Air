@@ -81,7 +81,7 @@ void init()
 	ftpserver->setSettings(Settings.load(SEC_SETTINGS));
 	ftpserver->ftpInit();
 
-	// TODO: Ознакомиться с доступным в Sming 2.1.5
+	// TODO: Ознакомиться с SSL, доступным в Sming 2.1.5
 	// TODO: Реализовать шифрование передаваемых через WEB-сервер данных с помощью SSL или AES
 	/* Создание экземпляра класса и инициализация Web-сервера */
 	webserver = new WebServer(WEB_SERVER_PORT);

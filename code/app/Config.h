@@ -8,6 +8,17 @@
 #ifndef APP_CONFIG_H_
 #define APP_CONFIG_H_
 
+/* Определение переменных среды IDE Eclipse для обратной совместимости
+ *
+ * Определения WIFI_SSID и WIFI_PWD хранят SSID и пароль точки доступа Wi-Fi для подключения в режиме "Клиент Wi-Fi сети".
+ * Их значения задаются в свойствах проекта (Project > Properties > C/C++ Build > Environment > Environment variables to set).
+ *
+ */
+#if !defined(WIFI_SSID) || !defined(WIFI_PWD)
+	#define WIFI_SSID ""
+	#define WIFI_PWD  ""
+#endif
+
 /* Определение типа платы используемого модуля ESP8266 */
 #define ESP07
 

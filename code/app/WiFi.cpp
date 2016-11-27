@@ -38,8 +38,8 @@ WiFi::WiFi() {
 	this->ap_wifi_def_channel	= 6;
 	this->ap_wifi_def_state		= Off;
 
-	this->st_wifi_ssid			= "";
-	this->st_wifi_pwd			= "";
+	this->st_wifi_ssid			= WIFI_SSID;
+	this->st_wifi_pwd			= WIFI_PWD;
 	this->st_wifi_autoconnect	= true;
 	this->st_wifi_conn_timeout  = 20;
 	this->st_wifi_err			= false;
