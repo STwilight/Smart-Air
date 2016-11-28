@@ -1,4 +1,3 @@
-
 /*
  * Application.h
  *
@@ -53,10 +52,10 @@ void init()
 	System.setCpuFrequency(eCF_160MHz);
 
 	/* Создание экземпляра класса модуля кондиционера */
-	// aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+	aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
 
 	/* Создание экземпляра класса модуля кондиционера - отладка на плате Smart-Rock */
-	/* DEBUG */ aircond = new AirConditioner(GPIO0, GPIO14, GPIO12, GPIO13, GPIO2, 11);
+	/* DEBUG */ // aircond = new AirConditioner(GPIO0, GPIO14, GPIO12, GPIO13, GPIO2, 11);
 
 	/* Монтирование файловой системы */
 	spiffs_mount();
