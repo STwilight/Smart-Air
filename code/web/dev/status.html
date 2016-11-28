@@ -25,7 +25,7 @@
 						<li role="presentation"><a href="about">About</a></li>
 					</ul>
 				</nav>
-				<h3 id="name" class="text-muted">%project_name% – %device_name%</h3><p>
+				<!-- Project Caption --> <h3 id="project_caption" class="text-muted">%project_name% – %device_name%</h3><p>
 			</div>
 			<div class="jumbotron">
 				<h1>Monitoring Page</h1>
@@ -38,10 +38,11 @@
 				<div class="col-lg-6">
 					<h3>Air conditioner:</h3>
 					<h4 style="margin-left: 7%">
-						<p>Heater state: <span id="heater" class="label label-default">N/A</span><p>
-						<p>Heater op. time: <span id="heater_on" class="label label-default">N/A</span><p>
-						<p>Temperature: <span id="temp" class="label label-default">0&deg;C</span><p>
-						<p>Max. temperature: <span id="max_temp" class="label label-default">0&deg;C</span><p>
+						<!-- Current power state --> <p>Power state: <span id="dev_power" class="label label-default">N/A</span><p>
+						<!-- Current device mode --> <p>Mode: <span id="dev_mode" class="label label-default">N/A</span><p>
+						<!-- Current fan speed --> <p>Speed: <span id="dev_fan_speed" class="label label-default">N/A</span><p>
+						<!-- Set temperature --> <p>Temperature: <span id="dev_set_temp" class="label label-default">0&deg;C</span><p>
+						<!-- Current temperature --> <p>Current temperature: <span id="dev_cur_temp" class="label label-default">0&deg;C</span><p>
 					</h4>
 				</div>
 				<div class="col-lg-6">
@@ -59,7 +60,7 @@
 			<p>&nbsp;</p>
 			<footer class="footer">
 				<center>
-					<p>&copy; 2016, ITPROM</p>
+					<!-- Footer Content --> <p id="footer">&copy; %year%, %company_name%</p>
 				</center>
 			</footer>
 		</div>
