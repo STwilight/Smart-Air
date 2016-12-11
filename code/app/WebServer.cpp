@@ -51,29 +51,35 @@ WebServer::WebServer(uint16_t port) {
 	void WebServer::webSocketConnected(WebSocket& socket) {
 		/* Метод обработки события установления нового socket-подключения */
 
-		WebSocketsList &clients = WebServer::webServer.getActiveWebSockets();
-		for(int i=0; i<clients.count(); i++)
-			clients[i].sendString("Connected! Total connections: " + String(WebServer::webServer.getActiveWebSockets().count()));
+		/* DEBUG */ /*
+			WebSocketsList &clients = WebServer::webServer.getActiveWebSockets();
+			for(int i=0; i<clients.count(); i++)
+				clients[i].sendString("Connected! Total connections: " + String(WebServer::webServer.getActiveWebSockets().count()));
+		*/
 	}
 	void WebServer::webSocketMessageReceived(WebSocket& socket, const String& message) {
 		/* Метод обработки полученной информации в текстовом формате */
 
-		String data = message.c_str();
-		String response = "Message received: " + message;
-		socket.sendString(response);
+		socket.sendString(getData(message.toInt()));
+		/* DEBUG */ // String response = "Message received: " + message;
+		/* DEBUG */ // socket.sendString(response);
 	}
 	void WebServer::webSocketBinaryReceived(WebSocket& socket, uint8_t* data, size_t size) {
 		/* Метод обработки полученной информации в двоичном формате */
 
-		String response = "Binary data recieved, size: " + size;
-		socket.sendString(response);
+		/* DEBUG */ /*
+			String response = "Binary data recieved, size: " + size;
+			socket.sendString(response);
+		*/
 	}
 	void WebServer::webSocketDisconnected(WebSocket& socket) {
 		/* Метод обработки разрыва существующего socket-подключения */
 
-		WebSocketsList &clients = WebServer::webServer.getActiveWebSockets();
-		for (int i=0; i<clients.count(); i++)
-			clients[i].sendString("Disconnected! Total connections: " + String(WebServer::webServer.getActiveWebSockets().count()));
+		/* DEBUG */ /*
+			WebSocketsList &clients = WebServer::webServer.getActiveWebSockets();
+			for (int i=0; i<clients.count(); i++)
+				clients[i].sendString("Disconnected! Total connections: " + String(WebServer::webServer.getActiveWebSockets().count()));
+		*/
 	}
 /* DEBUG - WebSockets */
 

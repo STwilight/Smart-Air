@@ -8,6 +8,7 @@
 #ifndef APP_WEBSERVER_H_
 #define APP_WEBSERVER_H_
 
+#include "Application.h"
 #include <SmingCore/SmingCore.h>
 
 class WebServer {

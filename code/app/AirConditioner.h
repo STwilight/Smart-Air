@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef APP_AirConditioner_H_
-#define APP_AirConditioner_H_
+#ifndef APP_AIRCONDITIONER_H_
+#define APP_AIRCONDITIONER_H_
 
 #include "Settings.h"
 #include "Application.h"
@@ -118,4 +118,4 @@ public:
 	void onSystemRestart();
 };
 
-#endif /* APP_AirConditioner_H_ */
+#endif /* APP_AIRCONDITIONER_H_ */

@@ -1,13 +1,15 @@
 /*
- * Application.h
+ * Application.cpp
  *
  * Основной файл приложения
  *
  */
 
-/* Подключение заголовочных файлов Sming */
-#include <user_config.h>
-#include <SmingCore/SmingCore.h>
+/* Подключение заголовочного файла приложения */
+#include "Application.h"
+
+/* Подключение файла с определениями */
+#include "Definitions.h"
 
 /* Подключение конфигурационных файлов проекта */
 #include "Config.h"
@@ -30,6 +32,7 @@ FileServer *ftpserver;
 WebServer *webserver;
 WiFi *wifi;
 
+
 void init()
 {
 	/* Основной метод */
@@ -37,7 +40,7 @@ void init()
 	// TODO: Добавить класс UART-интерфейса
 	/* Инициализация UART */
 	/* DEBUG */ Serial.begin(115200);
-	/* DEBUG */ Serial.systemDebugOutput(false);
+	/* DEBUG */ Serial.systemDebugOutput(true);
 	/* DEBUG */ Serial.commandProcessing(false);
 
 	// TODO: Добавить установку режима сна в класс Wi-Fi модуля
@@ -52,10 +55,10 @@ void init()
 	System.setCpuFrequency(eCF_160MHz);
 
 	/* Создание экземпляра класса модуля кондиционера */
-	aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+	// aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
 
 	/* Создание экземпляра класса модуля кондиционера - отладка на плате Smart-Rock */
-	/* DEBUG */ // aircond = new AirConditioner(GPIO0, GPIO14, GPIO12, GPIO13, GPIO2, 11);
+	/* DEBUG */ aircond = new AirConditioner(GPIO0, GPIO14, GPIO12, GPIO13, GPIO2, 11);
 
 	/* Монтирование файловой системы */
 	spiffs_mount();
@@ -96,4 +99,29 @@ extern void systemRestart() {
 
 	spiffs_unmount();
 	System.restart();
+}
+extern String getData(byte type) {
+	/* Метод, вызываемый внешними модулями при необходимости получения текущих настроек в формате JSON */
+
+	String settings;
+
+	switch (type) {
+		case AIR_SET:
+			settings = aircond->getSettings();
+			break;
+		case NTP_SET:
+			settings = ntpclient->getSettings();
+			break;
+		case FTP_SET:
+			settings = ftpserver->getSettings();
+			break;
+		case WIFI_SET:
+			settings = wifi->getSettings();
+			break;
+		default:
+			settings = "";
+			break;
+	}
+
+	return settings;
 }

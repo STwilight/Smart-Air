@@ -6,6 +6,12 @@
 
 <script src="debug.js"></script>
 
-<h2>WebSocket Test <input type="button" id="disconnect" onclick="doDisconnect()" value="X" title="Disconnect WS"/></h2>
+<h3>
+Air Conditioneer&nbsp;<input type="button" id="air_set" onclick="doSend(0x00)" value="Get Settings" title="Get Air Conditioneer Settings"/></br>
+NTP Client&nbsp;<input type="button" id="ntp_set" onclick="doSend(0x01)" value="Get Settings" title="Get NTP Client Settings"/></br>
+FTP Server&nbsp;<input type="button" id="ftp_set" onclick="doSend(0x02)" value="Get Settings" title="Get FTP Server Settings"/></br>
+Wi-Fi Module&nbsp;<input type="button" id="wifi_set" onclick="doSend(0x03)" value="Get Settings" title="Get Wi-Fi Module Settings"/></br>
+Disconnect&nbsp;<input type="button" id="disconnect" onclick="doDisconnect()" value="Disconnect" title="Disconnect"/></br>
+</h3>
 
 <div id="output"></div>

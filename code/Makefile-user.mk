@@ -31,3 +31,6 @@ MODULES = app
 
 # SPIFFs Location
 SPIFF_FILES = web/build
+
+# Flash Size
+# SPI_SIZE = 1M

@@ -22,7 +22,6 @@ function onOpen(evt) {
 	// Действие при установлении socket-соединения
 	
 	writeToScreen("CONNECTED");
-	doSend("I must connect!");
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
@@ -43,7 +42,7 @@ function onClose(evt) {
 function doSend(message) {
 	// Метод отправки информации в текстовом виде
 	
-	writeToScreen("SENT: " + message); 
+	// writeToScreen("SENT: " + message); 
 	websocket.send(message);
 }
 function doDisconnect() {
