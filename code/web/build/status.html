@@ -10,7 +10,7 @@
 		<!-- Project Name --> <title id="project_name">%project_name%</title>
 		<link href="bootstrap.css" rel="stylesheet">
 		<script src="jquery.js"></script>
-		<!-- <script src="status.js"></script> -->
+		<script src="status.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -38,11 +38,11 @@
 				<div class="col-lg-6">
 					<h3>Air conditioner:</h3>
 					<h4 style="margin-left: 7%">
-						<!-- Current power state --> <p>Power state: <span id="dev_power" class="label label-default">N/A</span><p>
-						<!-- Current device mode --> <p>Mode: <span id="dev_mode" class="label label-default">N/A</span><p>
-						<!-- Current fan speed --> <p>Speed: <span id="dev_fan_speed" class="label label-default">N/A</span><p>
-						<!-- Set temperature --> <p>Temperature: <span id="dev_set_temp" class="label label-default">0&deg;C</span><p>
-						<!-- Current temperature --> <p>Current temperature: <span id="dev_cur_temp" class="label label-default">0&deg;C</span><p>
+						<!-- Current power state --> <p>Power state: <span id="power" class="label label-default">N/A</span><p>
+						<!-- Current device mode --> <p>Mode: <span id="mode" class="label label-default">N/A</span><p>
+						<!-- Current fan speed --> <p>Speed: <span id="speed" class="label label-default">N/A</span><p>
+						<!-- Set temperature --> <p>Temperature: <span id="set_temp" class="label label-default">0&deg;C</span><p>
+						<!-- Current temperature --> <p>Current temperature: <span id="cur_temp" class="label label-default">0&deg;C</span><p>
 					</h4>
 				</div>
 				<div class="col-lg-6">
@@ -57,6 +57,7 @@
 					</h4>
 				</div>
 			</div>
+			<div id="output"></div>
 			<p>&nbsp;</p>
 			<footer class="footer">
 				<center>
