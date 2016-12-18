@@ -208,11 +208,6 @@ String AirConditioner::getSettings() {
 	settings["set_temp"]	= this->set_temp;
 	settings["delta_temp"]	= this->delta_temp;
 
-	JsonObject& info 		= jsonBuffer.createObject();
-	root["info"] 			= info;
-	info["cur_temp"]		= (float) this->cur_temp;
-	info["err_sensor"]		= (bool) this->sensor->sensor_error;
-
 	String jsonString;
 	root.printTo(jsonString);
 
@@ -254,6 +249,40 @@ void AirConditioner::applySettings() {
 	this->setSpeed(this->speed);
 	this->setSetTemp(this->set_temp);
 	this->setDeltaTemp(this->delta_temp);
+}
+
+String AirConditioner::getState() {
+	/* Метод получения текущего состояния модуля */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+	byte speed = 0x00;
+	if(digitalRead(LowSpeedPin))
+		speed = 0x01;
+	if(digitalRead(MedSpeedPin))
+		speed = 0x02;
+	if(digitalRead(HiSpeedPin))
+		speed = 0x03;
+
+	 JsonObject& status = jsonBuffer.createObject();
+		 root["status"] = status;
+
+		status["power"] = (bool) digitalRead(PowerPin);
+		 status["mode"] = (bool) this->mode;
+		status["speed"] = speed;
+	 status["set_temp"] = this->set_temp;
+
+	   JsonObject& info = jsonBuffer.createObject();
+		   root["info"]	= info;
+
+	   info["cur_temp"] = (float) this->cur_temp;
+	 info["err_sensor"] = (bool) this->sensor->sensor_error;
+
+	String jsonString;
+	root.printTo(jsonString);
+
+	return jsonString;
 }
 
 void AirConditioner::onSystemRestart() {

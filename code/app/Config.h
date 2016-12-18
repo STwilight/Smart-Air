@@ -22,8 +22,12 @@
 /* Определение типа платы используемого модуля ESP8266 */
 #define ESP07
 
-/* Определение имени проекта */
+/* Определение специальных переменных проекта */
+#define AUTHOR_NAME	 "Symrak"
 #define PROJECT_NAME "Smart Air"
+#define DEVICE_CLASS "Air conditioner"
+#define START_YEAR	 2016
+#define COMPANY_NAME "ITPROM LLC"
 
 /* Определение логина и пароля по-умолчанию */
 #define DEFAULT_LOGIN PROJECT_NAME

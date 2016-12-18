@@ -97,12 +97,18 @@ public:
 		/* Метод применения конфигурации к аппаратной части */
 		void applySettings();
 
+		/* Метод получения текущего состояния модуля */
+		String getState();
+
 		/* Методы получения MAC-адресов точки доступа и клиента Wi-Fi модуля */
 		String getAccessPointMAC(bool raw = false);
 		String getStationMAC(bool raw = false);
 
 		/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
 		String getSN();
+
+		/* Метод получения имени устройства по-умолчанию (на основе MAC адреса его точки доступа ) */
+		String getDefaulDeviceName();
 
 		/* Метод подключения к точке доступа в режиме "Клиент Wi-Fi сети" */
 		void wifiConnect(String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_autoconnect, bool store_settings);

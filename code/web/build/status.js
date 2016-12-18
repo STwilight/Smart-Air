@@ -2,7 +2,7 @@ var output;
 
 function init() {
 	// Основной метод
-	output = document.getElementById("output");
+	output = document.getElementById("messages");
 	startWebSocket();
 }
 
@@ -18,7 +18,6 @@ function startWebSocket() {
 
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
-	// websocket.send("0x00");
 	doLoopRequest();
 }
 function onMessage(evt) {
@@ -27,20 +26,21 @@ function onMessage(evt) {
 }
 function onError(evt) {
 	// Действие при возникновении ошибки
-	writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+	writeToScreen('<div class="alert alert-danger" role="alert">Connection error!</div>');
 }
 function onClose(evt) {
 	// Действие при разъединении socket-соединения
+	writeToScreen('<div class="alert alert-info" role="alert">Connection closed.</div>');	
 }
 
 function doSend(message) {
-	// Метод отправки информации в текстовом виде
-	// writeToScreen("SENT: " + message); 
+	// Метод отправки информации в текстовом виде 
 	websocket.send(message);
 }
 function doLoopRequest() {
 	(function worker() {
-		websocket.send("0x00");
+		websocket.send(0x01);
+		//websocket.send(0x05);
 		setTimeout(worker, 500);
 	})();
 }
@@ -54,13 +54,13 @@ function doDisconnect() {
 function processJSON(msg) {
 	// Метод обработки информации, полученной из JSON	
 	var messages = "";
-	var ap_mode = false;
-	// writeToScreen("JSON: " + msg);
+	var ap_wifi_enabled = false;
+	var st_wifi_enabled = false;
+	var st_wifi_connected = false;
+	// writeToScreen('<div class="alert alert-info" role="alert">' + msg + '</div>');
 	var data = JSON.parse(msg);
 	$.each(data, function(key, val) {
-		// writeToScreen("Root key: " + key);
 		$.each(val, function(subkey, subval) {
-			// writeToScreen("Subkey: " + subkey + ", value: " + subval);
 			var target = $("#" + subkey);
 			switch (subkey) {
 				case "cur_temp":
@@ -109,13 +109,78 @@ function processJSON(msg) {
 				case "set_temp":
 					document.getElementById(subkey).innerHTML = subval.toString() + "&deg;C";
 					break;
+				/*
+				case "ap_wifi_enabled":
+					ap_wifi_enabled = subval;
+					if (subval) {
+						target.removeClass("label-danger").addClass("label-success");
+						document.getElementById(subkey).innerHTML = "On";
+					}
+					else {
+						target.removeClass("label-success").addClass("label-danger");
+						document.getElementById(subkey).innerHTML = "Off";
+					}
+					break;
+				case "ap_wifi_ssid":
+					if (ap_wifi_enabled)
+						document.getElementById("ap_status").innerHTML = '<p>AP SSID: <span id="' + subkey + '" class="label label-default">' + subval + '</span></p>';
+					else
+						document.getElementById("ap_status").innerHTML = "";
+					break;
+				case "ap_wifi_ip":
+					if (ap_wifi_enabled)
+						document.getElementById("ap_status").innerHTML += '<p>AP IP: <span id="' + subkey + '" class="label label-default">' + subval + '</span></p>';
+					else
+						document.getElementById("ap_status").innerHTML = "";
+					break;
+				case "st_wifi_enabled":
+					st_wifi_enabled = subval;
+					if (subval) {
+						target.removeClass("label-danger").addClass("label-success");
+						document.getElementById(subkey).innerHTML = "On";
+					}
+					else {
+						target.removeClass("label-success").addClass("label-danger");
+						document.getElementById(subkey).innerHTML = "Off";
+					}
+					break;
+				case "st_wifi_ssid":
+					if (st_wifi_enabled)
+						document.getElementById("st_status").innerHTML = '<p>Station SSID: <span id="' + subkey + '" class="label label-default">' + subval + '</span></p>';
+					else
+						document.getElementById("st_status").innerHTML = "";
+					break;
+				case "st_wifi_connected":
+					st_wifi_connected = subval;
+					if (st_wifi_enabled) {
+						document.getElementById("st_status").innerHTML = '<p>Connected: <span id="' + subkey + '" class="label label-danger">' + "No" + '</span><p>';
+						if (subval) {
+							target.removeClass("label-danger").addClass("label-success");
+							document.getElementById(subkey).innerHTML = "Yes";
+						}
+						else {
+							target.removeClass("label-success").addClass("label-danger");
+							document.getElementById(subkey).innerHTML = "No";
+						}
+					}
+					else
+						document.getElementById("st_status").innerHTML = "";
+					break;
+				case "st_wifi_ip":
+					if (st_wifi_enabled & st_wifi_connected) {
+						document.getElementById("st_status").innerHTML = '<p>Station IP: <span id="' + subkey + '" class="label label-default">' + subval + '</span><p>';
+					}
+					else
+						document.getElementById("st_status").innerHTML = "";
+					break;
+				*/
 				default:
 					// document.getElementById(subkey).innerHTML = subval;
 					break;
 			}
 		});
 	});
-	document.getElementById("warnings").innerHTML = messages;
+	document.getElementById("messages").innerHTML = messages;
 }
 
 function writeToScreen(message) {

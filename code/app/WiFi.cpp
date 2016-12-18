@@ -210,6 +210,41 @@ void WiFi::applySettings() {
 	}
 }
 
+String WiFi::getState() {
+	/* Метод получения текущего состояния модуля */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+	String ap_wifi_ssid;
+	if(ap_wifi_def_state)
+		ap_wifi_ssid = ap_wifi_def_ssid;
+	else
+		ap_wifi_ssid = this->ap_wifi_ssid;
+
+			 JsonObject& ap_wifi_status = jsonBuffer.createObject();
+				 root["ap_wifi_status"] = ap_wifi_status;
+
+	  ap_wifi_status["ap_wifi_enabled"]	= (bool) WifiAccessPoint.isEnabled();
+	// функция 'WifiAccessPoint.getSSID()' не работает (не найдена)
+		 ap_wifi_status["ap_wifi_ssid"] = ap_wifi_ssid;
+		   ap_wifi_status["ap_wifi_ip"]	= WifiAccessPoint.getIP().toString();
+
+			 JsonObject& st_wifi_status = jsonBuffer.createObject();
+				 root["st_wifi_status"] = st_wifi_status;
+
+	  st_wifi_status["st_wifi_enabled"]	= (bool) WifiStation.isEnabled();
+		 st_wifi_status["st_wifi_ssid"]	= WifiStation.getSSID();
+	st_wifi_status["st_wifi_connected"] = (bool) WifiStation.isConnected();
+		   st_wifi_status["st_wifi_ip"]	= WifiStation.getIP().toString();
+	// функция 'WifiStation.getRssi()' не работает (не найдена)
+
+	String jsonString;
+	root.printTo(jsonString);
+
+	return jsonString;
+}
+
 AUTH_MODE WiFi::convertStringToAuthMode(String data) {
 	/* Метод преобразования строки в тип шифрования точки доступа */
 
@@ -288,6 +323,12 @@ String WiFi::getSN() {
 	/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
 
 	return this->convertSN(this->getAccessPointMAC(true));
+}
+
+String WiFi::getDefaulDeviceName() {
+	/* Метод получения имени устройства по-умолчанию (на основе MAC адреса его точки доступа ) */
+
+	return this->ap_wifi_ssid;
 }
 
 String WiFi::convertMAC(String macAddress, bool fullMAC) {

@@ -91,6 +91,15 @@ void WebServer::onStatus(HttpRequest &request, HttpResponse &response) {
 	TemplateFileStream *tmpl = new TemplateFileStream("status.html");
 
 	auto &vars = tmpl->variables();
+
+	vars["author_name"] = AUTHOR_NAME;
+	vars["project_name"] = PROJECT_NAME;
+	vars["device_name"] = device_name;
+	vars["device_class"] = DEVICE_CLASS;
+	vars["start_year"] = START_YEAR;
+	vars["current_year"] = current_year;
+	vars["company_name"] = COMPANY_NAME;
+
 	response.sendTemplate(tmpl);
 }
 void WebServer::onAjaxStatus(HttpRequest &request, HttpResponse &response) {

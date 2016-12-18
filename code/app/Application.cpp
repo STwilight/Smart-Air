@@ -32,6 +32,10 @@ FileServer *ftpserver;
 WebServer *webserver;
 WiFi *wifi;
 
+/* Объявление для глобальных внешних (extern) переменных */
+String device_name;
+uint16_t current_year;
+
 
 void init()
 {
@@ -40,7 +44,7 @@ void init()
 	// TODO: Добавить класс UART-интерфейса
 	/* Инициализация UART */
 	/* DEBUG */ Serial.begin(115200);
-	/* DEBUG */ Serial.systemDebugOutput(true);
+	/* DEBUG */ Serial.systemDebugOutput(false);
 	/* DEBUG */ Serial.commandProcessing(false);
 
 	// TODO: Добавить установку режима сна в класс Wi-Fi модуля
@@ -72,6 +76,9 @@ void init()
 	wifi->setSettings(Settings.load(WIFI_SETTINGS));
 	wifi->wifiInit();
 
+	/* Инициализация системных переменных */
+	vars_init();
+
 	// TODO: Реализовать шифрование хранимых файлов конфигурации с помощью AES
 	/* Создание экземпляра класса и инициализация NTP-клиента */
 	ntpclient = new TimeClient();
@@ -88,6 +95,10 @@ void init()
 	/* Создание экземпляра класса и инициализация Web-сервера */
 	webserver = new WebServer(WEB_SERVER_PORT);
 };
+void vars_init() {
+	device_name = wifi->getDefaulDeviceName();
+	current_year = START_YEAR;
+}
 
 extern void systemRestart() {
 	/* Метод, вызываемый внешними модулями при необходимости перезагрузки системы */
@@ -109,6 +120,9 @@ extern String getData(byte type) {
 		case AIR_SET:
 			settings = aircond->getSettings();
 			break;
+		case AIR_STA:
+			settings = aircond->getState();
+			break;
 		case NTP_SET:
 			settings = ntpclient->getSettings();
 			break;
@@ -117,6 +131,9 @@ extern String getData(byte type) {
 			break;
 		case WIFI_SET:
 			settings = wifi->getSettings();
+			break;
+		case WIFI_STA:
+			settings = wifi->getState();
 			break;
 		default:
 			settings = "";

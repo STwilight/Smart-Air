@@ -8,6 +8,7 @@
 #ifndef APP_WEBSERVER_H_
 #define APP_WEBSERVER_H_
 
+#include "Config.h"
 #include "Application.h"
 #include <SmingCore/SmingCore.h>
 

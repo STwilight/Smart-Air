@@ -5,10 +5,15 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="">
-		<!-- Author Name --> <meta id="author_name" name="author" content="%author_name%">
+		<meta id="author_name" name="author" content="{author_name}">
+		<title id="project_name">{project_name}</title>
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-		<!-- Project Name --> <title id="project_name">%project_name%</title>
-		<link href="bootstrap.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="bootstrap.css"/>
+		<style type="text/css">
+			h3.panel-title {
+				font-size: 24px;
+			}		
+		</style>
 		<script src="jquery.js"></script>
 		<script src="status.js"></script>
 	</head>
@@ -25,45 +30,50 @@
 						<li role="presentation"><a href="about">About</a></li>
 					</ul>
 				</nav>
-				<!-- Project Caption --> <h3 id="project_caption" class="text-muted">%project_name% – %device_name%</h3><p>
+				<h3 id="project_caption" class="text-muted">{project_name} – {device_name}</h3>
 			</div>
 			<div class="jumbotron">
 				<h1>Monitoring Page</h1>
-				<p class="lead">Information about current device status<p>
+				<p class="lead">Information about current device status</p>
 			</div>
-			<div id="warnings">
-				<!-- Div for messages output -->
-			</div>
+			<div id="messages"></div>
 			<div class="row marketing">
 				<div class="col-lg-6">
-					<h3>Air conditioner:</h3>
-					<h4 style="margin-left: 7%">
-						<!-- Current power state --> <p>Power state: <span id="power" class="label label-default">N/A</span><p>
-						<!-- Current device mode --> <p>Mode: <span id="mode" class="label label-default">N/A</span><p>
-						<!-- Current fan speed --> <p>Speed: <span id="speed" class="label label-default">N/A</span><p>
-						<!-- Set temperature --> <p>Temperature: <span id="set_temp" class="label label-default">0&deg;C</span><p>
-						<!-- Current temperature --> <p>Current temperature: <span id="cur_temp" class="label label-default">0&deg;C</span><p>
-					</h4>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">{device_class}</h3>
+						</div>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<p>Power state: <span id="power" class="label label-default">N/A</span></p>
+							<p>Mode: <span id="mode" class="label label-default">N/A</span></p>
+							<p>Speed: <span id="speed" class="label label-default">N/A</span></p>
+							<p>Temperature: <span id="set_temp" class="label label-default">0&deg;C</span></p>
+							<p>Current temperature: <span id="cur_temp" class="label label-default">0&deg;C</span></p>
+						</h4>
+					</div>
 				</div>
 				<div class="col-lg-6">
-					<h3>Network:</h3>
-					<h4 style="margin-left: 7%">
-						<p>AP mode: <span id="ap_mode" class="label label-default">N/A</span><p>
-						<div id="ap_status">
-							<!-- Div for AP status output -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Network</h3>
 						</div>
-						<p>Client SSID: <span id="st_ssid" class="label label-default">N/A</span><p>
-						<p>Client IP: <span id="st_ip" class="label label-default">0.0.0.0</span><p>
-					</h4>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<p>AP mode: <span id="ap_wifi_enabled" class="label label-default">N/A</span></p>
+							<div id="ap_status"></div>
+							<p>Client mode: <span id="st_wifi_enabled" class="label label-default">N/A</span></p>
+							<div id="st_status"></div>
+						</h4>
+					</div>				
 				</div>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<footer class="footer">
+					<center>
+						<h4 id="project_caption" class="text-muted">&copy; {start_year} – {current_year}, {company_name}</h4>
+					</center>
+				</footer>
 			</div>
-			<div id="output"></div>
-			<p>&nbsp;</p>
-			<footer class="footer">
-				<center>
-					<!-- Footer Content --> <p id="footer">&copy; %year%, %company_name%</p>
-				</center>
-			</footer>
 		</div>
 	</body>
 </html>
