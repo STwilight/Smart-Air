@@ -58,11 +58,14 @@ void init()
 	/* Установка рабочей частоты процессора на 160 МГц */
 	System.setCpuFrequency(eCF_160MHz);
 
-	/* Создание экземпляра класса модуля кондиционера */
-	// aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
-
-	/* Создание экземпляра класса модуля кондиционера - отладка на плате Smart-Rock */
-	/* DEBUG */ aircond = new AirConditioner(GPIO0, GPIO14, GPIO12, GPIO13, GPIO2, 11);
+	/* DEBUG-переменная для отладки программного обеспечения на плате Smart-Rock */
+	#ifdef DEBUG
+		/* Создание экземпляра класса модуля кондиционера - отладка на плате Smart-Rock */
+		aircond = new AirConditioner(GPIO0, GPIO14, GPIO12, GPIO13, GPIO2, 11);
+	#else
+		/* Создание экземпляра класса модуля кондиционера */
+		aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+	#endif
 
 	/* Монтирование файловой системы */
 	spiffs_mount();
@@ -139,6 +142,9 @@ extern String getData(byte type) {
 			settings = "";
 			break;
 	}
+
+	Serial.print("Free heap: ");
+	Serial.println(system_get_free_heap_size());
 
 	return settings;
 }
