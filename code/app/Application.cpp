@@ -143,8 +143,8 @@ extern String getData(byte type) {
 			break;
 	}
 
-	Serial.print("Free heap: ");
-	Serial.println(system_get_free_heap_size());
+	/* DEBUG */ // Serial.print("Free heap: ");
+	/* DEBUG */ // Serial.println(system_get_free_heap_size());
 
 	return settings;
 }

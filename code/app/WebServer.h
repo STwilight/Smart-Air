@@ -16,35 +16,24 @@ class WebServer {
 private:
 	static HttpServer webServer;
 
-	/* Методы для выдачи страницы мониторинга и ее содержимого */
-	static void onStatus(HttpRequest &request, HttpResponse &response);
-	static void onAjaxStatus(HttpRequest &request, HttpResponse &response);
+	/* Метод выдачи содержимого страниц */
+	static void onWebPage(HttpRequest &request, HttpResponse &response);
 
-	/* DEBUG - WebSockets */
-		/* Метод выдачи страницы отладки */
-		static void onDebug(HttpRequest &request, HttpResponse &response);
-
-		/* Методы обработки событий WebSocket'ов */
-		static void webSocketConnected(WebSocket& socket);
-		static void webSocketMessageReceived(WebSocket& socket, const String& message);
-		static void webSocketBinaryReceived(WebSocket& socket, uint8_t* data, size_t size);
-		static void webSocketDisconnected(WebSocket& socket);
-	/* DEBUG - WebSockets */
-
-	/* Методы для выдачи системных страниц */
-	static void onConfig(HttpRequest &request, HttpResponse &response);
-	static void onNetwork(HttpRequest &request, HttpResponse &response);
-	static void onSecurity(HttpRequest &request, HttpResponse &response);
-	static void onUpdate(HttpRequest &request, HttpResponse &response);
-	static void onBackup(HttpRequest &request, HttpResponse &response);
-	static void onRestore(HttpRequest &request, HttpResponse &response);
-	static void onAbout(HttpRequest &request, HttpResponse &response);
+	/* Методы обработки событий WebSocket'ов */
+	static void webSocketConnected(WebSocket& socket);
+	static void webSocketMessageReceived(WebSocket& socket, const String& message);
+	static void webSocketBinaryReceived(WebSocket& socket, uint8_t* data, size_t size);
+	static void webSocketDisconnected(WebSocket& socket);
 
 	/* Метод для отправки файла */
 	static void onFile(HttpRequest &request, HttpResponse &response);
 
 	/* Метод для создания файла в случае его отсутствия */
-	static void fileNotExist(String filename, bool createfile = true);
+	static bool fileNotExist(String filename, bool createfile = true, bool deletezerofile = false);
+
+	/* Методы для выдачи/получения файла с текущей конфигурацией устройства */
+	static void onBackup(HttpRequest &request, HttpResponse &response);
+	static void onRestore(HttpRequest &request, HttpResponse &response);
 
 public:
 	/* Конструктор по-умолчанию */
