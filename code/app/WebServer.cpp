@@ -110,8 +110,16 @@ void WebServer::onFile(HttpRequest &request, HttpResponse &response)
 			response.setCache(86400, true);
 			response.sendFile(file);
 		}
-		else
-			response.notFound();
+		else {
+			file.concat(".gz");
+			if(!WebServer::fileNotExist(file, false, false)) {
+				response.setCache(86400, true);
+				response.sendFile(file);
+			}
+			else
+				response.notFound();
+		}
+
 	}
 }
 
