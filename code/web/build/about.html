@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta id="author_name" name="author" content="{author_name}">
+		<title id="project_name">{project_name}</title>
+		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+		<link rel="stylesheet" type="text/css" href="bootstrap.css"/>
+		<style type="text/css">
+			h3.panel-title {
+				font-size: 24px;
+			}		
+		</style>
+		<script src="jquery.js"></script>
+		<script src="status.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<nav>
+					<ul class="nav nav-pills pull-right">
+						<li role="presentation"><a href="/">Status</a></li>
+						<li role="presentation"><a href="config">Configuration</a></li>
+						<li role="presentation"><a href="network">Network</a></li>
+						<li role="presentation"><a href="security">Security</a></li>
+						<li role="presentation"><a href="update">Update</a></li>
+						<li role="presentation" class="active"><a href="about">About</a></li>
+					</ul>
+				</nav>
+				<h3 id="project_caption" class="text-muted">{project_name} – {device_name}</h3>
+			</div>
+			<div class="jumbotron">
+				<h1>Monitoring Page</h1>
+				<p class="lead">Information about current device status</p>
+			</div>
+			<div id="messages"></div>
+			<div class="row marketing">
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Device</h3>
+						</div>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<p>Device S/N: <span id="dev_sn" class="label label-default">N/A</span></p>
+							<p>Device FW: <span id="dew_fw" class="label label-default">N/A</span></p>
+						</h4>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Network</h3>
+						</div>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<p>AP MAC: <span id="ap_mac" class="label label-default">N/A</span></p>
+							<p>Client MAC: <span id="st_mac" class="label label-default">N/A</span></p>
+						</h4>
+					</div>				
+				</div>
+				<p>&nbsp;</p>
+				<footer class="footer">
+					<center>
+						<h4 id="project_caption" class="text-muted">&copy; {start_year} – {current_year}, {company_name}</h4>
+					</center>
+				</footer>
+			</div>
+		</div>
+	</body>
+</html>

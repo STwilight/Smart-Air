@@ -138,6 +138,9 @@ extern String getData(byte type) {
 		case WIFI_STA:
 			settings = wifi->getState();
 			break;
+		case WIFI_HW:
+			settings = wifi->getHardwareInfo();
+			break;
 		default:
 			settings = "";
 			break;

@@ -19,5 +19,6 @@
 #define FTP_SET  0x03
 #define WIFI_SET 0x04
 #define WIFI_STA 0x05
+#define WIFI_HW	 0x06
 
 #endif /* APP_DEFINITIONS_H_ */

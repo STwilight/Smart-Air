@@ -245,6 +245,26 @@ String WiFi::getState() {
 	return jsonString;
 }
 
+String WiFi::getHardwareInfo() {
+	/* Метод получения информации об аппаратном обеспечении */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+  JsonObject& dev_info = jsonBuffer.createObject();
+	  root["dev_info"] = dev_info;
+
+	dev_info["dev_sn"] = this->getSN();
+	dev_info["dev_fw"] = FIRMWARE_VER;
+	dev_info["ap_mac"] = this->getAccessPointMAC();
+	dev_info["st_mac"] = this->getStationMAC();
+
+	String jsonString;
+	root.printTo(jsonString);
+
+	return jsonString;
+}
+
 AUTH_MODE WiFi::convertStringToAuthMode(String data) {
 	/* Метод преобразования строки в тип шифрования точки доступа */
 

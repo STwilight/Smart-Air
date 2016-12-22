@@ -40,7 +40,6 @@ private:
   static bool st_wifi_err;
 	     bool st_wifi_state;
 
-private:
 		/* Методы перенастройки Wi-Fi модуля в зависимости от состояния подключения в режиме "Клиент Wi-Fi сети" */
 	    static void wifiConnectOK();
 		static void wifiConnectFail();
@@ -55,6 +54,13 @@ private:
 		/* Методы преобразования RAW MAC-адреса в серийный номер устройства */
 		String convertHEX(String hexSN);
 		String convertSN(String macAddress);
+
+		/* Методы получения MAC-адресов точки доступа и клиента Wi-Fi модуля */
+		String getAccessPointMAC(bool raw = false);
+		String getStationMAC(bool raw = false);
+
+		/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
+		String getSN();
 
 public:
 	  /* Конструктор для режимов "Точка доступа Wi-Fi" и "Клиент Wi-Fi сети".
@@ -100,12 +106,8 @@ public:
 		/* Метод получения текущего состояния модуля */
 		String getState();
 
-		/* Методы получения MAC-адресов точки доступа и клиента Wi-Fi модуля */
-		String getAccessPointMAC(bool raw = false);
-		String getStationMAC(bool raw = false);
-
-		/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
-		String getSN();
+		/* Метод получения информации об аппаратном обеспечении */
+		String getHardwareInfo();
 
 		/* Метод получения имени устройства по-умолчанию (на основе MAC адреса его точки доступа ) */
 		String getDefaulDeviceName();
