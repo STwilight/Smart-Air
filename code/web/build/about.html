@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="">
 		<meta id="author_name" name="author" content="{author_name}">
-		<title id="project_name">{project_name}</title>
+		<title id="project_name">{project_name} – About</title>
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 		<link rel="stylesheet" type="text/css" href="bootstrap.css"/>
 		<style type="text/css">
@@ -15,7 +15,7 @@
 			}		
 		</style>
 		<script src="jquery.js"></script>
-		<script src="status.js"></script>
+		<script src="about.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -33,8 +33,8 @@
 				<h3 id="project_caption" class="text-muted">{project_name} – {device_name}</h3>
 			</div>
 			<div class="jumbotron">
-				<h1>Monitoring Page</h1>
-				<p class="lead">Information about current device status</p>
+				<h1>About {project_name}</h1>
+				<p class="lead">Information about {project_name} device</p>
 			</div>
 			<div id="messages"></div>
 			<div class="row marketing">
@@ -45,7 +45,7 @@
 						</div>
 						<h4 style="margin-left: 7%" class="panel-body">
 							<p>Device S/N: <span id="dev_sn" class="label label-default">N/A</span></p>
-							<p>Device FW: <span id="dew_fw" class="label label-default">N/A</span></p>
+							<p>Device FW: <span id="dev_fw" class="label label-default">N/A</span></p>
 						</h4>
 					</div>
 				</div>

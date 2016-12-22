@@ -46,10 +46,11 @@ function doLoopRequest() {
 }
 function doDisconnect() {
 	// Метод разрыва socket-соединения
+	websocket.close();
 }
 
 function processJSON(msg) {
-	// Метод обработки информации, полученной из JSON	
+	// Метод обработки информации, полученной из JSON
 	var messages = "";
 	var ap_wifi_enabled = false;
 	var st_wifi_enabled = false;
