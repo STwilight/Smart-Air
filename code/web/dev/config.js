@@ -48,8 +48,27 @@ function processJSON(msg) {
 		$.each(val, function(subkey, subval) {
 			var target = $("#" + subkey);
 			switch (subkey) {				
+				case "power":
+					if(subval) {
+						document.getElementById("power-on").checked = true;
+						document.getElementById("power-off").checked = false;
+					}
+					else {
+						document.getElementById("power-on").checked = false;
+						document.getElementById("power-off").checked = true;
+					}
+					break;
+				case "mode":
+					if(subval)
+						document.getElementById(subkey).selectedIndex = 1;
+					else
+						document.getElementById(subkey).selectedIndex = 0;
+					break;
+				case "speed":
+					document.getElementById(subkey).selectedIndex = subval;
+					break;
 				default:
-					document.getElementById(subkey).innerHTML = subval;
+					document.getElementById(subkey).value = subval;
 					break;
 			}
 		});
