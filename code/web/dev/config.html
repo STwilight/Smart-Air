@@ -46,8 +46,8 @@
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-group">
 								<label>Power state:&nbsp;&nbsp;</label>
-								<label class="radio-inline"><input id="power-on" type="radio">On</label>
-								<label class="radio-inline"><input id="power-off" type="radio">Off</label>
+								<label class="radio-inline"><input type="radio" id="power-on" name="power">On</label>
+								<label class="radio-inline"><input type="radio" id="power-off" name="power">Off</label>
 							</div>
 							<div class="form-group">
 								<label for="mode">Mode:&nbsp;&nbsp;</label>
@@ -67,11 +67,11 @@
 							</div>
 							<div class="form-inline">
 								<label>Temperature, &deg;C:&nbsp;&nbsp;</label>
-								<input id="set_temp" class="form-control" style="width: 70px" type="number" min=15 max=30 step=1 value=0>
+								<input type="number" id="set_temp" class="form-control" style="width: 70px" min=15 max=30 step=1 value=0>
 							</div>
 							<div class="form-inline">
 								<label>Temperature tolerance, &deg;C:&nbsp;&nbsp;</label>
-								<input id="delta_temp" class="form-control" style="width: 60px" type="number" min=0 max=5 step=1 value=0>
+								<input type="number" id="delta_temp" class="form-control" style="width: 60px" min=0 max=5 step=1 value=0>
 							</div>
 						</h4>
 					</div>
@@ -84,19 +84,19 @@
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-inline">
 								<label>Operating mode:&nbsp;&nbsp;</label>
-								<label class="radio-inline"><input type="radio" checked="checked" name="op-mode" {false}>Manual</label>
-								<label class="radio-inline"><input type="radio" name="op-mode" {true}>Auto</label>
+								<label class="radio-inline"><input type="radio" id="manual" name="op-mode">Manual</label>
+								<label class="radio-inline"><input type="radio" id="auto" name="op-mode">Auto</label>
 							</div>
 							<div class="form-i">
 								<label>Day of week:&nbsp;&nbsp;</label>
 								<p style="margin-left: 7%">
-									<label class="checkbox-inline"><input type="checkbox" name="day-mon" {mon}>Mon</label>
-									<label class="checkbox-inline"><input type="checkbox" name="day-tue" {tue}>Tue</label>
-									<label class="checkbox-inline"><input type="checkbox" name="day-wed" {wed}>Wed</label>
-									<label class="checkbox-inline"><input type="checkbox" name="day-thu" {thu}>Thu</label>
-									<label class="checkbox-inline"><input type="checkbox" name="day-fri" {fri}>Fri</label>
-									<label class="checkbox-inline"><input type="checkbox" name="day-sat" {sat}>Sat</label>
-									<label class="checkbox-inline"><input type="checkbox" name="day-sun" {sun}>Sun</label>
+									<label class="checkbox-inline"><input type="checkbox" id="mon" name="dof">Mon</label>
+									<label class="checkbox-inline"><input type="checkbox" id="tue" name="dof">Tue</label>
+									<label class="checkbox-inline"><input type="checkbox" id="wed" name="dof">Wed</label>
+									<label class="checkbox-inline"><input type="checkbox" id="thu" name="dof">Thu</label>
+									<label class="checkbox-inline"><input type="checkbox" id="fri" name="dof">Fri</label>
+									<label class="checkbox-inline"><input type="checkbox" id="sat" name="dof"}>Sat</label>
+									<label class="checkbox-inline"><input type="checkbox" id="sun" name="dof">Sun</label>
 								</p>								
 							</div>
 							<div class="form-inline">

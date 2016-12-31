@@ -4,6 +4,7 @@ function init() {
 	// Основной метод
 	output = document.getElementById("messages");
 	startWebSocket();
+	processInput();
 }
 
 function startWebSocket() {
@@ -44,19 +45,16 @@ function doDisconnect() {
 function processJSON(msg) {
 	// Метод обработки информации, полученной из JSON
 	var data = JSON.parse(msg);
+	
 	$.each(data, function(key, val) {
 		$.each(val, function(subkey, subval) {
 			var target = $("#" + subkey);
 			switch (subkey) {				
 				case "power":
-					if(subval) {
+					if(subval)
 						document.getElementById("power-on").checked = true;
-						document.getElementById("power-off").checked = false;
-					}
-					else {
-						document.getElementById("power-on").checked = false;
+					else
 						document.getElementById("power-off").checked = true;
-					}
 					break;
 				case "mode":
 					if(subval)
@@ -73,6 +71,40 @@ function processJSON(msg) {
 			}
 		});
 	});
+}
+
+function processInput() {
+	var num_inputs = [
+		document.getElementById("set_temp"),
+		document.getElementById("delta_temp")
+	];
+	
+	var time_inputs = [
+		document.getElementById("time_from"),
+		document.getElementById("time_to")
+	];
+
+    for(var i=0; i<num_inputs.length; i++) {
+        num_inputs[i].onkeypress = function(event) {
+			event = event || window.event;
+			if(event.charCode && (event.charCode < 48 || event.charCode > 57))
+				return false;
+		}
+		num_inputs[i].onpaste = function(event) {
+			return false;
+		}
+	}
+	
+    for(var i=0; i<time_inputs.length; i++) {
+        time_inputs[i].onkeypress = function(event) {
+			event = event || window.event;
+			if(event.charCode && (event.charCode < 48 || event.charCode > 58))
+				return false;
+		}
+		time_inputs[i].onpaste = function(event) {
+			return false;
+		}
+	}
 }
 
 function writeToScreen(message) {
