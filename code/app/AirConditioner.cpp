@@ -206,7 +206,11 @@ String AirConditioner::getSettings() {
 	settings["mode"]		= (bool) this->mode;
 	settings["speed"]		= this->speed;
 	settings["set_temp"]	= this->set_temp;
+	settings["set_temp_min"] = set_temp_min;
+	settings["set_temp_max"] = set_temp_max;
 	settings["delta_temp"]	= this->delta_temp;
+	settings["delta_temp_min"] = delta_temp_min;
+	settings["delta_temp_max"] = delta_temp_max;
 
 	String jsonString;
 	root.printTo(jsonString);

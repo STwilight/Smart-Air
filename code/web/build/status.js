@@ -51,10 +51,8 @@ function doDisconnect() {
 
 function processJSON(msg) {
 	// Метод обработки информации, полученной из JSON
-	var messages = "";
 	var ap_wifi_enabled = false;
 	var st_wifi_enabled = false;
-	// writeToScreen('<div class="alert alert-info" role="alert">' + msg + '</div>');
 	var data = JSON.parse(msg);
 	$.each(data, function(key, val) {
 		$.each(val, function(subkey, subval) {
@@ -65,7 +63,7 @@ function processJSON(msg) {
 					break;
 				case "err_sensor":
 					if (subval)
-						messages += '<div class="alert alert-danger" role="alert">Temperature sensor error!</div>';
+						document.getElementById("messages").innerHTML = '<div class="alert alert-danger" role="alert">Temperature sensor error!</div>';
 					break;
 				case "power":
 					if (subval) {
@@ -160,7 +158,6 @@ function processJSON(msg) {
 			}
 		});
 	});
-	document.getElementById("messages").innerHTML = messages;
 }
 
 function writeToScreen(message) {

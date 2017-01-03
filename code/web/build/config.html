@@ -65,11 +65,11 @@
 									<option>High</option>
 								</select>
 							</div>
-							<div class="form-inline">
+							<div class="form-inline" id="set_temp_div">
 								<label>Temperature, &deg;C:&nbsp;&nbsp;</label>
 								<input type="number" id="set_temp" class="form-control" style="width: 70px" min=15 max=30 step=1 value=0>
 							</div>
-							<div class="form-inline">
+							<div class="form-inline" id="delta_temp_div">
 								<label>Temperature tolerance, &deg;C:&nbsp;&nbsp;</label>
 								<input type="number" id="delta_temp" class="form-control" style="width: 60px" min=0 max=5 step=1 value=0>
 							</div>
@@ -114,7 +114,7 @@
 				<p>&nbsp;</p>
 					<center>
 						<!-- <input type="button" class="btn btn-info" name="save" value="Save">&nbsp;&nbsp; -->
-						<input type="button" class="btn btn-success" name="apply" value="Apply">&nbsp;&nbsp;
+						<input type="button" class="btn btn-success" name="apply" value="Apply" onclick="processData()">&nbsp;&nbsp;
 						<!-- <input type="button" class="btn btn-danger" name="cancel" value="Cancel"> -->
 					</center>				
 				<p>&nbsp;</p>

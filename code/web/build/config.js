@@ -1,5 +1,10 @@
 var output;
 
+var set_temp_min;
+var set_temp_max;
+var delta_temp_min;
+var delta_temp_max;
+
 function init() {
 	// Основной метод
 	output = document.getElementById("messages");
@@ -46,10 +51,16 @@ function processJSON(msg) {
 	// Метод обработки информации, полученной из JSON
 	var data = JSON.parse(msg);
 	
+	for (var key in data) {
+		for (var subkey in data[key]) {
+			// writeToScreen(key.subkey + " ");
+		}
+	}
+	
 	$.each(data, function(key, val) {
 		$.each(val, function(subkey, subval) {
 			var target = $("#" + subkey);
-			switch (subkey) {				
+			switch (subkey) {
 				case "power":
 					if(subval)
 						document.getElementById("power-on").checked = true;
@@ -64,6 +75,18 @@ function processJSON(msg) {
 					break;
 				case "speed":
 					document.getElementById(subkey).selectedIndex = subval;
+					break;
+				case "set_temp_min":
+					set_temp_min = subval;
+					break;
+				case "set_temp_max":
+					set_temp_max = subval;
+					break;
+				case "delta_temp_min":
+					delta_temp_min = subval;
+					break;
+				case "delta_temp_max":
+					delta_temp_max = subval;
 					break;
 				default:
 					document.getElementById(subkey).value = subval;
@@ -105,6 +128,10 @@ function processInput() {
 			return false;
 		}
 	}
+}
+
+function processData() {
+	alert("Apply button!");
 }
 
 function writeToScreen(message) {
