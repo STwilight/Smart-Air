@@ -38,11 +38,11 @@ function doSend(message) {
 	websocket.send(message);
 }
 function doLoopRequest() {
-	(function repeater() {
+	//(function repeater() {
 		websocket.send(0x01);
 		websocket.send(0x05);
-		setTimeout(repeater, 500);
-	})();
+		//setTimeout(repeater, 500);
+	//})();
 }
 function doDisconnect() {
 	// Метод разрыва socket-соединения
@@ -54,9 +54,13 @@ function processJSON(msg) {
 	var ap_wifi_enabled = false;
 	var st_wifi_enabled = false;
 	var data = JSON.parse(msg);
-	$.each(data, function(key, val) {
-		$.each(val, function(subkey, subval) {
-			var target = $("#" + subkey);
+	writeToScreen("<br>" + msg + "<br>");
+	for (var key in data) {
+		writeToScreen("Key: " + key + "<br>");
+		var val = data[key];
+		for (var subkey in val) {
+			var subval = val[subkey];
+			writeToScreen(subkey + "=" + subval + "<br>");
 			switch (subkey) {
 				case "cur_temp":
 					document.getElementById(subkey).innerHTML = subval.toFixed(2) + "&deg;C";
@@ -67,21 +71,21 @@ function processJSON(msg) {
 					break;
 				case "power":
 					if (subval) {
-						target.removeClass("label-danger").addClass("label-success");
+						// target.removeClass("label-danger").addClass("label-success");
 						document.getElementById(subkey).innerHTML = "On";
 					}
 					else {
-						target.removeClass("label-success").addClass("label-danger");
+						// target.removeClass("label-success").addClass("label-danger");
 						document.getElementById(subkey).innerHTML = "Off";
 					}
 					break;
 				case "mode":
 					if (subval) {
-						target.removeClass("label-info").addClass("label-warning");
+						// target.removeClass("label-info").addClass("label-warning");
 						document.getElementById(subkey).innerHTML = "Heating";
 					}
 					else {
-						target.removeClass("label-warning").addClass("label-info");
+						// target.removeClass("label-warning").addClass("label-info");
 						document.getElementById(subkey).innerHTML = "Cooling";
 					}
 					break;
@@ -107,11 +111,11 @@ function processJSON(msg) {
 				case "ap_wifi_enabled":
 					ap_wifi_enabled = subval;
 					if (subval) {
-						target.removeClass("label-danger").addClass("label-success");
+						// target.removeClass("label-danger").addClass("label-success");
 						document.getElementById(subkey).innerHTML = "On";
 					}
 					else {
-						target.removeClass("label-success").addClass("label-danger");
+						// target.removeClass("label-success").addClass("label-danger");
 						document.getElementById(subkey).innerHTML = "Off";
 					}
 					document.getElementById("ap_status").innerHTML = "";
@@ -127,11 +131,11 @@ function processJSON(msg) {
 				case "st_wifi_enabled":
 					st_wifi_enabled = subval;
 					if (subval) {
-						target.removeClass("label-danger").addClass("label-success");
+						// target.removeClass("label-danger").addClass("label-success");
 						document.getElementById(subkey).innerHTML = "On";
 					}
 					else {
-						target.removeClass("label-success").addClass("label-danger");
+						// target.removeClass("label-success").addClass("label-danger");
 						document.getElementById(subkey).innerHTML = "Off";
 					}
 					document.getElementById("st_status").innerHTML = "";
@@ -156,8 +160,8 @@ function processJSON(msg) {
 					document.getElementById(subkey).innerHTML = subval;
 					break;
 			}
-		});
-	});
+		}
+	}
 }
 
 function writeToScreen(message) {

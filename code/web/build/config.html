@@ -14,7 +14,6 @@
 				font-size: 24px;
 			}		
 		</style>
-		<script src="jquery.js"></script>
 		<script src="config.js"></script>
 	</head>
 	<body>
@@ -110,19 +109,17 @@
 						</h4>
 					</div>				
 				</div>
-				<p>&nbsp;</p>
-				<p>&nbsp;</p>
-					<center>
-						<!-- <input type="button" class="btn btn-info" name="save" value="Save">&nbsp;&nbsp; -->
-						<input type="button" class="btn btn-success" name="apply" value="Apply" onclick="processData()">&nbsp;&nbsp;
-						<!-- <input type="button" class="btn btn-danger" name="cancel" value="Cancel"> -->
-					</center>				
-				<p>&nbsp;</p>
-				<footer class="footer">
-					<center>
+				<div class="col-lg-12 text-center">
+					<!-- <input type="button" class="btn btn-info" name="save" value="Save"> -->
+					<input type="button" class="btn btn-success" name="apply" value="Apply" onclick="processData()">
+					<!-- <input type="button" class="btn btn-danger" name="cancel" value="Cancel"> -->
+				</div>
+				<div class="col-lg-12 text-center">
+					<p>&nbsp;</p>
+					<footer class="footer">
 						<h4 id="project_caption" class="text-muted">&copy; {start_year} – {current_year}, {company_name}</h4>
-					</center>
-				</footer>
+					</footer>
+				</div>
 			</div>
 		</div>
 	</body>

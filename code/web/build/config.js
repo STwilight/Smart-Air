@@ -50,16 +50,10 @@ function doDisconnect() {
 function processJSON(msg) {
 	// Метод обработки информации, полученной из JSON
 	var data = JSON.parse(msg);
-	
 	for (var key in data) {
-		for (var subkey in data[key]) {
-			// writeToScreen(key.subkey + " ");
-		}
-	}
-	
-	$.each(data, function(key, val) {
-		$.each(val, function(subkey, subval) {
-			var target = $("#" + subkey);
+		var val = data[key];
+		for (var subkey in val) {
+			var subval = val[subkey];
 			switch (subkey) {
 				case "power":
 					if(subval)
@@ -92,8 +86,8 @@ function processJSON(msg) {
 					document.getElementById(subkey).value = subval;
 					break;
 			}
-		});
-	});
+		}
+	}
 }
 
 function processInput() {

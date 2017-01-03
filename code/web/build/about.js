@@ -44,16 +44,17 @@ function doDisconnect() {
 function processJSON(msg) {
 	// Метод обработки информации, полученной из JSON
 	var data = JSON.parse(msg);
-	$.each(data, function(key, val) {
-		$.each(val, function(subkey, subval) {
-			var target = $("#" + subkey);
-			switch (subkey) {				
+	for (var key in data) {
+		var val = data[key];
+		for (var subkey in val) {
+			var subval = val[subkey];
+			switch (subkey) {
 				default:
 					document.getElementById(subkey).innerHTML = subval;
 					break;
 			}
-		});
-	});
+		}
+	}
 }
 
 function writeToScreen(message) {
