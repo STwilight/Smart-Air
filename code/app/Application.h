@@ -18,7 +18,7 @@ extern uint16_t current_year;
 
 /* Объявление внешних методов */
 extern void systemRestart();
-extern String getData(byte type);
+extern String processData(byte type, String data);
 
 /* Объявление системных функций */
 void vars_init();

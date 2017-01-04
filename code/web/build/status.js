@@ -38,11 +38,11 @@ function doSend(message) {
 	websocket.send(message);
 }
 function doLoopRequest() {
-	//(function repeater() {
-		websocket.send(0x01);
-		websocket.send(0x05);
-		//setTimeout(repeater, 500);
-	//})();
+	(function repeater() {
+		websocket.send(JSON.stringify({type: 0x01}));
+		websocket.send(JSON.stringify({type: 0x05}));
+		setTimeout(repeater, 500);
+	})();
 }
 function doDisconnect() {
 	// Метод разрыва socket-соединения
@@ -54,16 +54,14 @@ function processJSON(msg) {
 	var ap_wifi_enabled = false;
 	var st_wifi_enabled = false;
 	var data = JSON.parse(msg);
-	writeToScreen("<br>" + msg + "<br>");
 	for (var key in data) {
-		writeToScreen("Key: " + key + "<br>");
 		var val = data[key];
 		for (var subkey in val) {
 			var subval = val[subkey];
-			writeToScreen(subkey + "=" + subval + "<br>");
+			var target = document.getElementById(subkey);
 			switch (subkey) {
 				case "cur_temp":
-					document.getElementById(subkey).innerHTML = subval.toFixed(2) + "&deg;C";
+					target.innerHTML = subval.toFixed(2) + "&deg;C";
 					break;
 				case "err_sensor":
 					if (subval)
@@ -71,52 +69,58 @@ function processJSON(msg) {
 					break;
 				case "power":
 					if (subval) {
-						// target.removeClass("label-danger").addClass("label-success");
-						document.getElementById(subkey).innerHTML = "On";
+						target.classList.remove("label-danger");
+						target.classList.add("label-success");
+						target.innerHTML = "On";
 					}
 					else {
-						// target.removeClass("label-success").addClass("label-danger");
-						document.getElementById(subkey).innerHTML = "Off";
+						target.classList.remove("label-success");
+						target.classList.add("label-danger");
+						target.innerHTML = "Off";
 					}
 					break;
 				case "mode":
 					if (subval) {
-						// target.removeClass("label-info").addClass("label-warning");
-						document.getElementById(subkey).innerHTML = "Heating";
+						target.classList.remove("label-info");
+						target.classList.add("label-warning");
+						target.innerHTML = "Heating";
 					}
 					else {
-						// target.removeClass("label-warning").addClass("label-info");
-						document.getElementById(subkey).innerHTML = "Cooling";
+						target.classList.remove("label-warning");
+						target.classList.add("label-info");
+						target.innerHTML = "Cooling";
 					}
 					break;
 				case "speed":
 					switch (subval) {
 						case 0x01:
-							document.getElementById(subkey).innerHTML = "Low";
+							target.innerHTML = "Low";
 							break;
 						case 0x02:
-							document.getElementById(subkey).innerHTML = "Medium";
+							target.innerHTML = "Medium";
 							break;
 						case 0x03:
-							document.getElementById(subkey).innerHTML = "High";
+							target.innerHTML = "High";
 							break;
 						default:
-							document.getElementById(subkey).innerHTML = "Stopped";
+							target.innerHTML = "Stopped";
 							break;
 					}
 					break;
 				case "set_temp":
-					document.getElementById(subkey).innerHTML = subval.toString() + "&deg;C";
+					target.innerHTML = subval.toString() + "&deg;C";
 					break;
 				case "ap_wifi_enabled":
 					ap_wifi_enabled = subval;
 					if (subval) {
-						// target.removeClass("label-danger").addClass("label-success");
-						document.getElementById(subkey).innerHTML = "On";
+						target.classList.remove("label-danger");
+						target.classList.add("label-success");
+						target.innerHTML = "On";
 					}
 					else {
-						// target.removeClass("label-success").addClass("label-danger");
-						document.getElementById(subkey).innerHTML = "Off";
+						target.classList.remove("label-success");
+						target.classList.add("label-danger");
+						target.innerHTML = "Off";
 					}
 					document.getElementById("ap_status").innerHTML = "";
 					break;
@@ -131,12 +135,14 @@ function processJSON(msg) {
 				case "st_wifi_enabled":
 					st_wifi_enabled = subval;
 					if (subval) {
-						// target.removeClass("label-danger").addClass("label-success");
-						document.getElementById(subkey).innerHTML = "On";
+						target.classList.remove("label-danger");
+						target.classList.add("label-success");
+						target.innerHTML = "On";
 					}
 					else {
-						// target.removeClass("label-success").addClass("label-danger");
-						document.getElementById(subkey).innerHTML = "Off";
+						target.classList.remove("label-success");
+						target.classList.add("label-danger");
+						target.innerHTML = "Off";
 					}
 					document.getElementById("st_status").innerHTML = "";
 					break;
@@ -157,7 +163,7 @@ function processJSON(msg) {
 						document.getElementById("st_status").innerHTML += '<p>Client IP: <span id="' + subkey + '" class="label label-default">' + subval + '</span></p>';
 					break;
 				default:
-					document.getElementById(subkey).innerHTML = subval;
+					target.innerHTML = subval;
 					break;
 			}
 		}

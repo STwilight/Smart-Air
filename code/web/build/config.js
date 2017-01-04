@@ -24,7 +24,7 @@ function startWebSocket() {
 
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
-	websocket.send(0x00);
+	websocket.send(JSON.stringify({type: 0x00}));
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
@@ -68,7 +68,7 @@ function processJSON(msg) {
 						document.getElementById(subkey).selectedIndex = 0;
 					break;
 				case "speed":
-					document.getElementById(subkey).selectedIndex = subval;
+					document.getElementById(subkey).selectedIndex = (subval - 1);
 					break;
 				case "set_temp_min":
 					set_temp_min = subval;
@@ -91,6 +91,7 @@ function processJSON(msg) {
 }
 
 function processInput() {
+	// Метод проверки ввода
 	var num_inputs = [
 		document.getElementById("set_temp"),
 		document.getElementById("delta_temp")
@@ -124,8 +125,40 @@ function processInput() {
 	}
 }
 
-function processData() {
-	alert("Apply button!");
+function getAirSettings() {
+	// Получение конфигурации кондиционера в формате JSON-строки
+	var root = {};
+	root["type"] = 0x10;
+	var settings = {};
+	settings["power"]	   = ((document.getElementById("power-on").checked && !document.getElementById("power-off").checked) ? true : false);
+	settings["mode"]	   = ((document.getElementById("mode").selectedIndex == 1) ? true : false);
+	settings["speed"]	   = (document.getElementById("speed").selectedIndex + 1);
+	settings["set_temp"]   = parseInt(document.getElementById("set_temp").value, 10);
+	settings["delta_temp"] = parseInt(document.getElementById("delta_temp").value, 10);
+		root["settings"]   = settings;
+	return JSON.stringify(root);	
+}
+function getSchedulerSettings() {
+	// Получение конфигурации планировщика в формате JSON-строки
+	var root = {};
+	root["type"] = 0x17;
+	var settings = {};
+	settings["op-mode"]   = ((document.getElementById("auto").checked && !document.getElementById("manual").checked) ? true : false);
+	settings["dof"]       = (((document.getElementById("mon").checked ? 1 : 0) << 0) | ((document.getElementById("tue").checked ? 1 : 0) << 1) | ((document.getElementById("wed").checked ? 1 : 0) << 2) | ((document.getElementById("thu").checked ? 1 : 0) << 3) | ((document.getElementById("fri").checked ? 1 : 0) << 4) | ((document.getElementById("sat").checked ? 1 : 0) << 5) | ((document.getElementById("sun").checked ? 1 : 0) << 6));
+	settings["time_from"] = document.getElementById("time_from").value;
+	settings["time_to"]   = document.getElementById("time_to").value;
+		root["settings"]  = settings;
+	return JSON.stringify(root);	
+}
+
+function onApplyButton() {
+	// Метод обработки данных при нажатии на кнопку "Apply"
+	websocket.send(getAirSettings());
+	websocket.send(getSchedulerSettings());
+}
+function onCancelButton() {
+	// Метод обработки данных при нажатии на кнопку "Cancel"
+	websocket.send(JSON.stringify({type: 0x00}));
 }
 
 function writeToScreen(message) {

@@ -72,7 +72,6 @@ void init()
 
 	/* Инициализация модуля кондиционера */
 	aircond->setSettings(Settings.load(APP_SETTINGS));
-	aircond->applySettings();
 
 	/* Создание экземпляра класса и инициализация Wi-Fi модуля */
 	wifi = new WiFi();
@@ -114,12 +113,13 @@ extern void systemRestart() {
 	spiffs_unmount();
 	System.restart();
 }
-extern String getData(byte type) {
-	/* Метод, вызываемый внешними модулями при необходимости получения текущих настроек в формате JSON */
+extern String processData(byte type, String data) {
+	/* Метод, вызываемый внешними модулями при необходимости получения/установки настроек в формате JSON */
 
 	String settings;
 
 	switch (type) {
+		// Получение настроек
 		case AIR_SET:
 			settings = aircond->getSettings();
 			break;
@@ -141,13 +141,32 @@ extern String getData(byte type) {
 		case WIFI_HW:
 			settings = wifi->getHardwareInfo();
 			break;
+		case SCH_SET:
+			// Зарезервировано для выдачи настроек планировщика
+			break;
+		// Установка настроек
+		case AIR_CFG:
+			aircond->setSettings(data);
+			break;
+		case NTP_CFG:
+			ntpclient->setSettings(data);
+			ntpclient->applySettings();
+			break;
+		case FTP_CFG:
+			ftpserver->setSettings(data);
+			ftpserver->applySettings();
+			break;
+		case WIFI_CFG:
+			wifi->setSettings(data);
+			wifi->applySettings();
+			break;
+		case SCH_CFG:
+			// Зарезервировано для установки настроек планировщика
+			break;
 		default:
 			settings = "";
 			break;
 	}
-
-	/* DEBUG */ // Serial.print("Free heap: ");
-	/* DEBUG */ // Serial.println(system_get_free_heap_size());
 
 	return settings;
 }

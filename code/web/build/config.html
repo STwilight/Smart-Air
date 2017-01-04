@@ -58,7 +58,6 @@
 							<div class="form-group">
 								<label for="speed">Speed:&nbsp;&nbsp;</label>
 								<select id="speed" class="form-control-inline" style="width: 100px">
-									<option>Stopped</option>
 									<option>Low</option>
 									<option>Medium</option>
 									<option>High</option>
@@ -110,9 +109,8 @@
 					</div>				
 				</div>
 				<div class="col-lg-12 text-center">
-					<!-- <input type="button" class="btn btn-info" name="save" value="Save"> -->
-					<input type="button" class="btn btn-success" name="apply" value="Apply" onclick="processData()">
-					<!-- <input type="button" class="btn btn-danger" name="cancel" value="Cancel"> -->
+					<input type="button" class="btn btn-success" name="apply" value="Apply" onclick="onApplyButton()">&nbsp;&nbsp;
+					<input type="button" class="btn btn-danger" name="cancel" value="Cancel" onclick="onCancelButton()">
 				</div>
 				<div class="col-lg-12 text-center">
 					<p>&nbsp;</p>

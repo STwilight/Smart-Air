@@ -73,7 +73,13 @@ void WebServer::webSocketConnected(WebSocket& socket) {
 void WebServer::webSocketMessageReceived(WebSocket& socket, const String& message) {
 	/* Метод обработки полученной информации в текстовом формате */
 
-	socket.sendString(getData(message.toInt()));
+	// socket.sendString(processData(message.toInt()));
+	if(message.length() != 0) {
+		DynamicJsonBuffer jsonBuffer;
+		JsonObject& root = jsonBuffer.parseObject(message);
+		byte type = root["type"];
+		socket.sendString(processData(type, message));
+	}
 }
 void WebServer::webSocketBinaryReceived(WebSocket& socket, uint8_t* data, size_t size) {
 	/* Метод обработки полученной информации в двоичном формате */

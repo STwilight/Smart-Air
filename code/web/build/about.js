@@ -18,7 +18,7 @@ function startWebSocket() {
 
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
-	websocket.send(0x06);
+	websocket.send(JSON.stringify({type: 0x06}));
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде

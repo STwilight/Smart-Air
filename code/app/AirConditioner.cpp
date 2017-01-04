@@ -78,7 +78,7 @@ AirConditioner::AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin
 
 	this->power			= PowerOff;
 	this->mode			= Cooling;
-	this->speed			= Stopped;
+	this->speed			= LowSpeed;
 	this->set_temp		= set_temp_def;
 	this->delta_temp	= delta_temp_def;
 	this->cur_temp		= 0;
@@ -109,14 +109,6 @@ void AirConditioner::setPower(bool power) {
 
 	digitalWrite(AirConditioner::PowerPin, power);
 }
-void AirConditioner::setMode(bool mode) {
-	/* Применение параметра "Режим работы" */
-
-	if(mode)
-		this->mode = Heating;
-	else
-		this->mode = Cooling;
-}
 void AirConditioner::setSpeed(byte speed) {
 	/* Применение параметра "Скорость вращения вентилятора" */
 
@@ -143,16 +135,6 @@ void AirConditioner::setSpeed(byte speed) {
 			break;
 	}
 }
-void AirConditioner::setSetTemp(byte temp) {
-	/* Применение параметра "Заданная температура" */
-
-	this->set_temp = temp;
-}
-void AirConditioner::setDeltaTemp(byte temp) {
-	/* Применение параметра "Отклонение температуры" */
-
-	this->delta_temp = temp;
-}
 
 void AirConditioner::updateTemp() {
 	/* Получение температуры с датчика */
@@ -164,13 +146,13 @@ void AirConditioner::execThermostat() {
 
 	if(AirConditioner::power == PowerOn && !AirConditioner::sensor->sensor_error) {
 		if(AirConditioner::mode == Cooling){
-			if(AirConditioner::cur_temp >= AirConditioner::set_temp + AirConditioner::delta_temp)
+			if(AirConditioner::cur_temp >= (AirConditioner::set_temp + AirConditioner::delta_temp))
 				AirConditioner::setSpeed(AirConditioner::speed);
 			else
 				AirConditioner::setSpeed(Stopped);
 		}
 		if(AirConditioner::mode == Heating) {
-			if(AirConditioner::cur_temp <= AirConditioner::set_temp - AirConditioner::delta_temp)
+			if(AirConditioner::cur_temp <= (AirConditioner::set_temp - AirConditioner::delta_temp))
 				AirConditioner::setSpeed(AirConditioner::speed);
 			else
 				AirConditioner::setSpeed(Stopped);
@@ -180,6 +162,8 @@ void AirConditioner::execThermostat() {
 		AirConditioner::setSpeed(Stopped);
 		AirConditioner::setPower(Off);
 	}
+	else
+		AirConditioner::setSpeed(Stopped);
 }
 void AirConditioner::execConditioner() {
 	/* Основной исполняемый метод, реализующий функционал кондиционера */
@@ -200,15 +184,15 @@ String AirConditioner::getSettings() {
 	DynamicJsonBuffer jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
 
-	JsonObject& settings 	= jsonBuffer.createObject();
-	root["settings"]		= settings;
-	settings["power"]		= (bool) this->power;
-	settings["mode"]		= (bool) this->mode;
-	settings["speed"]		= this->speed;
-	settings["set_temp"]	= this->set_temp;
-	settings["set_temp_min"] = set_temp_min;
-	settings["set_temp_max"] = set_temp_max;
-	settings["delta_temp"]	= this->delta_temp;
+	JsonObject& settings	   = jsonBuffer.createObject();
+	root["settings"]		   = settings;
+	settings["power"]		   = (bool) this->power;
+	settings["mode"]		   = (bool) this->mode;
+	settings["speed"]		   = this->speed;
+	settings["set_temp"]	   = this->set_temp;
+	settings["set_temp_min"]   = set_temp_min;
+	settings["set_temp_max"]   = set_temp_max;
+	settings["delta_temp"]	   = this->delta_temp;
 	settings["delta_temp_min"] = delta_temp_min;
 	settings["delta_temp_max"] = delta_temp_max;
 
@@ -227,6 +211,7 @@ void AirConditioner::setSettings(String jsonString) {
 		JsonObject& settings = root["settings"];
 
 		this->power = settings["power"];
+		this->setPower(this->power);
 		this->mode = settings["mode"];
 
 		if((settings["speed"] >= Stopped) && (settings["speed"] <= HiSpeed))
@@ -243,16 +228,9 @@ void AirConditioner::setSettings(String jsonString) {
 			this->delta_temp = settings["delta_temp"];
 		else
 			this->delta_temp = delta_temp_def;
-	}
-}
-void AirConditioner::applySettings() {
-	/* Применение конфигурации кондиционера к аппаратной части */
 
-	this->setPower(this->power);
-	this->setMode(this->mode);
-	this->setSpeed(this->speed);
-	this->setSetTemp(this->set_temp);
-	this->setDeltaTemp(this->delta_temp);
+		Settings.save(this->getSettings(), APP_SETTINGS);
+	}
 }
 
 String AirConditioner::getState() {

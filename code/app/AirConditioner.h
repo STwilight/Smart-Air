@@ -82,10 +82,7 @@ private:
 
 	/* Методы управления кондиционером */
 	static void setPower(bool power);
-	void setMode(bool mode);
 	static void setSpeed(byte speed);
-	void setSetTemp(byte temp);
-	void setDeltaTemp(byte temp);
 
 	/* Таймеры для отсчета времени */
 	Timer executeConditioner;
@@ -110,9 +107,6 @@ public:
 	/* Методы получения и сохранения конфигурации */
 	String getSettings();
 	void setSettings(String settings);
-
-	/* Метод применения конфигурации к аппаратной части */
-	void applySettings();
 
 	/* Метод получения текущего состояния модуля */
 	String getState();
