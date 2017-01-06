@@ -16,6 +16,7 @@ WebServer::WebServer(uint16_t port) {
 	this->webServer.addPath("/", this->onWebPage);
 	this->webServer.addPath("/config", this->onWebPage);
 	this->webServer.addPath("/network", this->onWebPage);
+	this->webServer.addPath("/services", this->onWebPage);
 	this->webServer.addPath("/security", this->onWebPage);
 	this->webServer.addPath("/update", this->onWebPage);
 	this->webServer.addPath("/about", this->onWebPage);
