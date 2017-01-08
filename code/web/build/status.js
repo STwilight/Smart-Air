@@ -163,7 +163,8 @@ function processJSON(msg) {
 						document.getElementById("st_status").innerHTML += '<p>Client IP: <span id="' + subkey + '" class="label label-default">' + subval + '</span></p>';
 					break;
 				default:
-					target.innerHTML = subval;
+					if(target != null)
+						target.innerHTML = subval;
 					break;
 			}
 		}

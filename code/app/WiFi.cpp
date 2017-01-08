@@ -19,12 +19,12 @@
 WiFi::WiFi() {
 	/* Конструктор по-умолчанию */
 
-	String def_ssid = PROJECT_NAME;
-	def_ssid.concat(" [");
-	def_ssid.concat(this->convertMAC(WifiAccessPoint.getMAC(), false));
-	def_ssid.concat("]");
+	default_device_name = PROJECT_NAME;
+	default_device_name.concat(" [");
+	default_device_name.concat(this->convertMAC(WifiAccessPoint.getMAC(), false));
+	default_device_name.concat("]");
 
-	this->ap_wifi_ssid			= def_ssid;
+	this->ap_wifi_ssid			= default_device_name;
 	this->ap_wifi_pwd			= DEFAULT_PASS;
 	this->ap_wifi_auth_mode		= AUTH_OPEN;
 	this->ap_wifi_hidden		= false;
@@ -32,7 +32,7 @@ WiFi::WiFi() {
 	this->ap_wifi_ip_address	= "10.0.0.1";
 	this->ap_wifi_state			= Off;
 
-	this->ap_wifi_def_ssid		= def_ssid;
+	this->ap_wifi_def_ssid		= default_device_name;
 	this->ap_wifi_def_pwd		= DEFAULT_PASS;
 	this->ap_wifi_def_auth_mode = AUTH_OPEN;
 	this->ap_wifi_def_channel	= 6;
@@ -158,30 +158,47 @@ void WiFi::setSettings(String jsonString) {
 		DynamicJsonBuffer jsonBuffer;
 		JsonObject& root = jsonBuffer.parseObject(jsonString);
 
-			 JsonObject& ap_mode = root["ap_mode"];
-
-			  this->ap_wifi_ssid = ap_mode["ap_wifi_ssid"].asString();
-			   this->ap_wifi_pwd = ap_mode["ap_wifi_pwd"].asString();
-		 this->ap_wifi_auth_mode = this->convertStringToAuthMode(ap_mode["ap_wifi_auth_mode"].asString());
-			this->ap_wifi_hidden = ap_mode["ap_wifi_hidden"];
-		   this->ap_wifi_channel = ap_mode["ap_wifi_channel"];
-		this->ap_wifi_ip_address = ap_mode["ap_wifi_ip_address"].asString();
-			 WiFi::ap_wifi_state = ap_mode["ap_wifi_state"];
-
-		 JsonObject& ap_def_mode = root["ap_def_mode"];
-
-		   WiFi::ap_wifi_def_pwd = ap_def_mode["ap_wifi_def_pwd"].asString();
-	 WiFi::ap_wifi_def_auth_mode = this->convertStringToAuthMode(ap_def_mode["ap_wifi_def_auth_mode"].asString());
-		 WiFi::ap_wifi_def_state = ap_def_mode["ap_wifi_def_state"];
-
-		 JsonObject& client_mode = root["client_mode"];
-
-			  this->st_wifi_ssid = client_mode["st_wifi_ssid"].asString();
-			   this->st_wifi_pwd = client_mode["st_wifi_pwd"].asString();
-	   this->st_wifi_autoconnect = client_mode["st_wifi_autoconnect"];
-	  this->st_wifi_conn_timeout = client_mode["st_wifi_conn_timeout"];
-			   WiFi::st_wifi_err = client_mode["st_wifi_err"];
-			 this->st_wifi_state = client_mode["st_wifi_state"];
+		if(root.containsKey("ap_mode") && root.get("ap_mode").size() != 0) {
+			JsonObject& ap_mode = root["ap_mode"];
+			if(ap_mode.containsKey("ap_wifi_ssid"))
+				this->ap_wifi_ssid = ap_mode["ap_wifi_ssid"].asString();
+			if(ap_mode.containsKey("ap_wifi_pwd"))
+				this->ap_wifi_pwd = ap_mode["ap_wifi_pwd"].asString();
+			if(ap_mode.containsKey("ap_wifi_auth_mode"))
+				this->ap_wifi_auth_mode = this->convertStringToAuthMode(ap_mode["ap_wifi_auth_mode"].asString());
+			if(ap_mode.containsKey("ap_wifi_hidden"))
+				this->ap_wifi_hidden = ap_mode["ap_wifi_hidden"];
+			if(ap_mode.containsKey("ap_wifi_channel"))
+				this->ap_wifi_channel = ap_mode["ap_wifi_channel"];
+			if(ap_mode.containsKey("ap_wifi_ip_address"))
+				this->ap_wifi_ip_address = ap_mode["ap_wifi_ip_address"].asString();
+			if(ap_mode.containsKey("ap_wifi_state"))
+				WiFi::ap_wifi_state = ap_mode["ap_wifi_state"];
+		}
+		if(root.containsKey("ap_def_mode") && root.get("ap_def_mode").size() != 0) {
+			JsonObject& ap_def_mode = root["ap_def_mode"];
+			if(ap_def_mode.containsKey("ap_wifi_def_pwd"))
+				WiFi::ap_wifi_def_pwd = ap_def_mode["ap_wifi_def_pwd"].asString();
+			if(ap_def_mode.containsKey("ap_wifi_def_auth_mode"))
+				WiFi::ap_wifi_def_auth_mode = this->convertStringToAuthMode(ap_def_mode["ap_wifi_def_auth_mode"].asString());
+			if(ap_def_mode.containsKey("ap_wifi_def_state"))
+				WiFi::ap_wifi_def_state = ap_def_mode["ap_wifi_def_state"];
+		}
+		if(root.containsKey("client_mode") && root.get("client_mode").size() != 0) {
+			JsonObject& client_mode = root["client_mode"];
+			if(client_mode.containsKey("st_wifi_ssid"))
+				this->st_wifi_ssid = client_mode["st_wifi_ssid"].asString();
+			if(client_mode.containsKey("st_wifi_pwd"))
+				this->st_wifi_pwd = client_mode["st_wifi_pwd"].asString();
+			if(client_mode.containsKey("st_wifi_autoconnect"))
+				this->st_wifi_autoconnect = client_mode["st_wifi_autoconnect"];
+			if(client_mode.containsKey("st_wifi_conn_timeout"))
+				this->st_wifi_conn_timeout = client_mode["st_wifi_conn_timeout"];
+			if(client_mode.containsKey("st_wifi_err"))
+				WiFi::st_wifi_err = client_mode["st_wifi_err"];
+			if(client_mode.containsKey("st_wifi_state"))
+				this->st_wifi_state = client_mode["st_wifi_state"];
+		}
 	}
 }
 void WiFi::applySettings() {
@@ -255,7 +272,6 @@ String WiFi::getHardwareInfo() {
 	  root["dev_info"] = dev_info;
 
 	dev_info["dev_sn"] = this->getSN();
-	dev_info["dev_fw"] = FIRMWARE_VER;
 	dev_info["ap_mac"] = this->getAccessPointMAC();
 	dev_info["st_mac"] = this->getStationMAC();
 
@@ -348,7 +364,7 @@ String WiFi::getSN() {
 String WiFi::getDefaulDeviceName() {
 	/* Метод получения имени устройства по-умолчанию (на основе MAC адреса его точки доступа ) */
 
-	return this->ap_wifi_ssid;
+	return this->default_device_name;
 }
 
 String WiFi::convertMAC(String macAddress, bool fullMAC) {

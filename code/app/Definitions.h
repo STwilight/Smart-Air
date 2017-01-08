@@ -21,6 +21,7 @@
 #define WIFI_STA 0x05
 #define WIFI_HW	 0x06
 #define SCH_SET  0x07
+#define SYS_INF  0x08
 
 /* Определения типов настроек для получения в формате JSON */
 #define AIR_CFG  0x10
@@ -28,5 +29,11 @@
 #define FTP_CFG  0x13
 #define WIFI_CFG 0x14
 #define SCH_CFG  0x17
+#define SYS_CFG  0x18
+
+/* Определение типов комманд для применения настроек */
+#define NTP_APP  0x22
+#define FTP_APP  0x23
+#define WIFI_APP 0x24
 
 #endif /* APP_DEFINITIONS_H_ */

@@ -40,6 +40,9 @@ private:
   static bool st_wifi_err;
 	     bool st_wifi_state;
 
+    /* Определение дополнительных значений */
+	   String default_device_name;
+
 		/* Методы перенастройки Wi-Fi модуля в зависимости от состояния подключения в режиме "Клиент Wi-Fi сети" */
 	    static void wifiConnectOK();
 		static void wifiConnectFail();

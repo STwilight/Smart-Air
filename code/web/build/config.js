@@ -83,7 +83,8 @@ function processJSON(msg) {
 					delta_temp_max = subval;
 					break;
 				default:
-					document.getElementById(subkey).value = subval;
+					if(document.getElementById(subkey) != null)
+						document.getElementById(subkey).value = subval;
 					break;
 			}
 		}

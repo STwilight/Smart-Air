@@ -101,6 +101,32 @@ void vars_init() {
 	device_name = wifi->getDefaulDeviceName();
 	current_year = START_YEAR;
 }
+String getSysInfo() {
+	/* Метод применения конфигурации системы */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+  JsonObject& sys_info = jsonBuffer.createObject();
+	  root["sys_info"] = sys_info;
+
+	sys_info["dev_name"] = device_name;
+	sys_info["dev_fw"]   = FIRMWARE_VER;
+
+	String jsonString;
+	root.printTo(jsonString);
+
+	return jsonString;
+}
+void setSysInfo(String jsonString) {
+	/* Сохранение конфигурации системы из формата JSON-строки */
+
+	if(jsonString.length() != 0) {
+		DynamicJsonBuffer jsonBuffer;
+		JsonObject& root = jsonBuffer.parseObject(jsonString);
+		device_name = root["dev_name"].asString();
+	}
+}
 
 extern void systemRestart() {
 	/* Метод, вызываемый внешними модулями при необходимости перезагрузки системы */
@@ -144,24 +170,40 @@ extern String processData(byte type, String data) {
 		case SCH_SET:
 			// Зарезервировано для выдачи настроек планировщика
 			break;
-		// Установка настроек
+		case SYS_INF:
+			settings = getSysInfo();
+			break;
+		// Сохранение настроек
 		case AIR_CFG:
 			aircond->setSettings(data);
 			break;
 		case NTP_CFG:
 			ntpclient->setSettings(data);
-			ntpclient->applySettings();
 			break;
 		case FTP_CFG:
 			ftpserver->setSettings(data);
-			ftpserver->applySettings();
 			break;
 		case WIFI_CFG:
 			wifi->setSettings(data);
-			wifi->applySettings();
 			break;
 		case SCH_CFG:
-			// Зарезервировано для установки настроек планировщика
+			// Зарезервировано для сохранения настроек планировщика
+			break;
+		case SYS_CFG:
+			setSysInfo(data);
+			break;
+		// Применение настроек
+		case NTP_APP:
+			ntpclient->setSettings(data);
+			ntpclient->applySettings();
+			break;
+		case FTP_APP:
+			ftpserver->setSettings(data);
+			ftpserver->applySettings();
+			break;
+		case WIFI_APP:
+			wifi->setSettings(data);
+			wifi->applySettings();
 			break;
 		default:
 			settings = "";

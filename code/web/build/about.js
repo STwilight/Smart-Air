@@ -1,4 +1,5 @@
 var output;
+var messages = 0;
 
 function init() {
 	// Основной метод
@@ -19,11 +20,14 @@ function startWebSocket() {
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
 	websocket.send(JSON.stringify({type: 0x06}));
+	websocket.send(JSON.stringify({type: 0x08}));
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
+	messages++;
 	processJSON(evt.data);
-	doDisconnect();
+	if(messages >= 2)
+		doDisconnect();
 }
 function onError(evt) {
 	// Действие при возникновении ошибки
@@ -50,7 +54,8 @@ function processJSON(msg) {
 			var subval = val[subkey];
 			switch (subkey) {
 				default:
-					document.getElementById(subkey).innerHTML = subval;
+					if(document.getElementById(subkey) != null)
+						document.getElementById(subkey).innerHTML = subval;
 					break;
 			}
 		}

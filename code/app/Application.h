@@ -23,4 +23,8 @@ extern String processData(byte type, String data);
 /* Объявление системных функций */
 void vars_init();
 
+/* Методы получения и сохранения конфигурации */
+String getSysInfo();
+void setSysInfo(String jsonString);
+
 #endif /* APP_APPLICATION_H_ */
