@@ -167,6 +167,9 @@ extern String processData(byte type, String data) {
 		case WIFI_HW:
 			settings = wifi->getHardwareInfo();
 			break;
+		case WIFI_NET:
+			settings = wifi->wifiScan();
+			break;
 		case SCH_SET:
 			// Зарезервировано для выдачи настроек планировщика
 			break;

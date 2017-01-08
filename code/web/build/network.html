@@ -36,7 +36,9 @@
 				<h1>Network configuration</h1>
 				<p class="lead">Device networking settings</p>
 			</div>
-			<div id="messages"></div>
+			<div id="messages">
+				<div class="alert alert-warning" role="alert">Changing of Access point state (On/Off) applies with reboot!</div>
+			</div>
 			<div class="row marketing">
 				<div class="col-lg-4">
 					<div class="panel panel-default">
@@ -45,7 +47,7 @@
 						</div>
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-group">
-								<label>Enable Wi-Fi AP:&nbsp;&nbsp;</label>
+								<label>AP State:&nbsp;&nbsp;</label>
 								<label class="radio-inline"><input type="radio" id="ap-wifi-on" name="ap_wifi_state">On</label>
 								<label class="radio-inline"><input type="radio" id="ap-wifi-off" name="ap_wifi_state">Off</label>
 							</div>
@@ -69,7 +71,8 @@
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-inline">
 								<label for="mode">AP SSID:&nbsp;&nbsp;</label>
-								<input type="text" id="st_wifi_ssid" class="form-control" style="width: 170px" value="">
+								<input type="text" id="st_wifi_ssid" class="form-control" style="width: 107px" value="">
+								<input type="button" class="btn btn-default" name="scan" value="Scan" onclick="onScanButton()">
 							</div>
 							<div>&nbsp;</div>
 							<div class="form-inline">

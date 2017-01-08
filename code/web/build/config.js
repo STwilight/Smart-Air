@@ -2,8 +2,10 @@ var output;
 
 var set_temp_min;
 var set_temp_max;
+var set_temp_def;
 var delta_temp_min;
 var delta_temp_max;
+var delta_temp_def;
 
 function init() {
 	// Основной метод
@@ -25,6 +27,7 @@ function startWebSocket() {
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
 	websocket.send(JSON.stringify({type: 0x00}));
+	websocket.send(JSON.stringify({type: 0x08}));
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
@@ -76,11 +79,17 @@ function processJSON(msg) {
 				case "set_temp_max":
 					set_temp_max = subval;
 					break;
+				case "set_temp_def":
+					set_temp_def = subval;
+					break;
 				case "delta_temp_min":
 					delta_temp_min = subval;
 					break;
 				case "delta_temp_max":
 					delta_temp_max = subval;
+					break;
+				case "delta_temp_def":
+					delta_temp_def = subval;
 					break;
 				default:
 					if(document.getElementById(subkey) != null)
@@ -131,18 +140,33 @@ function getAirSettings() {
 	var root = {};
 	root["type"] = 0x10;
 	var settings = {};
-	settings["power"]	   = ((document.getElementById("power-on").checked && !document.getElementById("power-off").checked) ? true : false);
-	settings["mode"]	   = ((document.getElementById("mode").selectedIndex == 1) ? true : false);
-	settings["speed"]	   = (document.getElementById("speed").selectedIndex + 1);
-	settings["set_temp"]   = parseInt(document.getElementById("set_temp").value, 10);
-	settings["delta_temp"] = parseInt(document.getElementById("delta_temp").value, 10);
-		root["settings"]   = settings;
+	settings["power"] = ((document.getElementById("power-on").checked && !document.getElementById("power-off").checked) ? true : false);
+	settings["mode"]  = ((document.getElementById("mode").selectedIndex == 1) ? true : false);
+	settings["speed"] = (document.getElementById("speed").selectedIndex + 1);
+	
+	var set_temp = parseInt(document.getElementById("set_temp").value, 10);
+	if((set_temp < set_temp_min) || (set_temp > set_temp_max)) {
+		set_temp = set_temp_def;
+		document.getElementById("set_temp").value = set_temp;
+		alert("Temperature must be in range of +" + set_temp_min + " .. +" + set_temp_max + "°C!");
+	}
+	settings["set_temp"] = set_temp;
+	
+	var delta_temp = parseInt(document.getElementById("delta_temp").value, 10);
+	if((delta_temp < delta_temp_min) || (delta_temp > delta_temp_max)) {
+		delta_temp = delta_temp_def;
+		document.getElementById("delta_temp").value = delta_temp;
+		alert("Temperature tolerance must be in range of " + delta_temp_min + " .. +" + delta_temp_max + "°C!");
+	}
+	settings["delta_temp"] = delta_temp;
+		
+	root["settings"] = settings;
 	return JSON.stringify(root);	
 }
 function getSchedulerSettings() {
 	// Получение конфигурации планировщика в формате JSON-строки
 	var root = {};
-	root["type"] = 0x17;
+	root["type"] = 0x18;
 	var settings = {};
 	settings["op-mode"]   = ((document.getElementById("auto").checked && !document.getElementById("manual").checked) ? true : false);
 	settings["dof"]       = (((document.getElementById("mon").checked ? 1 : 0) << 0) | ((document.getElementById("tue").checked ? 1 : 0) << 1) | ((document.getElementById("wed").checked ? 1 : 0) << 2) | ((document.getElementById("thu").checked ? 1 : 0) << 3) | ((document.getElementById("fri").checked ? 1 : 0) << 4) | ((document.getElementById("sat").checked ? 1 : 0) << 5) | ((document.getElementById("sun").checked ? 1 : 0) << 6));
@@ -160,6 +184,7 @@ function onApplyButton() {
 function onCancelButton() {
 	// Метод обработки данных при нажатии на кнопку "Cancel"
 	websocket.send(JSON.stringify({type: 0x00}));
+	websocket.send(JSON.stringify({type: 0x08}));
 }
 
 function writeToScreen(message) {

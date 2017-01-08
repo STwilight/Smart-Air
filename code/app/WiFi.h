@@ -33,18 +33,19 @@ private:
 	     static bool ap_wifi_def_state;
 
 	/* Определение значений для режима "Клиент Wi-Fi сети" */
-	   String st_wifi_ssid;
-	   String st_wifi_pwd;
+	    String st_wifi_ssid;
+	    String st_wifi_pwd;
 	   	 bool st_wifi_autoconnect;
 	   	 byte st_wifi_conn_timeout;
   static bool st_wifi_err;
 	     bool st_wifi_state;
 
-    /* Определение дополнительных значений */
-	   String default_device_name;
+	    /* Определение дополнительных значений */
+	    String default_device_name;
+	    static BssList networks;
 
 		/* Методы перенастройки Wi-Fi модуля в зависимости от состояния подключения в режиме "Клиент Wi-Fi сети" */
-	    static void wifiConnectOK();
+		static void wifiConnectOK();
 		static void wifiConnectFail();
 
 		/* Методы преобразования типа шифрования */
@@ -61,6 +62,9 @@ private:
 		/* Методы получения MAC-адресов точки доступа и клиента Wi-Fi модуля */
 		String getAccessPointMAC(bool raw = false);
 		String getStationMAC(bool raw = false);
+
+		/* Метод для обработки результатов сканирования Wi-Fi сетей */
+		static void scanNetworks(bool succeeded, BssList list);
 
 		/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
 		String getSN();

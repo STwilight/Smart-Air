@@ -19,7 +19,7 @@ function startWebSocket() {
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
 	websocket.send(JSON.stringify({type: 0x04}));
-	websocket.send(JSON.stringify({type: 0x08}));
+	websocket.send(JSON.stringify({type: 0x09}));
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
@@ -72,12 +72,18 @@ function getWiFiSettings(type) {
 	var ap_mode = {};
 	ap_mode["ap_wifi_state"] = ((document.getElementById("ap-wifi-on").checked && !document.getElementById("ap-wifi-off").checked) ? true : false);
 	ap_mode["ap_wifi_ssid"]  = document.getElementById("ap_wifi_ssid").value;
-	ap_mode["ap_wifi_pwd"]   = document.getElementById("ap_wifi_pwd").value;
 	if(document.getElementById("ap_wifi_pwd").value.length >= 8)
 		ap_mode["ap_wifi_auth_mode"] = "AUTH_WPA2_PSK";
-	else
+	else {
+		if(document.getElementById("ap_wifi_pwd").value.length != 0)
+		{
+			document.getElementById("ap_wifi_pwd").value = "";
+			alert("Password must be at least 8 characters long!");
+		}
 		ap_mode["ap_wifi_auth_mode"] = "AUTH_OPEN";
-			root["ap_mode"]  = ap_mode;
+	}
+	ap_mode["ap_wifi_pwd"] = document.getElementById("ap_wifi_pwd").value;
+			root["ap_mode"] = ap_mode;
 	var client_mode = {};
 	client_mode["st_wifi_ssid"] = document.getElementById("st_wifi_ssid").value;
 	client_mode["st_wifi_pwd"]  = document.getElementById("st_wifi_pwd").value;
@@ -92,20 +98,24 @@ function getDeviceNameSettings(type) {
 	return JSON.stringify(root);	
 }
 
+function onScanButton() {
+	// Метод обработки данных при нажатии на кнопку "Scan"
+	websocket.send(JSON.stringify({type: 0x07}));
+}
 function onSaveButton() {
 	// Метод обработки данных при нажатии на кнопку "Save"
 	websocket.send(getWiFiSettings(0x14));
-	websocket.send(getDeviceNameSettings(0x18));
+	websocket.send(getDeviceNameSettings(0x19));
 }
 function onApplyButton() {
 	// Метод обработки данных при нажатии на кнопку "Apply"
 	websocket.send(getWiFiSettings(0x24));
-	websocket.send(getDeviceNameSettings(0x18));
+	websocket.send(getDeviceNameSettings(0x19));
 }
 function onCancelButton() {
 	// Метод обработки данных при нажатии на кнопку "Cancel"
 	websocket.send(JSON.stringify({type: 0x04}));
-	websocket.send(JSON.stringify({type: 0x08}));
+	websocket.send(JSON.stringify({type: 0x09}));
 }
 
 function writeToScreen(message) {

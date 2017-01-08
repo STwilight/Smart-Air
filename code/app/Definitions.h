@@ -20,16 +20,17 @@
 #define WIFI_SET 0x04
 #define WIFI_STA 0x05
 #define WIFI_HW	 0x06
-#define SCH_SET  0x07
-#define SYS_INF  0x08
+#define WIFI_NET 0x07
+#define SCH_SET  0x08
+#define SYS_INF  0x09
 
 /* Определения типов настроек для получения в формате JSON */
 #define AIR_CFG  0x10
 #define NTP_CFG  0x12
 #define FTP_CFG  0x13
 #define WIFI_CFG 0x14
-#define SCH_CFG  0x17
-#define SYS_CFG  0x18
+#define SCH_CFG  0x18
+#define SYS_CFG  0x19
 
 /* Определение типов комманд для применения настроек */
 #define NTP_APP  0x22

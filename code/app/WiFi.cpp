@@ -15,6 +15,7 @@
   	   byte WiFi::ap_wifi_def_channel;
 	   bool WiFi::ap_wifi_def_state;
 	   bool WiFi::st_wifi_err;
+	   BssList WiFi::networks;
 
 WiFi::WiFi() {
 	/* Конструктор по-умолчанию */
@@ -105,11 +106,46 @@ void WiFi::wifiConnect(String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_aut
 String WiFi::wifiScan() {
 	/* Метод сканирования доступных точек доступа */
 
-	// TODO: Завершить реализацию метода сканирования доступных точек доступа
-	BssList networks;
+	int counter = 0;
+	WifiStation.startScan(this->scanNetworks);
+
+	JsonObjectStream* stream = new JsonObjectStream();
+	JsonObject& root = stream->getRoot();
+
+	JsonArray& netlist = root.createNestedArray("networks");
+
+	for(int i=0; i<networks.count(); i++)
+	{
+		if(networks[i].hidden)
+			continue;
+		else
+		{
+			  JsonObject &item = netlist.createNestedObject();
+					item["id"] = (int)networks[i].getHashId();
+				 item["ssid"] = networks[i].ssid;
+				item["rssi"] = networks[i].rssi;
+			item["encryption"] = networks[i].getAuthorizationMethodName();
+			counter++;
+		}
+	}
+	WiFi::networks.clear();
+
 	String jsonString;
+	root.printTo(jsonString);
 
 	return jsonString;
+}
+void WiFi::scanNetworks(bool succeeded, BssList list) {
+	if(succeeded)
+	{
+		for(int i=0; i<list.count(); i++)
+			if(!list[i].hidden && list[i].ssid.length()>0)
+				WiFi::networks.add(list[i]);
+	}
+	list.clear();
+	WiFi::networks.sort([](const BssInfo& a, const BssInfo& b) {
+		return b.rssi - a.rssi;
+	});
 }
 
 String WiFi::getSettings() {
