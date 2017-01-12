@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta id="author_name" name="author" content="{author_name}">
+		<title id="project_name">{project_name} – Services</title>
+		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+		<link rel="stylesheet" type="text/css" href="bootstrap.css"/>
+		<style type="text/css">
+			h3.panel-title {
+				font-size: 24px;
+			}		
+		</style>
+		<script src="services.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<nav>
+					<ul class="nav nav-pills pull-right">
+						<li role="presentation"><a href="/">Status</a></li>
+						<li role="presentation"><a href="config">Configuration</a></li>
+						<li role="presentation"><a href="network">Network</a></li>
+						<li role="presentation" class="active"><a href="services">Services</a></li>
+						<li role="presentation"><a href="security">Security</a></li>
+						<li role="presentation"><a href="update">Update</a></li>
+						<li role="presentation"><a href="about">About</a></li>
+					</ul>
+				</nav>
+				<h3 id="project_caption" class="text-muted">{project_name} – {device_name}</h3>
+			</div>
+			<div class="jumbotron">
+				<h1>Services configuration</h1>
+				<p class="lead">Running services setup</p>
+			</div>
+			<div id="messages">
+				<div class="alert alert-warning" role="alert">Changing of any services settings applies with reboot!</div>
+			</div>
+			<div class="row marketing">
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">FTP Service</h3>
+						</div>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<div class="form-group">
+								<label>FTP State:&nbsp;&nbsp;</label>
+								<label class="radio-inline"><input type="radio" id="ftp-on" name="ftp_server_state">On</label>
+								<label class="radio-inline"><input type="radio" id="ftp-off" name="ftp_server_state">Off</label>
+							</div>
+							<div class="form-inline">
+								<label for="mode">Username:&nbsp;&nbsp;</label>
+								<input type="text" id="ftp_server_name" class="form-control" style="width: 170px" value="">
+							</div>
+							<div>&nbsp;</div>
+							<div class="form-inline">
+								<label for="mode">Password:&nbsp;&nbsp;</label>
+								<input type="password" id="ftp_server_pass" class="form-control" style="width: 170px" value="">
+							</div>
+						</h4>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">NTP Service</h3>
+						</div>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<div class="form-inline">
+								<label for="mode">Address:&nbsp;&nbsp;</label>
+								<input type="text" id="ntp_server_address" class="form-control" style="width: 250px" value="">
+							</div>
+							<div>&nbsp;</div>
+							<div class="form-group">
+								<label for="ntp_timezone">Timezone:&nbsp;&nbsp;</label>
+								<select id="ntp_timezone" class="form-control-inline" style="width: 140px">
+									<option>UTC –12:00</option>
+									<option>UTC –11:00</option>
+									<option>UTC –10:00</option>
+									<option>UTC –09:00</option>
+									<option>UTC –08:00</option>
+									<option>UTC –07:00</option>
+									<option>UTC –06:00</option>
+									<option>UTC –05:00</option>
+									<option>UTC –04:00</option>
+									<option>UTC –03:00</option>
+									<option>UTC –02:00</option>
+									<option>UTC –01:00</option>
+									<option>UTC 00:00</option>
+									<option>UTC +01:00</option>
+									<option>UTC +02:00</option>
+									<option>UTC +03:00</option>
+									<option>UTC +04:00</option>
+									<option>UTC +05:00</option>
+									<option>UTC +06:00</option>
+									<option>UTC +07:00</option>
+									<option>UTC +08:00</option>
+									<option>UTC +09:00</option>
+									<option>UTC +10:00</option>
+									<option>UTC +11:00</option>
+									<option>UTC +12:00</option>
+								</select>
+							</div>
+						</h4>
+					</div>
+				</div>
+				<div class="col-lg-12 text-center">
+					<input type="button" class="btn btn-info" name="save" value="Save" onclick="onSaveButton()">&nbsp;&nbsp;
+					<input type="button" class="btn btn-success" name="apply" value="Apply" onclick="onApplyButton()">&nbsp;&nbsp;
+					<input type="button" class="btn btn-danger" name="cancel" value="Cancel" onclick="onCancelButton()">
+				</div>
+				<div class="col-lg-12 text-center">
+					<p>&nbsp;</p>
+					<footer class="footer">
+						<h4 id="project_caption" class="text-muted">&copy; {start_year} – {current_year}, {company_name}</h4>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
