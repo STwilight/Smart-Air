@@ -1,8 +1,8 @@
 /*
- * Scheduler.cpp
+ * TimeClient.cpp
  *
- *  Created on: 10 окт. 2016 г.
- *      Author: Symrak
+ * Класс, описывающий планировщик
+ *
  */
 
 #include "Scheduler.h"
@@ -10,5 +10,7 @@
 Scheduler::Scheduler() {
 	// TODO Реализовать класс "Планировщик"
 
-}
+	/* Конструктор по-умолчанию */
 
+
+}

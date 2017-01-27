@@ -44,7 +44,7 @@ void init()
 	// TODO: Добавить класс UART-интерфейса
 	/* Инициализация UART */
 	/* DEBUG */ Serial.begin(115200);
-	/* DEBUG */ Serial.systemDebugOutput(false);
+	/* DEBUG */ Serial.systemDebugOutput(true);
 	/* DEBUG */ Serial.commandProcessing(false);
 
 	// TODO: Добавить установку режима сна в класс Wi-Fi модуля
@@ -64,7 +64,7 @@ void init()
 		aircond = new AirConditioner(GPIO0, GPIO14, GPIO12, GPIO13, GPIO2, 11);
 	#else
 		/* Создание экземпляра класса модуля кондиционера */
-		aircond = new AirConditioner(GPIO16, GPIO14, GPIO12, GPIO13, GPIO4, 11);
+		aircond = new AirConditioner(GPIO13, GPIO12, GPIO16, GPIO14, GPIO4, 11);
 	#endif
 
 	/* Монтирование файловой системы */
