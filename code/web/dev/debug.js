@@ -26,7 +26,7 @@ function onOpen(evt) {
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
 	
-	writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
+	writeToScreen('<span style="color: orange;">' + getTime() + " <: " + "</span>" + "<b>" + evt.data + "</b>");
 }
 function onError(evt) {
 	// Действие при возникновении ошибки
@@ -42,8 +42,8 @@ function onClose(evt) {
 function doSend(message) {
 	// Метод отправки информации в текстовом виде
 	
-	// writeToScreen("SENT: " + message); 
-	websocket.send(message);
+	writeToScreen('<span style="color: blue;">' + getTime() + " >: " + "</span>" + "<b>" + message + "</b>"); 
+	websocket.send(JSON.stringify({type: message}));
 }
 function doDisconnect() {
 	// Метод разрыва socket-соединения
@@ -51,15 +51,22 @@ function doDisconnect() {
 	var disconnect = document.getElementById("disconnect");
 	disconnect.disabled = true;
 	websocket.close();
+	writeToScreen("DISCONNECTED");
 }
 
 function writeToScreen(message) {
 	// Метод вывода информации на страницу
 	
-	var pre = document.createElement("p");
+	var pre = document.createElement("div");
 	pre.style.wordWrap = "break-word";
 	pre.innerHTML = message;
 	output.appendChild(pre);
+}
+function getTime() {
+	// Метод для получения текущей даты и времени
+	
+	var timestamp = new Date();
+	return (("0" + timestamp.getDate()).slice(-2) + "." + ("0" + (timestamp.getMonth() + 1)).slice(-2) + "." + timestamp.getFullYear() + ", " + ("0" + timestamp.getHours()).slice(-2) + ":" + ("0" + timestamp.getMinutes()).slice(-2) + ":" + ("0" + timestamp.getSeconds()).slice(-2) + "." + ("00" + timestamp.getMilliseconds()).slice(-3));
 }
 
 window.addEventListener("load", init, false);

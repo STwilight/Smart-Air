@@ -28,21 +28,8 @@ void TimeClient::updateSystemClock(NtpClient& client, time_t timestamp) {
 
 	SystemClock.setTime(timestamp);
 
-	DateTime currentDateTime = SystemClock.now(eTZ_UTC);
+	DateTime currentDateTime = SystemClock.now(eTZ_Local);
 	current_year = currentDateTime.Year;
-
-	/* DEBUG */
-		int8_t day_of_week = currentDateTime.DayofWeek;
-		int8_t hour = currentDateTime.Hour;
-		int8_t minute = currentDateTime.Minute;
-		String data = "Time is ";
-		data.concat(hour);
-		data.concat(":");
-		data.concat(minute);
-		data.concat(", day of week is ");
-		data.concat(day_of_week);
-		Serial.println(data);
-	/* DEBUG */
 }
 
 String TimeClient::getSettings() {

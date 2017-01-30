@@ -12,7 +12,7 @@
 #define On		true
 #define Off		false
 
-/* Определения типов настроек для выдачи в формате JSON */
+/* Определения типов команд для выдачи настроек в формате JSON */
 #define AIR_SET  0x00
 #define AIR_STA  0x01
 #define NTP_SET  0x02
@@ -24,7 +24,7 @@
 #define SCH_SET  0x08
 #define SYS_INF  0x09
 
-/* Определения типов настроек для получения в формате JSON */
+/* Определения типов команд для получения настроек в формате JSON */
 #define AIR_CFG  0x10
 #define NTP_CFG  0x12
 #define FTP_CFG  0x13
@@ -32,9 +32,12 @@
 #define SCH_CFG  0x18
 #define SYS_CFG  0x19
 
-/* Определение типов комманд для применения настроек */
+/* Определение типов команд для применения настроек */
 #define NTP_APP  0x22
 #define FTP_APP  0x23
 #define WIFI_APP 0x24
+
+/* Определение типов команд для отладки */
+#define DBG_REQ	 0xFF
 
 #endif /* APP_DEFINITIONS_H_ */

@@ -44,7 +44,7 @@ void init()
 	// TODO: Добавить класс UART-интерфейса
 	/* Инициализация UART */
 	/* DEBUG */ Serial.begin(115200);
-	/* DEBUG */ Serial.systemDebugOutput(true);
+	/* DEBUG */ Serial.systemDebugOutput(false);
 	/* DEBUG */ Serial.commandProcessing(false);
 
 	// TODO: Добавить установку режима сна в класс Wi-Fi модуля
@@ -128,6 +128,25 @@ void setSysInfo(String jsonString) {
 	}
 }
 
+String debugMethod() {
+	/* Метод для выполнения отладки */
+
+	DateTime currentDateTime = SystemClock.now(eTZ_Local);
+
+	int8_t hour = currentDateTime.Hour;
+	int8_t minute = currentDateTime.Minute;
+	int8_t day_of_week = currentDateTime.DayofWeek;
+
+	String data = "Time is ";
+	data.concat(hour);
+	data.concat(":");
+	data.concat(minute);
+	data.concat(", day of week is ");
+	data.concat(day_of_week);
+
+	return data;
+}
+
 extern void systemRestart() {
 	/* Метод, вызываемый внешними модулями при необходимости перезагрузки системы */
 
@@ -142,39 +161,39 @@ extern void systemRestart() {
 extern String processData(byte type, String data) {
 	/* Метод, вызываемый внешними модулями при необходимости получения/установки настроек в формате JSON */
 
-	String settings;
+	String message;
 
 	switch (type) {
 		// Получение настроек
 		case AIR_SET:
-			settings = aircond->getSettings();
+			message = aircond->getSettings();
 			break;
 		case AIR_STA:
-			settings = aircond->getState();
+			message = aircond->getState();
 			break;
 		case NTP_SET:
-			settings = ntpclient->getSettings();
+			message = ntpclient->getSettings();
 			break;
 		case FTP_SET:
-			settings = ftpserver->getSettings();
+			message = ftpserver->getSettings();
 			break;
 		case WIFI_SET:
-			settings = wifi->getSettings();
+			message = wifi->getSettings();
 			break;
 		case WIFI_STA:
-			settings = wifi->getState();
+			message = wifi->getState();
 			break;
 		case WIFI_HW:
-			settings = wifi->getHardwareInfo();
+			message = wifi->getHardwareInfo();
 			break;
 		case WIFI_NET:
-			settings = wifi->wifiScan();
+			message = wifi->wifiScan();
 			break;
 		case SCH_SET:
 			// Зарезервировано для выдачи настроек планировщика
 			break;
 		case SYS_INF:
-			settings = getSysInfo();
+			message = getSysInfo();
 			break;
 		// Сохранение настроек
 		case AIR_CFG:
@@ -208,10 +227,13 @@ extern String processData(byte type, String data) {
 			wifi->setSettings(data);
 			wifi->applySettings();
 			break;
+		case DBG_REQ:
+			message = debugMethod();
+			break;
 		default:
-			settings = "";
+			message = "";
 			break;
 	}
 
-	return settings;
+	return message;
 }
