@@ -21,28 +21,28 @@ function startWebSocket() {
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
 	
-	writeToScreen("CONNECTED");
+	writeToScreen('<span style="color: green; font-weight: bold;">CONNECTED.</span>');
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
 	
-	writeToScreen('<span style="color: orange;">' + getTime() + " <: " + "</span>" + "<b>" + evt.data + "</b>");
+	writeToScreen('<span style="color: orange; font-weight: bold;">' + getTime() + "> " + "</span>" + evt.data);
 }
 function onError(evt) {
 	// Действие при возникновении ошибки
 	
-	writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+	writeToScreen('<span style="color: red; font-weight: bold;">ERROR:</span> ' + evt.data);
 }
 function onClose(evt) {
 	// Действие при разъединении socket-соединения
 	
-	writeToScreen("DISCONNECTED");
+	writeToScreen('<span style="color: red; font-weight: bold;">DISCONNECTED.</span>');
 }
 
 function doSend(message) {
 	// Метод отправки информации в текстовом виде
 	
-	writeToScreen('<span style="color: blue;">' + getTime() + " >: " + "</span>" + "<b>" + message + "</b>"); 
+	writeToScreen('<span style="color: blue; font-weight: bold;">' + getTime() + "< " + "</span>" + message); 
 	websocket.send(JSON.stringify({type: message}));
 }
 function doDisconnect() {
@@ -51,7 +51,7 @@ function doDisconnect() {
 	var disconnect = document.getElementById("disconnect");
 	disconnect.disabled = true;
 	websocket.close();
-	writeToScreen("DISCONNECTED");
+	writeToScreen('<span style="color: red; font-weight: bold;">DISCONNECTED.</span>');
 }
 
 function writeToScreen(message) {

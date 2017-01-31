@@ -27,4 +27,7 @@ void vars_init();
 String getSysInfo();
 void setSysInfo(String jsonString);
 
+/* Отладочный метод */
+String debugMethod();
+
 #endif /* APP_APPLICATION_H_ */

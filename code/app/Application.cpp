@@ -127,22 +127,17 @@ void setSysInfo(String jsonString) {
 		device_name = root["dev_name"].asString();
 	}
 }
-
 String debugMethod() {
 	/* Метод для выполнения отладки */
 
-	DateTime currentDateTime = SystemClock.now(eTZ_Local);
-
-	int8_t hour = currentDateTime.Hour;
-	int8_t minute = currentDateTime.Minute;
-	int8_t day_of_week = currentDateTime.DayofWeek;
+	DateTime currentDateTime = SystemClock.now(eTZ_UTC);
 
 	String data = "Time is ";
-	data.concat(hour);
+	data.concat(currentDateTime.Hour);
 	data.concat(":");
-	data.concat(minute);
+	data.concat(currentDateTime.Minute);
 	data.concat(", day of week is ");
-	data.concat(day_of_week);
+	data.concat(currentDateTime.DayofWeek);
 
 	return data;
 }

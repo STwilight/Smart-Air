@@ -28,7 +28,7 @@ void TimeClient::updateSystemClock(NtpClient& client, time_t timestamp) {
 
 	SystemClock.setTime(timestamp);
 
-	DateTime currentDateTime = SystemClock.now(eTZ_Local);
+	DateTime currentDateTime = SystemClock.now(eTZ_UTC);
 	current_year = currentDateTime.Year;
 }
 
