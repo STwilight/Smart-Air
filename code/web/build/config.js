@@ -7,6 +7,11 @@ var delta_temp_min;
 var delta_temp_max;
 var delta_temp_def;
 
+var time_from_hours;
+var time_from_mins;
+var time_to_hours;
+var time_to_mins;
+
 function init() {
 	// Основной метод
 	output = document.getElementById("messages");
@@ -108,8 +113,10 @@ function processInput() {
 	];
 	
 	var time_inputs = [
-		document.getElementById("time_from"),
-		document.getElementById("time_to")
+		document.getElementById("time_from_hours"),
+		document.getElementById("time_from_mins"),
+		document.getElementById("time_to_hours"),
+		document.getElementById("time_to_mins")
 	];
 
     for(var i=0; i<num_inputs.length; i++) {
@@ -126,7 +133,7 @@ function processInput() {
     for(var i=0; i<time_inputs.length; i++) {
         time_inputs[i].onkeypress = function(event) {
 			event = event || window.event;
-			if(event.charCode && (event.charCode < 48 || event.charCode > 58))
+			if(event.charCode && (event.charCode < 48 || event.charCode > 57))
 				return false;
 		}
 		time_inputs[i].onpaste = function(event) {
@@ -168,11 +175,42 @@ function getSchedulerSettings() {
 	var root = {};
 	root["type"] = 0x18;
 	var settings = {};
-	settings["op-mode"]   = ((document.getElementById("auto").checked && !document.getElementById("manual").checked) ? true : false);
-	settings["dof"]       = (((document.getElementById("mon").checked ? 1 : 0) << 0) | ((document.getElementById("tue").checked ? 1 : 0) << 1) | ((document.getElementById("wed").checked ? 1 : 0) << 2) | ((document.getElementById("thu").checked ? 1 : 0) << 3) | ((document.getElementById("fri").checked ? 1 : 0) << 4) | ((document.getElementById("sat").checked ? 1 : 0) << 5) | ((document.getElementById("sun").checked ? 1 : 0) << 6));
-	settings["time_from"] = document.getElementById("time_from").value;
-	settings["time_to"]   = document.getElementById("time_to").value;
-		root["settings"]  = settings;
+	settings["op-mode"] = ((document.getElementById("auto").checked && !document.getElementById("manual").checked) ? true : false);
+	settings["dow"] = (((document.getElementById("sun").checked ? 1 : 0) << 0) | ((document.getElementById("mon").checked ? 1 : 0) << 1) | ((document.getElementById("tue").checked ? 1 : 0) << 2) | ((document.getElementById("wed").checked ? 1 : 0) << 3) | ((document.getElementById("thu").checked ? 1 : 0) << 4) | ((document.getElementById("fri").checked ? 1 : 0) << 5) | ((document.getElementById("sat").checked ? 1 : 0) << 6));
+	
+	time_from_hours = parseInt(document.getElementById("time_from_hours").value, 10);
+	if((time_from_hours < 0) || (time_from_hours > 23)) {
+		time_from_hours = 0;
+		document.getElementById("time_from_hours").value = 0;
+		alert("Hours value must be from 0 to 23!");
+	}
+	settings["time_from_hours"] = time_from_hours;
+	
+	time_from_mins = parseInt(document.getElementById("time_from_mins").value, 10);
+	if((time_from_mins < 0) || (time_from_mins > 59)) {
+		time_from_mins = 0;
+		document.getElementById("time_from_mins").value = 0;
+		alert("Minutes value must be from 0 to 59!");
+	}
+	settings["time_from_mins"] = time_from_mins;
+
+	time_to_hours = parseInt(document.getElementById("time_to_hours").value, 10);
+	if((time_to_hours < 0) || (time_to_hours > 23)) {
+		time_to_hours = 0;
+		document.getElementById("time_to_hours").value = 0;
+		alert("Hours value must be from 0 to 23!");
+	}
+	settings["time_to_hours"] = time_to_hours;
+	
+	time_to_mins = parseInt(document.getElementById("time_to_mins").value, 10);
+	if((time_to_mins < 0) || (time_to_mins > 59)) {
+		time_to_mins = 0;
+		document.getElementById("time_to_mins").value = 0;
+		alert("Minutes value must be from 0 to 59!");
+	}
+	settings["time_to_mins"] = time_to_mins;
+	
+	root["settings"] = settings;
 	return JSON.stringify(root);	
 }
 

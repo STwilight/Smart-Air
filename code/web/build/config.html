@@ -66,11 +66,11 @@
 							</div>
 							<div class="form-inline" id="set_temp_div">
 								<label>Temperature, &deg;C:&nbsp;&nbsp;</label>
-								<input type="number" id="set_temp" class="form-control" style="width: 70px" min=15 max=30 step=1 value=0>
+								<input type="number" id="set_temp" class="form-control" style="width: 65px" min=15 max=30 step=1 value=0>
 							</div>
 							<div class="form-inline" id="delta_temp_div">
 								<label>Temperature tolerance, &deg;C:&nbsp;&nbsp;</label>
-								<input type="number" id="delta_temp" class="form-control" style="width: 60px" min=0 max=5 step=1 value=0>
+								<input type="number" id="delta_temp" class="form-control" style="width: 65px" min=0 max=5 step=1 value=0>
 							</div>
 						</h4>
 					</div>
@@ -89,22 +89,27 @@
 							<div class="form-i">
 								<label>Day of week:&nbsp;&nbsp;</label>
 								<p style="margin-left: 7%">
-									<label class="checkbox-inline"><input type="checkbox" id="mon" name="dof">Mon</label>
-									<label class="checkbox-inline"><input type="checkbox" id="tue" name="dof">Tue</label>
-									<label class="checkbox-inline"><input type="checkbox" id="wed" name="dof">Wed</label>
-									<label class="checkbox-inline"><input type="checkbox" id="thu" name="dof">Thu</label>
-									<label class="checkbox-inline"><input type="checkbox" id="fri" name="dof">Fri</label>
-									<label class="checkbox-inline"><input type="checkbox" id="sat" name="dof"}>Sat</label>
-									<label class="checkbox-inline"><input type="checkbox" id="sun" name="dof">Sun</label>
+									<label class="checkbox-inline"><input type="checkbox" id="mon" name="dow">Mon</label>
+									<label class="checkbox-inline"><input type="checkbox" id="tue" name="dow">Tue</label>
+									<label class="checkbox-inline"><input type="checkbox" id="wed" name="dow">Wed</label>
+									<label class="checkbox-inline"><input type="checkbox" id="thu" name="dow">Thu</label>
+									<label class="checkbox-inline"><input type="checkbox" id="fri" name="dow">Fri</label>
+									<label class="checkbox-inline"><input type="checkbox" id="sat" name="dow"}>Sat</label>
+									<label class="checkbox-inline"><input type="checkbox" id="sun" name="dow">Sun</label>
 								</p>								
 							</div>
 							<div class="form-inline">
 								<label>Time interval:&nbsp;&nbsp;</label>
 								<p style="margin-left: 7%">
-									<input id="time_from" class="form-control" style="width: 70px" type="text" value="00:00">
-									&nbsp;–&nbsp;
-									<input id="time_to" class="form-control" style="width: 70px" type="text" value="00:00">
-								</p>								
+									<b>From:</b>&nbsp;&nbsp;
+										<input type="number" id="time_from_hours" class="form-control" style="width: 65px" min=0 max=23 step=1 value=0>&nbsp;hours
+										<input type="number" id="time_from_mins" class="form-control" style="width: 65px" min=0 max=59 step=1 value=0>&nbsp;minutes
+								</p>
+								<p style="margin-left: 7%">
+									<b>To:</b>&nbsp;&nbsp;
+										<input type="number" id="time_to_hours" class="form-control" style="width: 65px" min=0 max=23 step=1 value=0>&nbsp;hours
+										<input type="number" id="time_to_mins" class="form-control" style="width: 65px" min=0 max=59 step=1 value=0>&nbsp;minutes
+								</p>							
 							</div>						
 						</h4>
 					</div>				
