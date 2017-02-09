@@ -175,7 +175,7 @@ function getSchedulerSettings() {
 	var root = {};
 	root["type"] = 0x18;
 	var settings = {};
-	settings["op-mode"] = ((document.getElementById("auto").checked && !document.getElementById("manual").checked) ? true : false);
+	settings["scheduler"] = ((document.getElementById("scheduler-on").checked && !document.getElementById("scheduler-off").checked) ? true : false);
 	settings["dow"] = (((document.getElementById("sun").checked ? 1 : 0) << 0) | ((document.getElementById("mon").checked ? 1 : 0) << 1) | ((document.getElementById("tue").checked ? 1 : 0) << 2) | ((document.getElementById("wed").checked ? 1 : 0) << 3) | ((document.getElementById("thu").checked ? 1 : 0) << 4) | ((document.getElementById("fri").checked ? 1 : 0) << 5) | ((document.getElementById("sat").checked ? 1 : 0) << 6));
 	
 	time_from_hours = parseInt(document.getElementById("time_from_hours").value, 10);
