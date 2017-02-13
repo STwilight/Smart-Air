@@ -83,7 +83,7 @@ AirConditioner::AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin
 	this->delta_temp	= delta_temp_def;
 	this->cur_temp		= 0;
 
-	AirConditioner::executeConditioner.initializeMs(1000, AirConditioner::execConditioner).start();
+
 }
 
 void AirConditioner::initGPIO() {
@@ -102,6 +102,12 @@ void AirConditioner::initGPIO() {
 	pinMode(this->HiSpeedPin, OUTPUT);
 	noPullup(this->HiSpeedPin);
 	digitalWrite(this->HiSpeedPin, Off);
+}
+
+void AirConditioner::start() {
+	/* Метод для запуска кондиционера в работу */
+
+	this->executeConditioner.initializeMs(1000, AirConditioner::execConditioner).start();
 }
 
 void AirConditioner::setPower(bool power) {
@@ -144,23 +150,29 @@ void AirConditioner::updateTemp() {
 void AirConditioner::execThermostat() {
 	/* Осуществление поддержания постоянной температуры (функционал термостат) */
 
-	if(AirConditioner::power == PowerOn && !AirConditioner::sensor->sensor_error) {
-		if(AirConditioner::mode == Cooling){
-			if(AirConditioner::cur_temp >= (AirConditioner::set_temp + AirConditioner::delta_temp))
-				AirConditioner::setSpeed(AirConditioner::speed);
-			else
-				AirConditioner::setSpeed(Stopped);
+	bool enabled_by_scheduler = getSchedulerStatus();
+
+	if(enabled_by_scheduler) {
+		if(AirConditioner::power == PowerOn && !AirConditioner::sensor->sensor_error) {
+			if(AirConditioner::mode == Cooling){
+				if(AirConditioner::cur_temp >= (AirConditioner::set_temp + AirConditioner::delta_temp))
+					AirConditioner::setSpeed(AirConditioner::speed);
+				else
+					AirConditioner::setSpeed(Stopped);
+			}
+			if(AirConditioner::mode == Heating) {
+				if(AirConditioner::cur_temp <= (AirConditioner::set_temp - AirConditioner::delta_temp))
+					AirConditioner::setSpeed(AirConditioner::speed);
+				else
+					AirConditioner::setSpeed(Stopped);
+			}
 		}
-		if(AirConditioner::mode == Heating) {
-			if(AirConditioner::cur_temp <= (AirConditioner::set_temp - AirConditioner::delta_temp))
-				AirConditioner::setSpeed(AirConditioner::speed);
-			else
-				AirConditioner::setSpeed(Stopped);
+		else if(AirConditioner::power == PowerOn && AirConditioner::sensor->sensor_error) {
+			AirConditioner::setSpeed(Stopped);
+			AirConditioner::setPower(Off);
 		}
-	}
-	else if(AirConditioner::power == PowerOn && AirConditioner::sensor->sensor_error) {
-		AirConditioner::setSpeed(Stopped);
-		AirConditioner::setPower(Off);
+		else
+			AirConditioner::setSpeed(Stopped);
 	}
 	else
 		AirConditioner::setSpeed(Stopped);

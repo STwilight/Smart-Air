@@ -27,8 +27,12 @@ Scheduler::Scheduler() {
 	this->time_to_hours		 = 0;
 	this->time_to_mins		 = 0;
 	this->days_of_week		 = 0;
+}
 
-	Scheduler::executeScheduler.initializeMs(1000, Scheduler::execScheduler).start();
+void Scheduler::start() {
+	/* Метод для запуска кондиционера в работу */
+
+	this->executeScheduler.initializeMs(1000, Scheduler::execScheduler).start();
 }
 
 void Scheduler::execScheduler() {
@@ -41,17 +45,14 @@ void Scheduler::execScheduler() {
 			 byte current_minute = currentDateTime.Minute;
 
 		if(((Scheduler::days_of_week & (1 << current_day_of_week)) >> current_day_of_week) && \
-		   ((current_hour >= Scheduler::time_from_hours) && (current_minute >= Scheduler::time_from_mins)) && \
-		   ((current_hour <= Scheduler::time_to_hours) && (current_minute < Scheduler::time_to_mins))) {
-			Scheduler::schedule_triggered = true;
-		}
-		else {
+		  ((current_hour >= Scheduler::time_from_hours) && (current_minute >= Scheduler::time_from_mins)) && \
+		  ((current_hour <= Scheduler::time_to_hours) && (current_minute < Scheduler::time_to_mins)))
+				Scheduler::schedule_triggered = true;
+		else
 			Scheduler::schedule_triggered = false;
-		}
 	}
-	else {
+	else
 		Scheduler::schedule_triggered = true;
-	}
 }
 
 String Scheduler::getSettings() {
@@ -99,3 +100,13 @@ bool Scheduler::getStatus() {
 
 	return this->schedule_triggered;
 }
+
+void Scheduler::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля планировщика для перезагрузки системы */
+
+	if(this->executeScheduler.isStarted())
+		this->executeScheduler.stop();
+
+	Settings.save(this->getSettings(), SYS_SETTINGS);
+}
+

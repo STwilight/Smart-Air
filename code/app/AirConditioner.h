@@ -101,6 +101,9 @@ public:
 	/* Конструктор по-умолчанию */
 	AirConditioner(byte PowerPin, byte LowSpeedPin, byte MedSpeedPin, byte HiSpeedPin, byte SensorPin, byte SensorResolution);
 
+	/* Метод для запуска кондиционера в работу */
+	void start();
+
 	/* Метод получения текущей температуры */
 	float getTemp();
 

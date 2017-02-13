@@ -23,6 +23,7 @@
 #include "TimeClient.h"
 #include "FileServer.h"
 #include "WebServer.h"
+#include "Scheduler.h"
 #include "WiFi.h"
 
 /* Ссылки на объекты классов */
@@ -30,6 +31,7 @@ AirConditioner *aircond;
 TimeClient *ntpclient;
 FileServer *ftpserver;
 WebServer *webserver;
+Scheduler *scheduler;
 WiFi *wifi;
 
 /* Объявление для глобальных внешних (extern) переменных */
@@ -70,6 +72,10 @@ void init()
 	/* Монтирование файловой системы */
 	spiffs_mount();
 
+	/* Создание экземпляра класса и инициализация модуля планировщика */
+	scheduler = new Scheduler();
+	scheduler->setSettings(Settings.load(SYS_SETTINGS));
+
 	/* Инициализация модуля кондиционера */
 	aircond->setSettings(Settings.load(APP_SETTINGS));
 
@@ -96,6 +102,10 @@ void init()
 	// TODO: Реализовать шифрование передаваемых через WEB-сервер данных с помощью SSL или AES
 	/* Создание экземпляра класса и инициализация Web-сервера */
 	webserver = new WebServer(WEB_SERVER_PORT);
+
+	/* Запуск модулей планировщика и кондиционера */
+	scheduler->start();
+	aircond->start();
 };
 void vars_init() {
 	device_name = wifi->getDefaulDeviceName();
@@ -146,6 +156,7 @@ extern void systemRestart() {
 	/* Метод, вызываемый внешними модулями при необходимости перезагрузки системы */
 
 	aircond->onSystemRestart();
+	scheduler->onSystemRestart();
 	ntpclient->onSystemRestart();
 	wifi->onSystemRestart();
 	ftpserver->onSystemRestart();
@@ -185,7 +196,7 @@ extern String processData(byte type, String data) {
 			message = wifi->wifiScan();
 			break;
 		case SCH_SET:
-			// Зарезервировано для выдачи настроек планировщика
+			message = scheduler->getSettings();
 			break;
 		case SYS_INF:
 			message = getSysInfo();
@@ -204,7 +215,7 @@ extern String processData(byte type, String data) {
 			wifi->setSettings(data);
 			break;
 		case SCH_CFG:
-			// Зарезервировано для сохранения настроек планировщика
+			scheduler->setSettings(data);
 			break;
 		case SYS_CFG:
 			setSysInfo(data);
@@ -231,4 +242,9 @@ extern String processData(byte type, String data) {
 	}
 
 	return message;
+}
+extern bool getSchedulerStatus() {
+	/* Метод, вызываемый внешним модулем при необходимости получения флага срабатывания расписания планировщика */
+
+	return scheduler->getStatus();
 }

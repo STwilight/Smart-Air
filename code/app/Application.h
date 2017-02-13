@@ -19,6 +19,7 @@ extern uint16_t current_year;
 /* Объявление внешних методов */
 extern void systemRestart();
 extern String processData(byte type, String data);
+extern bool getSchedulerStatus();
 
 /* Объявление системных функций */
 void vars_init();

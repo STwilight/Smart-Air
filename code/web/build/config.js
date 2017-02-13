@@ -96,6 +96,21 @@ function processJSON(msg) {
 				case "delta_temp_def":
 					delta_temp_def = subval;
 					break;
+				case "scheduler":
+					if(subval)
+						document.getElementById("scheduler-on").checked = true;
+					else
+						document.getElementById("scheduler-off").checked = true;
+					break;
+				case "dow":
+					document.getElementById("sun").checked = ((subval & (1 << 0)) >> 0);
+					document.getElementById("mon").checked = ((subval & (1 << 1)) >> 1);
+					document.getElementById("tue").checked = ((subval & (1 << 2)) >> 2);
+					document.getElementById("wed").checked = ((subval & (1 << 3)) >> 3);
+					document.getElementById("thu").checked = ((subval & (1 << 4)) >> 4);
+					document.getElementById("fri").checked = ((subval & (1 << 5)) >> 5);
+					document.getElementById("sat").checked = ((subval & (1 << 6)) >> 6);
+					break;
 				default:
 					if(document.getElementById(subkey) != null)
 						document.getElementById(subkey).value = subval;
@@ -209,6 +224,16 @@ function getSchedulerSettings() {
 		alert("Minutes value must be from 0 to 59!");
 	}
 	settings["time_to_mins"] = time_to_mins;
+	
+	if((time_from_hours == time_to_hours) && (time_from_mins >= time_to_mins)) {
+		time_from_mins = 0;
+		time_to_mins   = 0;
+		document.getElementById("time_from_mins").value = 0;
+		document.getElementById("time_to_mins").value   = 0;
+		alert("\"Time to\" must be greater than \"time from\"!");		
+	}
+	settings["time_from_mins"] = time_from_mins;
+	settings["time_to_mins"]   = time_to_mins;
 	
 	root["settings"] = settings;
 	return JSON.stringify(root);	
