@@ -74,5 +74,5 @@ void TimeClient::onSystemRestart() {
 
 	this->ntpClient->setAutoQuery(false);
 
-	Settings.save(this->getSettings(), SYS_SETTINGS);
+	Settings.save(this->getSettings(), NTP_SETTINGS);
 }

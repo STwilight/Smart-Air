@@ -24,7 +24,7 @@
 #define SCH_SET  0x08
 #define SYS_INF  0x09
 
-/* Определения типов команд для получения настроек в формате JSON */
+/* Определения типов команд для установки настроек в формате JSON */
 #define AIR_CFG  0x10
 #define NTP_CFG  0x12
 #define FTP_CFG  0x13
@@ -36,6 +36,10 @@
 #define NTP_APP  0x22
 #define FTP_APP  0x23
 #define WIFI_APP 0x24
+
+/* Определение типов команд для сохранения и восстановления конфигурации */
+#define BAK_CFG  0xA0
+#define RES_CFG  0xB0
 
 /* Определение типов команд для отладки */
 #define DBG_REQ	 0xFF

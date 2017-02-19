@@ -136,13 +136,15 @@ bool WebServer::fileNotExist(String name, bool createfile, bool deletezerofile) 
 	}
 }
 
-void WebServer::onBackup(HttpRequest &request, HttpResponse &response) {
+String WebServer::onBackup() {
 	/* Метод для выдачи файла с текущей конфигурацией устройства */
 
-	// TODO: Реализовать метод для выдачи файла с текущей конфигурацией устройства
+	String file = Settings.backup();
+
+	return file;
 }
-void WebServer::onRestore(HttpRequest &request, HttpResponse &response) {
+void WebServer::onRestore(String filename) {
 	/* Метод для получения файла с конфигурацией устройства */
 
-	// TODO: Реализовать метод для получения файла с конфигурацией устройства
+	Settings.restore(filename);
 }

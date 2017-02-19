@@ -13,7 +13,7 @@
 #include <SmingCore/SmingCore.h>
 
 /* Объявление глобальных внешних переменных */
-extern String device_name;
+extern String device_name, device_sn;
 extern uint16_t current_year;
 
 /* Объявление внешних методов */

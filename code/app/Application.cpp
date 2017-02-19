@@ -25,6 +25,7 @@
 #include "WebServer.h"
 #include "Scheduler.h"
 #include "WiFi.h"
+#include "UART.h"
 
 /* Ссылки на объекты классов */
 AirConditioner *aircond;
@@ -33,9 +34,11 @@ FileServer *ftpserver;
 WebServer *webserver;
 Scheduler *scheduler;
 WiFi *wifi;
+UART *uart;
 
 /* Объявление для глобальных внешних (extern) переменных */
 String device_name;
+String device_sn;
 uint16_t current_year;
 
 
@@ -43,19 +46,8 @@ void init()
 {
 	/* Основной метод */
 
-	// TODO: Добавить класс UART-интерфейса
 	/* Инициализация UART */
-	/* DEBUG */ Serial.begin(115200);
-	/* DEBUG */ Serial.systemDebugOutput(false);
-	/* DEBUG */ Serial.commandProcessing(false);
-
-	// TODO: Добавить установку режима сна в класс Wi-Fi модуля
-	/* Отключение сна для Wi-Fi модуля */
-	/* DEBUG */ wifi_set_sleep_type(NONE_SLEEP_T);
-
-	// TODO: Изучить доступные события Wi-Fi модуля
-	/* Класс событий Wi-Fi модуля */
-	/* DEBUG */ // WifiEvents
+	uart = new UART();
 
 	/* Установка рабочей частоты процессора на 160 МГц */
 	System.setCpuFrequency(eCF_160MHz);
@@ -74,10 +66,10 @@ void init()
 
 	/* Создание экземпляра класса и инициализация модуля планировщика */
 	scheduler = new Scheduler();
-	scheduler->setSettings(Settings.load(SYS_SETTINGS));
+	scheduler->setSettings(Settings.load(SCH_SETTINGS));
 
 	/* Инициализация модуля кондиционера */
-	aircond->setSettings(Settings.load(APP_SETTINGS));
+	aircond->setSettings(Settings.load(DEV_SETTINGS));
 
 	/* Создание экземпляра класса и инициализация Wi-Fi модуля */
 	wifi = new WiFi();
@@ -90,16 +82,16 @@ void init()
 	// TODO: Реализовать шифрование хранимых файлов конфигурации с помощью AES
 	/* Создание экземпляра класса и инициализация NTP-клиента */
 	ntpclient = new TimeClient();
-	ntpclient->setSettings(Settings.load(SYS_SETTINGS));
+	ntpclient->setSettings(Settings.load(NTP_SETTINGS));
 	ntpclient->ntpInit();
 
 	/* Создание экземпляра класса и инициализация FTP-сервера */
 	ftpserver = new FileServer();
-	ftpserver->setSettings(Settings.load(SEC_SETTINGS));
+	ftpserver->setSettings(Settings.load(FTP_SETTINGS));
 	ftpserver->ftpInit();
 
-	// TODO: Ознакомиться с SSL, доступным в Sming 2.1.5
 	// TODO: Реализовать шифрование передаваемых через WEB-сервер данных с помощью SSL или AES
+	// TODO: Реализовать websocket-клиент для обмена настройками между различными устройствами
 	/* Создание экземпляра класса и инициализация Web-сервера */
 	webserver = new WebServer(WEB_SERVER_PORT);
 
@@ -109,6 +101,7 @@ void init()
 };
 void vars_init() {
 	device_name = wifi->getDefaulDeviceName();
+	device_sn = wifi->getSN();
 	current_year = START_YEAR;
 }
 String getSysInfo() {
@@ -233,6 +226,14 @@ extern String processData(byte type, String data) {
 			wifi->setSettings(data);
 			wifi->applySettings();
 			break;
+		// Глобальный Backup/Restore настроек
+		case BAK_CFG:
+			message = webserver->onBackup();
+			break;
+		case RES_CFG:
+			webserver->onRestore(data);
+			break;
+		// DEBUG
 		case DBG_REQ:
 			message = debugMethod();
 			break;

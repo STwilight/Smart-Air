@@ -5,71 +5,92 @@
  *
  */
 
+#include "Application.h"
 #include <SmingCore/SmingCore.h>
 
 #ifndef APP_SETTINGS_H_
 #define APP_SETTINGS_H_
 
-/* Определения названий файлов с настройками */
-#define SYS_SETTINGS_FILE  ".system.conf"
-#define SEC_SETTINGS_FILE  ".security.conf"
-#define APP_SETTINGS_FILE  ".application.conf"
-#define WIFI_SETTINGS_FILE ".wireless.conf"
+/* Определения имен файлов с настройками */
+#define DEV_SETTINGS  ".device.conf"
+#define SCH_SETTINGS  ".scheduler.conf"
+#define FTP_SETTINGS  ".fileserver.conf"
+#define TCP_SETTINGS  ".tcpserver.conf"
+#define NTP_SETTINGS  ".ntpserver.conf"
+#define WIFI_SETTINGS ".wireless.conf"
 
-/* Определения типов настроек */
-#define SYS_SETTINGS  0x00
-#define SEC_SETTINGS  0x01
-#define APP_SETTINGS  0x02
-#define WIFI_SETTINGS 0x03
+/* Определение имени файла с комулятивного настройками */
+#define BAK_SETTINGS  ".backup"
 
 struct SettingsStorage
 {
 	/* Структура для выполнения сохранения и загрузки настроек в/из файла в формате JSON */
 
-	String load(byte type) {
+	String set_files[6] = {DEV_SETTINGS, SCH_SETTINGS, FTP_SETTINGS, TCP_SETTINGS, NTP_SETTINGS, WIFI_SETTINGS};
+
+	String load(String filename) {
 		/* Метод загрузки настроек в формате JSON */
 
-		String settings;
-
-		switch (type) {
-			case SYS_SETTINGS:
-				settings = readJSONFile(SYS_SETTINGS_FILE);
-				break;
-			case SEC_SETTINGS:
-				settings = readJSONFile(SEC_SETTINGS_FILE);
-				break;
-			case APP_SETTINGS:
-				settings = readJSONFile(APP_SETTINGS_FILE);
-				break;
-			case WIFI_SETTINGS:
-				settings = readJSONFile(WIFI_SETTINGS_FILE);
-				break;
-			default:
-				settings = "";
-				break;
-		}
-
-		return settings;
+		return readJSONFile(filename);
 	}
-	bool save(String settings, byte type) {
+	bool save(String settings, String filename) {
 		/* Метод сохранения настроек */
 
-		switch (type) {
-			case SYS_SETTINGS:
-				return writeJSONFile(settings, SYS_SETTINGS_FILE);
-				break;
-			case SEC_SETTINGS:
-				return writeJSONFile(settings, SEC_SETTINGS_FILE);
-				break;
-			case APP_SETTINGS:
-				return writeJSONFile(settings, APP_SETTINGS_FILE);
-				break;
-			case WIFI_SETTINGS:
-				return writeJSONFile(settings, WIFI_SETTINGS_FILE);
-				break;
-			default:
-				return false;
-				break;
+		return writeJSONFile(settings, filename);
+	}
+
+	String backup() {
+		/* Метод для сбора JSON-конфигураций из файлов в единый backup-файл */
+
+		DateTime currentDateTime = SystemClock.now(eTZ_UTC);
+		String file, timestamp;
+
+		timestamp.concat(currentDateTime.Year + "-");
+		timestamp.concat(currentDateTime.Month + "-");
+		timestamp.concat(currentDateTime.Day + ", ");
+		timestamp.concat(currentDateTime.Hour + ".");
+		timestamp.concat(currentDateTime.Minute + ".");
+		timestamp.concat(currentDateTime.Second);
+
+		file.concat(timestamp + "_" + BAK_SETTINGS);
+
+		DynamicJsonBuffer jsonBuffer;
+		JsonObject& root = jsonBuffer.createObject();
+
+		 JsonObject& info = jsonBuffer.createObject();
+		 	 root["info"] = info;
+		info["timestamp"] = timestamp;
+		 info["dev_name"] = device_name;
+		   info["dev_sn"] = device_sn;
+
+	 JsonObject& settings = jsonBuffer.createObject();
+		 root["settings"] = settings;
+
+		for(uint8_t i = 0; i < sizeof(set_files); i++) {
+			settings[set_files[i]] = readJSONFile(set_files[i]);
+		}
+
+		String jsonString;
+		root.printTo(jsonString);
+
+		writeJSONFile(jsonString, BAK_SETTINGS);
+
+		return file;
+	}
+	void restore(String filename) {
+		/* Метод для записи JSON-конфигурации из backup-файла в целевые файлы конфигураций модулей */
+
+		String data = readJSONFile(filename);
+
+		if(data.length() != 0) {
+			DynamicJsonBuffer jsonBuffer;
+			JsonObject& root = jsonBuffer.parseObject(data);
+
+			JsonObject& settings = root["settings"];
+
+			for(uint8_t i = 0; i < sizeof(set_files); i++) {
+				writeJSONFile(settings[set_files[i]].asString(), set_files[i]);
+			}
 		}
 	}
 

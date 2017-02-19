@@ -9,6 +9,7 @@
 #define APP_WEBSERVER_H_
 
 #include "Config.h"
+#include "Settings.h"
 #include "Application.h"
 #include <SmingCore/SmingCore.h>
 
@@ -31,13 +32,13 @@ private:
 	/* Метод для создания файла в случае его отсутствия */
 	static bool fileNotExist(String filename, bool createfile = true, bool deletezerofile = false);
 
-	/* Методы для выдачи/получения файла с текущей конфигурацией устройства */
-	static void onBackup(HttpRequest &request, HttpResponse &response);
-	static void onRestore(HttpRequest &request, HttpResponse &response);
-
 public:
 	/* Конструктор по-умолчанию */
 	WebServer(uint16_t port);
+
+	/* Методы для выдачи/получения файла с текущей конфигурацией устройства */
+	static String onBackup();
+	static void onRestore(String filename);
 };
 
 #endif /* APP_WEBSERVER_H_ */

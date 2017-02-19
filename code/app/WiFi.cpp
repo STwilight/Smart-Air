@@ -5,6 +5,8 @@
  *
  */
 
+// TODO: События Wi-Fi модуля на уровне Sming доступны через WifiEvents
+
 #include "WiFi.h"
 
 /* Декларирование static-переменных класса WiFi */
@@ -45,10 +47,15 @@ WiFi::WiFi() {
 	this->st_wifi_conn_timeout  = 20;
 	this->st_wifi_err			= false;
 	this->st_wifi_state			= On;
+
+	this->wifi_sleep_type		= NONE_SLEEP_T;
 }
 
 void WiFi::wifiInit() {
 	/* Метод инициализации Wi-Fi модуля */
+
+	/* Установка режима сна для Wi-Fi модуля */
+	wifi_set_sleep_type(this->wifi_sleep_type);
 
 	/* Настройка режима "Точка доступа Wi-Fi" */
 	WifiAccessPoint.setIP(IPAddress(this->ap_wifi_ip_address));
@@ -316,6 +323,11 @@ String WiFi::getHardwareInfo() {
 
 	return jsonString;
 }
+String WiFi::getSN() {
+	/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
+
+	return this->convertSN(this->getAccessPointMAC(true));
+}
 
 AUTH_MODE WiFi::convertStringToAuthMode(String data) {
 	/* Метод преобразования строки в тип шифрования точки доступа */
@@ -390,11 +402,6 @@ String WiFi::getStationMAC(bool raw) {
 		return rawMAC;
 	else
 		return convertMAC(rawMAC, true);
-}
-String WiFi::getSN() {
-	/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
-
-	return this->convertSN(this->getAccessPointMAC(true));
 }
 
 String WiFi::getDefaulDeviceName() {

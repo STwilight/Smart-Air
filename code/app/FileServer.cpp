@@ -60,5 +60,5 @@ void FileServer::applySettings() {
 void FileServer::onSystemRestart() {
 	/* Метод, выполняющий подготовку FTP модуля для перезагрузки системы */
 
-	Settings.save(this->getSettings(), SEC_SETTINGS);
+	Settings.save(this->getSettings(), FTP_SETTINGS);
 }

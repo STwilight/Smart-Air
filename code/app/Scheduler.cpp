@@ -91,7 +91,7 @@ void Scheduler::setSettings(String jsonString) {
 		this->time_to_hours		= settings["time_to_hours"];
 		this->time_to_mins		= settings["time_to_mins"];
 
-		Settings.save(this->getSettings(), APP_SETTINGS);
+		Settings.save(this->getSettings(), SCH_SETTINGS);
 	}
 }
 
@@ -107,6 +107,6 @@ void Scheduler::onSystemRestart() {
 	if(this->executeScheduler.isStarted())
 		this->executeScheduler.stop();
 
-	Settings.save(this->getSettings(), SYS_SETTINGS);
+	Settings.save(this->getSettings(), SCH_SETTINGS);
 }
 

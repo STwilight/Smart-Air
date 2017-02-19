@@ -43,6 +43,7 @@ private:
 	    /* Определение дополнительных значений */
 	    String default_device_name;
 	    static BssList networks;
+	    enum sleep_type wifi_sleep_type;
 
 		/* Методы перенастройки Wi-Fi модуля в зависимости от состояния подключения в режиме "Клиент Wi-Fi сети" */
 		static void wifiConnectOK();
@@ -65,9 +66,6 @@ private:
 
 		/* Метод для обработки результатов сканирования Wi-Fi сетей */
 		static void scanNetworks(bool succeeded, BssList list);
-
-		/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
-		String getSN();
 
 public:
 	  /* Конструктор для режимов "Точка доступа Wi-Fi" и "Клиент Wi-Fi сети".
@@ -115,6 +113,9 @@ public:
 
 		/* Метод получения информации об аппаратном обеспечении */
 		String getHardwareInfo();
+
+		/* Метод получения серийного номера Wi-Fi модуля на основе MAC адреса его точки доступа */
+		String getSN();
 
 		/* Метод получения имени устройства по-умолчанию (на основе MAC адреса его точки доступа ) */
 		String getDefaulDeviceName();

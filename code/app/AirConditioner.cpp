@@ -243,7 +243,7 @@ void AirConditioner::setSettings(String jsonString) {
 		else
 			this->delta_temp = delta_temp_def;
 
-		Settings.save(this->getSettings(), APP_SETTINGS);
+		Settings.save(this->getSettings(), DEV_SETTINGS);
 	}
 }
 
@@ -290,5 +290,5 @@ void AirConditioner::onSystemRestart() {
 	this->setSpeed(Stopped);
 	this->setPower(PowerOff);
 
-	Settings.save(this->getSettings(), APP_SETTINGS);
+	Settings.save(this->getSettings(), DEV_SETTINGS);
 }
