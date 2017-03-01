@@ -1,3 +1,4 @@
+var current_ssid;
 var output;
 
 function init() {
@@ -19,6 +20,7 @@ function startWebSocket() {
 function onOpen(evt) {
 	// Действие при установлении socket-соединения
 	websocket.send(JSON.stringify({type: 0x04}));
+	websocket.send(JSON.stringify({type: 0x07}));
 	websocket.send(JSON.stringify({type: 0x09}));
 }
 function onMessage(evt) {
@@ -44,6 +46,8 @@ function doDisconnect() {
 
 function processJSON(msg) {
 	// Метод обработки информации, полученной из JSON
+	var ssid_list = [];
+	var rssi_list = [];
 	var data = JSON.parse(msg);
 	for (var key in data) {
 		var val = data[key];
@@ -56,12 +60,36 @@ function processJSON(msg) {
 					else
 						document.getElementById("ap-wifi-off").checked = true;
 					break;
+				case "st_wifi_ssid":
+					current_ssid = subval;
+					break;
 				default:
 					if(document.getElementById(subkey) != null)
 						document.getElementById(subkey).value = subval;
+					else if(!isNaN(parseInt(subkey)) && isFinite(subkey)) {
+						ssid_list.push(subval["ssid"]);
+						rssi_list.push(subval["rssi"]);
+					}
 					break;
 			}
 		}
+	}
+	if(ssid_list.length != 0) {
+		var list = document.getElementById("st_wifi_ssid");
+		var index = 0;
+		var option;
+		while(list.length != 0)
+			list.remove(0);
+		for(var i=0; i<ssid_list.length; i++) {
+			option = document.createElement("option");
+			option.text = (ssid_list[i] + ", " + rssi_list[i] + " dBm");
+			list.add(option, list[i]);
+			if(ssid_list[i] == current_ssid)
+				index = i;
+		}
+		list.selectedIndex = index;
+		ssid_list = [];
+		rssi_list = [];
 	}
 }
 
@@ -115,6 +143,7 @@ function onApplyButton() {
 function onCancelButton() {
 	// Метод обработки данных при нажатии на кнопку "Cancel"
 	websocket.send(JSON.stringify({type: 0x04}));
+	websocket.send(JSON.stringify({type: 0x07}));
 	websocket.send(JSON.stringify({type: 0x09}));
 }
 

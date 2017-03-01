@@ -52,12 +52,12 @@
 								<label class="radio-inline"><input type="radio" id="ap-wifi-off" name="ap_wifi_state">Off</label>
 							</div>
 							<div class="form-inline">
-								<label for="mode">AP SSID:&nbsp;&nbsp;</label>
+								<label for="ap_wifi_ssid">AP SSID:&nbsp;&nbsp;</label>
 								<input type="text" id="ap_wifi_ssid" class="form-control" style="width: 170px" value="">
 							</div>
 							<div>&nbsp;</div>
 							<div class="form-inline">
-								<label for="mode">AP Password:&nbsp;&nbsp;</label>
+								<label for="ap_wifi_pwd">AP Password:&nbsp;&nbsp;</label>
 								<input type="password" id="ap_wifi_pwd" class="form-control" style="width: 127px" value="">
 							</div>
 						</h4>
@@ -68,15 +68,15 @@
 						<div class="panel-heading">
 							<h3 class="panel-title">Client mode</h3>
 						</div>
-						<h4 style="margin-left: 7%" class="panel-body">
-							<div class="form-inline">
-								<label for="mode">AP SSID:&nbsp;&nbsp;</label>
-								<input type="text" id="st_wifi_ssid" class="form-control" style="width: 107px" value="">
+						<h4 style="margin-left: 7%" class="panel-body">					
+							<div class="form-group">
+								<label for="st_wifi_ssid">AP SSID:&nbsp;&nbsp;</label>
+								<select id="st_wifi_ssid" class="form-control-inline" style="width: 107px">
+								</select>&nbsp;&nbsp;
 								<input type="button" class="btn btn-default" name="scan" value="Scan" onclick="onScanButton()">
 							</div>
-							<div>&nbsp;</div>
 							<div class="form-inline">
-								<label for="mode">AP Password:&nbsp;&nbsp;</label>
+								<label for="st_wifi_pwd">AP Password:&nbsp;&nbsp;</label>
 								<input type="password" id="st_wifi_pwd" class="form-control" style="width: 127px" value="">
 							</div>
 						</h4>
@@ -89,7 +89,7 @@
 						</div>
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-inline">
-								<label for="mode">Name:&nbsp;&nbsp;</label>
+								<label for="dev_name">Name:&nbsp;&nbsp;</label>&nbsp;&nbsp;
 								<input type="text" id="dev_name" class="form-control" style="width: 200px" value="">
 							</div>
 						</h4>
