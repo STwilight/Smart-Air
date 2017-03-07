@@ -17,6 +17,7 @@ class FileServer {
 private:
 	FTPServer ftpServer;
 
+	bool ftpServerEnabled;
 	String ftpServerName;
 	String ftpServerPass;
 	uint16_t ftpServerPort;

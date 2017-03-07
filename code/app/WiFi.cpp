@@ -114,6 +114,7 @@ String WiFi::wifiScan() {
 	/* Метод сканирования доступных точек доступа */
 
 	int counter = 0;
+
 	WifiStation.startScan(this->scanNetworks);
 
 	JsonObjectStream* stream = new JsonObjectStream();
@@ -129,8 +130,8 @@ String WiFi::wifiScan() {
 		{
 			  JsonObject &item = netlist.createNestedObject();
 					item["id"] = (int)networks[i].getHashId();
-				 item["ssid"] = networks[i].ssid;
-				item["rssi"] = networks[i].rssi;
+				  item["ssid"] = networks[i].ssid;
+				  item["rssi"] = networks[i].rssi;
 			item["encryption"] = networks[i].getAuthorizationMethodName();
 			counter++;
 		}

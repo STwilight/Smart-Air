@@ -10,16 +10,19 @@
 FileServer::FileServer() {
 	/* Конструктор по-умолчанию */
 
-	this->ftpServerName = DEFAULT_LOGIN;
-	this->ftpServerPass = DEFAULT_PASS;
-	this->ftpServerPort = FTP_SERVER_PORT;
+	this->ftpServerEnabled = true;
+	   this->ftpServerName = DEFAULT_LOGIN;
+	   this->ftpServerPass = DEFAULT_PASS;
+	   this->ftpServerPort = FTP_SERVER_PORT;
 }
 
 void FileServer::ftpInit() {
 	/* Метод инициализации и запуска FTP-сервера */
 
-	ftpServer.addUser(this->ftpServerName, this->ftpServerPass);
-	ftpServer.listen(this->ftpServerPort);
+	if(this->ftpServerEnabled) {
+		ftpServer.addUser(this->ftpServerName, this->ftpServerPass);
+		ftpServer.listen(this->ftpServerPort);
+	}
 }
 
 String FileServer::getSettings() {
@@ -31,8 +34,9 @@ String FileServer::getSettings() {
 		   JsonObject& ftp_server = jsonBuffer.createObject();
 			   root["ftp_server"] = ftp_server;
 
-	ftp_server["ftp_server_name"] = this->ftpServerName;
-	ftp_server["ftp_server_pass"] = this->ftpServerPass;
+	ftp_server["ftp_server_enabled"] = (bool) this->ftpServerEnabled;
+	   ftp_server["ftp_server_name"] = this->ftpServerName;
+	   ftp_server["ftp_server_pass"] = this->ftpServerPass;
 
 	String jsonString;
 	root.printTo(jsonString);
@@ -47,8 +51,9 @@ void FileServer::setSettings(String jsonString) {
 		JsonObject& root = jsonBuffer.parseObject(jsonString);
 
 		JsonObject& ftp_server = root["ftp_server"];
-		   this->ftpServerName = ftp_server["ftp_server_name"].asString();
-		   this->ftpServerPass = ftp_server["ftp_server_pass"].asString();
+		   this->ftpServerEnabled = ftp_server["ftp_server_enabled"];
+		      this->ftpServerName = ftp_server["ftp_server_name"].asString();
+		      this->ftpServerPass = ftp_server["ftp_server_pass"].asString();
 	}
 }
 void FileServer::applySettings() {
