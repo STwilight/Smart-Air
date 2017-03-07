@@ -101,12 +101,21 @@ bool Scheduler::getStatus() {
 	return this->schedule_triggered;
 }
 
-void Scheduler::onSystemRestart() {
-	/* Метод, выполняющий подготовку модуля планировщика для перезагрузки системы */
+void Scheduler::stopModule() {
+	/* Метод, выполняющий остановку процессов внутри модуля */
 
 	if(this->executeScheduler.isStarted())
 		this->executeScheduler.stop();
+}
+void Scheduler::saveConfig() {
+	/* Метод, выполняющий сохранение конфигурации модуля в файл */
 
 	Settings.save(this->getSettings(), SCH_SETTINGS);
+}
+void Scheduler::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля для перезагрузки системы */
+
+	this->stopModule();
+	this->saveConfig();
 }
 

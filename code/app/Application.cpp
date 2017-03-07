@@ -100,7 +100,9 @@ void init()
 	aircond->start();
 };
 void vars_init() {
-	device_name = wifi->getDefaulDeviceName();
+	setSysInfo(Settings.load(SYS_INFO));
+	if(device_name.length() == 0)
+		device_name = wifi->getDefaulDeviceName();
 	device_sn = wifi->getSN();
 	current_year = START_YEAR;
 }
@@ -127,7 +129,11 @@ void setSysInfo(String jsonString) {
 	if(jsonString.length() != 0) {
 		DynamicJsonBuffer jsonBuffer;
 		JsonObject& root = jsonBuffer.parseObject(jsonString);
-		device_name = root["dev_name"].asString();
+		if(root.containsKey("sys_info") && root.get("sys_info").size() != 0) {
+			JsonObject& sys_info = root["sys_info"];
+			if(sys_info.containsKey("dev_name"))
+				device_name = sys_info["dev_name"].asString();
+		}
 	}
 }
 String debugMethod() {
@@ -145,6 +151,25 @@ String debugMethod() {
 	return data;
 }
 
+extern void stopModules() {
+	/* Метод, вызываемый внешними модулями при необходимости остановки всех модулей */
+
+	aircond->stopModule();
+	scheduler->stopModule();
+	ntpclient->stopModule();
+	wifi->stopModule();
+	ftpserver->stopModule();
+}
+extern void saveConfigs() {
+	/* Метод, вызываемый внешними модулями при необходимости сохранения конфигурации всех модулей */
+
+	aircond->saveConfig();
+	scheduler->saveConfig();
+	ntpclient->saveConfig();
+	wifi->saveConfig();
+	ftpserver->saveConfig();
+	Settings.save(getSysInfo(), SYS_INFO);
+}
 extern void systemRestart() {
 	/* Метод, вызываемый внешними модулями при необходимости перезагрузки системы */
 
@@ -153,6 +178,7 @@ extern void systemRestart() {
 	ntpclient->onSystemRestart();
 	wifi->onSystemRestart();
 	ftpserver->onSystemRestart();
+	Settings.save(getSysInfo(), SYS_INFO);
 
 	spiffs_unmount();
 	System.restart();
@@ -226,7 +252,16 @@ extern String processData(byte type, String data) {
 			wifi->setSettings(data);
 			wifi->applySettings();
 			break;
-		// Глобальный Backup/Restore настроек
+		// Глобальный Backup/Restore настроек и остановка модулей
+		case SYS_RES:
+			systemRestart();
+			break;
+		case STP_ALL:
+			stopModules();
+			break;
+		case SAV_CFG:
+			saveConfigs();
+			break;
 		case BAK_CFG:
 			message = webserver->onBackup();
 			break;

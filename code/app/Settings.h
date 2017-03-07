@@ -12,12 +12,16 @@
 #define APP_SETTINGS_H_
 
 /* Определения имен файлов с настройками */
+#define SYS_INFO	  ".system.info"
 #define DEV_SETTINGS  ".device.conf"
 #define SCH_SETTINGS  ".scheduler.conf"
 #define FTP_SETTINGS  ".fileserver.conf"
 #define TCP_SETTINGS  ".tcpserver.conf"
 #define NTP_SETTINGS  ".ntpserver.conf"
 #define WIFI_SETTINGS ".wireless.conf"
+
+/* Определение размера массива для хранения имен файлов */
+#define FILES_COUNT   7
 
 /* Определение имени файла с комулятивного настройками */
 #define BAK_SETTINGS  ".backup"
@@ -26,7 +30,7 @@ struct SettingsStorage
 {
 	/* Структура для выполнения сохранения и загрузки настроек в/из файла в формате JSON */
 
-	String set_files[6] = {DEV_SETTINGS, SCH_SETTINGS, FTP_SETTINGS, TCP_SETTINGS, NTP_SETTINGS, WIFI_SETTINGS};
+	String set_files[FILES_COUNT] = {SYS_INFO, DEV_SETTINGS, SCH_SETTINGS, FTP_SETTINGS, TCP_SETTINGS, NTP_SETTINGS, WIFI_SETTINGS};
 
 	String load(String filename) {
 		/* Метод загрузки настроек в формате JSON */
@@ -42,17 +46,25 @@ struct SettingsStorage
 	String backup() {
 		/* Метод для сбора JSON-конфигураций из файлов в единый backup-файл */
 
+		String year, month, day, hour, minute, second, file, timestamp, content;
 		DateTime currentDateTime = SystemClock.now(eTZ_UTC);
-		String file, timestamp;
+		char buffer[5];
 
-		timestamp.concat(currentDateTime.Year + "-");
-		timestamp.concat(currentDateTime.Month + "-");
-		timestamp.concat(currentDateTime.Day + ", ");
-		timestamp.concat(currentDateTime.Hour + ".");
-		timestamp.concat(currentDateTime.Minute + ".");
-		timestamp.concat(currentDateTime.Second);
+		sprintf(buffer, "%04u", currentDateTime.Year);
+		year = buffer;
+		sprintf(buffer, "%02u", currentDateTime.Month);
+		month = buffer;
+		sprintf(buffer, "%02u", currentDateTime.Day);
+		day = buffer;
+		sprintf(buffer, "%02u", currentDateTime.Hour);
+		hour = buffer;
+		sprintf(buffer, "%02u", currentDateTime.Minute);
+		minute = buffer;
+		sprintf(buffer, "%02u", currentDateTime.Second);
+		second = buffer;
 
-		file.concat(timestamp + "_" + BAK_SETTINGS);
+		timestamp = year + "-" + month + "-" + day + ", " + hour + ":" + minute + ":" + second;
+			 file = "dev-" + device_sn + BAK_SETTINGS;
 
 		DynamicJsonBuffer jsonBuffer;
 		JsonObject& root = jsonBuffer.createObject();
@@ -66,14 +78,17 @@ struct SettingsStorage
 	 JsonObject& settings = jsonBuffer.createObject();
 		 root["settings"] = settings;
 
-		for(uint8_t i = 0; i < sizeof(set_files); i++) {
-			settings[set_files[i]] = readJSONFile(set_files[i]);
+		saveConfigs();
+
+		for(uint8_t i = 0; i < FILES_COUNT; i++) {
+			content = readJSONFile(set_files[i]);
+			settings[set_files[i]] = content;
 		}
 
 		String jsonString;
 		root.printTo(jsonString);
 
-		writeJSONFile(jsonString, BAK_SETTINGS);
+		writeJSONFile(jsonString, file);
 
 		return file;
 	}

@@ -488,8 +488,8 @@ String WiFi::convertSN(String macAddress)
 	return convertHEX(tmp);
 }
 
-void WiFi::onSystemRestart() {
-	/* Метод, выполняющий подготовку Wi-Fi модуля для перезагрузки системы */
+void WiFi::stopModule() {
+	/* Метод, выполняющий остановку процессов внутри модуля */
 
 	if(WifiAccessPoint.isEnabled())
 		WifiAccessPoint.enable(false);
@@ -497,6 +497,15 @@ void WiFi::onSystemRestart() {
 		WifiStation.disconnect();
 	if(WifiStation.isEnabled())
 		WifiStation.enable(false);
+}
+void WiFi::saveConfig() {
+	/* Метод, выполняющий сохранение конфигурации модуля в файл */
 
 	Settings.save(this->getSettings(), WIFI_SETTINGS);
+}
+void WiFi::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля для перезагрузки системы */
+
+	this->stopModule();
+	this->saveConfig();
 }

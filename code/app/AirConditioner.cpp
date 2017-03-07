@@ -281,14 +281,23 @@ String AirConditioner::getState() {
 	return jsonString;
 }
 
-void AirConditioner::onSystemRestart() {
-	/* Метод, выполняющий подготовку модуля кондиционера для перезагрузки системы */
+void AirConditioner::stopModule() {
+	/* Метод, выполняющий остановку процессов внутри модуля */
 
 	if(this->executeConditioner.isStarted())
 		this->executeConditioner.stop();
 
 	this->setSpeed(Stopped);
 	this->setPower(PowerOff);
+}
+void AirConditioner::saveConfig() {
+	/* Метод, выполняющий сохранение конфигурации модуля в файл */
 
 	Settings.save(this->getSettings(), DEV_SETTINGS);
+}
+void AirConditioner::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля для перезагрузки системы */
+
+	this->stopModule();
+	this->saveConfig();
 }

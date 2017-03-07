@@ -57,8 +57,19 @@ void FileServer::applySettings() {
 	systemRestart();
 }
 
-void FileServer::onSystemRestart() {
-	/* Метод, выполняющий подготовку FTP модуля для перезагрузки системы */
+void FileServer::stopModule() {
+	/* Метод, выполняющий остановку процессов внутри модуля */
+
+	// Тут нечего делать. Пока.
+}
+void FileServer::saveConfig() {
+	/* Метод, выполняющий сохранение конфигурации модуля в файл */
 
 	Settings.save(this->getSettings(), FTP_SETTINGS);
+}
+void FileServer::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля для перезагрузки системы */
+
+	this->stopModule();
+	this->saveConfig();
 }

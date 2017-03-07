@@ -40,6 +40,9 @@
 /* Определение типов команд для сохранения и восстановления конфигурации */
 #define BAK_CFG  0xA0
 #define RES_CFG  0xB0
+#define SAV_CFG  0xC0
+#define STP_ALL  0xD0
+#define SYS_RES  0xF0
 
 /* Определение типов команд для отладки */
 #define DBG_REQ	 0xFF

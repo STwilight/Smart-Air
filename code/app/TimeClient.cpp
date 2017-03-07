@@ -69,10 +69,19 @@ void TimeClient::applySettings() {
 	systemRestart();
 }
 
-void TimeClient::onSystemRestart() {
-	/* Метод, выполняющий подготовку NTP модуля для перезагрузки системы */
+void TimeClient::stopModule() {
+	/* Метод, выполняющий остановку процессов внутри модуля */
 
 	this->ntpClient->setAutoQuery(false);
+}
+void TimeClient::saveConfig() {
+	/* Метод, выполняющий сохранение конфигурации модуля в файл */
 
 	Settings.save(this->getSettings(), NTP_SETTINGS);
+}
+void TimeClient::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля для перезагрузки системы */
+
+	this->stopModule();
+	this->saveConfig();
 }

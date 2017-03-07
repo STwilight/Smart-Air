@@ -17,6 +17,8 @@ extern String device_name, device_sn;
 extern uint16_t current_year;
 
 /* Объявление внешних методов */
+extern void stopModules();
+extern void saveConfigs();
 extern void systemRestart();
 extern String processData(byte type, String data);
 extern bool getSchedulerStatus();

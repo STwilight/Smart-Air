@@ -124,7 +124,9 @@ function getDeviceNameSettings(type) {
 	// Получение настройки имени устройства в формате JSON-строки
 	var root = {};
 	root["type"] = type;
-	root["dev_name"] = document.getElementById("dev_name").value;
+	var sys_info = {};
+	sys_info["dev_name"] = document.getElementById("dev_name").value;
+	root["sys_info"] = sys_info;
 	return JSON.stringify(root);	
 }
 
