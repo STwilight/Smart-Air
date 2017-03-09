@@ -38,29 +38,48 @@
 			</div>
 			<div id="messages"></div>
 			<div class="row marketing">
-				<div class="col-lg-6">
+				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">Device</h3>
+							<h3 class="panel-title">Settings Backup & Restore</h3>
 						</div>
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-inline">
-								<label>Device FW:&nbsp;&nbsp;</label>
-								<span id="dev_fw" class="label label-default">N/A</span>
+								<label>Backup:&nbsp;&nbsp;</label>
+								<input type="button" class="btn btn-default" name="set_backup" value="Backup" onclick="onBackupButton()">
+							</div>
+							<div>&nbsp;</div>
+							<div class="form-inline">
+								<label>Restore:&nbsp;&nbsp;</label>
+								<select id="file_restore" class="form-control-inline" style="width: 107px"></select>&nbsp;
+								<input type="button" class="btn btn-default" name="set_restore" value="Restore" onclick="onRestoreButton()">
 							</div>
 						</h4>
 					</div>
 				</div>
-				<div class="col-lg-6">
+				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title">Update</h3>
+							<h3 class="panel-title">Firmware Update</h3>
 						</div>
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-inline">
 								<label>Firmware:&nbsp;&nbsp;</label>
-								<input type="url" id="fw_url" class="form-control" style="width: 300px">&nbsp;
+								<input type="url" id="fw_url" class="form-control" style="width: 100px">&nbsp;
 								<input type="button" class="btn btn-default" name="fw_update" value="Update" onclick="onUpdateButton()">
+							</div>
+						</h4>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">About Firmware</h3>
+						</div>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<div class="form-inline">
+								<label>FW version:&nbsp;&nbsp;</label>
+								<span id="dev_fw" class="label label-default">N/A</span>
 							</div>
 						</h4>
 					</div>
