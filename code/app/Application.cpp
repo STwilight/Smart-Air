@@ -189,7 +189,7 @@ extern String processData(byte type, String data) {
 	String message;
 
 	switch (type) {
-		// Получение настроек
+		// Получение настроек и параметров
 		case AIR_SET:
 			message = aircond->getSettings();
 			break;
@@ -212,7 +212,7 @@ extern String processData(byte type, String data) {
 			message = wifi->getHardwareInfo();
 			break;
 		case WIFI_NET:
-			message = wifi->wifiScan();
+			message = wifi->scanWiFiNetworks();
 			break;
 		case SCH_SET:
 			message = scheduler->getSettings();

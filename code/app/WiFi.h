@@ -43,6 +43,7 @@ private:
 	    /* Определение дополнительных значений */
 	    String default_device_name;
 	    static BssList networks;
+	    static String json_networks_string;
 	    enum sleep_type wifi_sleep_type;
 
 		/* Методы перенастройки Wi-Fi модуля в зависимости от состояния подключения в режиме "Клиент Wi-Fi сети" */
@@ -64,8 +65,11 @@ private:
 		String getAccessPointMAC(bool raw = false);
 		String getStationMAC(bool raw = false);
 
-		/* Метод для обработки результатов сканирования Wi-Fi сетей */
-		static void scanNetworks(bool succeeded, BssList list);
+		/* Метод обработки результатов сканирования доступных точек доступа */
+		static void processScanningResults(bool succeeded, BssList list);
+
+		/* Метод формирования JSON-строки со списком доступных точек доступа */
+		static String getWiFiNetworks();
 
 public:
 	  /* Конструктор для режимов "Точка доступа Wi-Fi" и "Клиент Wi-Fi сети".
@@ -124,7 +128,7 @@ public:
 		void wifiConnect(String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_autoconnect, bool store_settings);
 
 		/* Метод сканирования доступных точек доступа */
-		String wifiScan();
+		String scanWiFiNetworks(bool makeJSON = true);
 
 		/* Метод, выполняющий остановку процессов внутри модуля */
 		void stopModule();

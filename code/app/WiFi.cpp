@@ -18,6 +18,7 @@
 	   bool WiFi::ap_wifi_def_state;
 	   bool WiFi::st_wifi_err;
 	   BssList WiFi::networks;
+	    String WiFi::json_networks_string;
 
 WiFi::WiFi() {
 	/* Конструктор по-умолчанию */
@@ -65,8 +66,10 @@ void WiFi::wifiInit() {
 	}
 
 	/* Настройка режима "Клиент Wi-Fi сети" */
-	WifiStation.enable(this->st_wifi_state);
-	this->wifiConnect(this->st_wifi_ssid, this->st_wifi_pwd, this->st_wifi_autoconnect, false);
+	WifiStation.enable(On);
+	this->scanWiFiNetworks(false);
+	if(this->st_wifi_state)
+		this->wifiConnect(this->st_wifi_ssid, this->st_wifi_pwd, this->st_wifi_autoconnect, false);
 }
 
 void WiFi::wifiConnectOK() {
@@ -84,8 +87,12 @@ void WiFi::wifiConnectFail() {
 
 	WiFi::st_wifi_err = true;
 
-	if(WifiStation.isEnabled())
-		WifiStation.enable(Off);
+	if(WifiStation.isEnabled()) {
+		WifiStation.config("", "", false);
+		WifiStation.disconnect();
+	}
+	else
+		WifiStation.enable(On);
 
 	if(!WifiAccessPoint.isEnabled()) {
 		WifiAccessPoint.enable(On);
@@ -110,12 +117,37 @@ void WiFi::wifiConnect(String st_wifi_ssid, String st_wifi_pwd, bool st_wifi_aut
 	}
 }
 
-String WiFi::wifiScan() {
+String WiFi::scanWiFiNetworks(bool makeJSON) {
 	/* Метод сканирования доступных точек доступа */
 
-	int counter = 0;
+	if(!WifiStation.isEnabled())
+		WifiStation.enable(On);
 
-	WifiStation.startScan(this->scanNetworks);
+	WifiStation.startScan(this->processScanningResults);
+
+	if(makeJSON)
+		return this->json_networks_string;
+	else
+		return "";
+}
+void WiFi::processScanningResults(bool succeeded, BssList list) {
+	/* Метод обработки результатов сканирования доступных точек доступа */
+
+	if(succeeded)
+	{
+		for(int i=0; i<list.count(); i++)
+			if(!list[i].hidden && list[i].ssid.length()>0)
+				WiFi::networks.add(list[i]);
+	}
+	list.clear();
+	WiFi::networks.sort([](const BssInfo& a, const BssInfo& b) {
+		return b.rssi - a.rssi;
+	});
+	WiFi::json_networks_string = WiFi::getWiFiNetworks();
+	WiFi::networks.clear();
+}
+String WiFi::getWiFiNetworks() {
+	/* Метод формирования JSON-строки со списком доступных точек доступа */
 
 	JsonObjectStream* stream = new JsonObjectStream();
 	JsonObject& root = stream->getRoot();
@@ -133,27 +165,13 @@ String WiFi::wifiScan() {
 				  item["ssid"] = networks[i].ssid;
 				  item["rssi"] = networks[i].rssi;
 			item["encryption"] = networks[i].getAuthorizationMethodName();
-			counter++;
 		}
 	}
-	WiFi::networks.clear();
 
 	String jsonString;
 	root.printTo(jsonString);
 
 	return jsonString;
-}
-void WiFi::scanNetworks(bool succeeded, BssList list) {
-	if(succeeded)
-	{
-		for(int i=0; i<list.count(); i++)
-			if(!list[i].hidden && list[i].ssid.length()>0)
-				WiFi::networks.add(list[i]);
-	}
-	list.clear();
-	WiFi::networks.sort([](const BssInfo& a, const BssInfo& b) {
-		return b.rssi - a.rssi;
-	});
 }
 
 String WiFi::getSettings() {
