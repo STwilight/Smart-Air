@@ -40,7 +40,7 @@
 				<div class="alert alert-warning" role="alert">Changing of any services settings applies with reboot!</div>
 			</div>
 			<div class="row marketing">
-				<div class="col-lg-6">
+				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="panel-title">FTP Service</h3>
@@ -63,7 +63,7 @@
 						</h4>
 					</div>
 				</div>
-				<div class="col-lg-6">
+				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="panel-title">NTP Service</h3>
@@ -103,6 +103,23 @@
 									<option>UTC +11:00</option>
 									<option>UTC +12:00</option>
 								</select>
+							</div>
+						</h4>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Current Date and Time</h3>
+						</div>
+						<h4 style="margin-left: 7%" class="panel-body">
+							<div class="form-inline">
+								<p>Date and time: <span id="cur_datetime" class="label label-default">N/A</span></p><br>
+							</div>
+							<div class="form-inline">
+								<center>
+									<input type="button" class="btn btn-default" name="update" value="Update from NTP" onclick="onUpdateButton()">
+								</center>
 							</div>
 						</h4>
 					</div>

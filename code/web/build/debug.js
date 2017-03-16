@@ -51,7 +51,6 @@ function doDisconnect() {
 	var disconnect = document.getElementById("disconnect");
 	disconnect.disabled = true;
 	websocket.close();
-	writeToScreen('<span style="color: red; font-weight: bold;">DISCONNECTED.</span>');
 }
 
 function writeToScreen(message) {

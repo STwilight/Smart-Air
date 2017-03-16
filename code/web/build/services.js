@@ -21,6 +21,7 @@ function onOpen(evt) {
 	// Действие при установлении socket-соединения
 	websocket.send(JSON.stringify({type: 0x02}));
 	websocket.send(JSON.stringify({type: 0x03}));
+	websocket.send(JSON.stringify({type: 0xE0}));
 }
 function onMessage(evt) {
 	// Действие при получении информации в текстовом виде
@@ -66,6 +67,9 @@ function processJSON(msg) {
 				case "ntp_request_interval":
 					ntp_request_interval = subval;
 					break;
+				case "cur_datetime":
+					document.getElementById(subkey).innerHTML = subval;
+					break;
 				default:
 					if(document.getElementById(subkey) != null)
 						document.getElementById(subkey).value = subval;
@@ -103,6 +107,10 @@ function getFTPSettings(type) {
 	return JSON.stringify(root);	
 }
 
+function onUpdateButton() {
+	// Метод обработки данных при нажатии на кнопку "Update"
+	websocket.send(JSON.stringify({type: 0xE0}));
+}
 function onSaveButton() {
 	// Метод обработки данных при нажатии на кнопку "Save"
 	websocket.send(getNTPSettings(0x12));

@@ -30,6 +30,9 @@ public:
 	/* Метод инициализации системных часов и запуска NTP-клиента */
 	void ntpInit();
 
+	/* Метод синхронизации времени */
+	String syncTime();
+
 	/* Методы получения и сохранения конфигурации */
 	String getSettings();
 	void setSettings(String settings);

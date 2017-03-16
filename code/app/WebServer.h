@@ -39,6 +39,12 @@ public:
 	/* Методы для выдачи/получения файла с текущей конфигурацией устройства */
 	static String onBackup();
 	static void onRestore(String filename);
+
+	/* Метод, выполняющий остановку процессов внутри модуля */
+	void stopModule();
+
+	/* Метод, выполняющий подготовку модуля для перезагрузки системы */
+	void onSystemRestart();
 };
 
 #endif /* APP_WEBSERVER_H_ */

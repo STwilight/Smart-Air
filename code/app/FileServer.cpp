@@ -65,7 +65,7 @@ void FileServer::applySettings() {
 void FileServer::stopModule() {
 	/* Метод, выполняющий остановку процессов внутри модуля */
 
-	// Тут нечего делать. Пока.
+	ftpServer.close();
 }
 void FileServer::saveConfig() {
 	/* Метод, выполняющий сохранение конфигурации модуля в файл */

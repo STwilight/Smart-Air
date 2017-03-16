@@ -136,29 +136,16 @@ void setSysInfo(String jsonString) {
 		}
 	}
 }
-String debugMethod() {
-	/* Метод для выполнения отладки */
-
-	DateTime currentDateTime = SystemClock.now(eTZ_UTC);
-
-	String data = "Time is ";
-	data.concat(currentDateTime.Hour);
-	data.concat(":");
-	data.concat(currentDateTime.Minute);
-	data.concat(", day of week is ");
-	data.concat(currentDateTime.DayofWeek);
-
-	return data;
-}
 
 extern void stopModules() {
 	/* Метод, вызываемый внешними модулями при необходимости остановки всех модулей */
 
 	aircond->stopModule();
 	scheduler->stopModule();
+	webserver->stopModule();
+	ftpserver->stopModule();
 	ntpclient->stopModule();
 	wifi->stopModule();
-	ftpserver->stopModule();
 }
 extern void saveConfigs() {
 	/* Метод, вызываемый внешними модулями при необходимости сохранения конфигурации всех модулей */
@@ -168,6 +155,7 @@ extern void saveConfigs() {
 	ntpclient->saveConfig();
 	wifi->saveConfig();
 	ftpserver->saveConfig();
+
 	Settings.save(getSysInfo(), SYS_INFO);
 }
 extern void systemRestart() {
@@ -175,9 +163,11 @@ extern void systemRestart() {
 
 	aircond->onSystemRestart();
 	scheduler->onSystemRestart();
+	webserver->onSystemRestart();
+	ftpserver->onSystemRestart();
 	ntpclient->onSystemRestart();
 	wifi->onSystemRestart();
-	ftpserver->onSystemRestart();
+
 	Settings.save(getSysInfo(), SYS_INFO);
 
 	spiffs_unmount();
@@ -253,9 +243,6 @@ extern String processData(byte type, String data) {
 			wifi->applySettings();
 			break;
 		// Глобальный Backup/Restore настроек и остановка модулей
-		case SYS_RES:
-			systemRestart();
-			break;
 		case STP_ALL:
 			stopModules();
 			break;
@@ -268,10 +255,14 @@ extern String processData(byte type, String data) {
 		case RES_CFG:
 			webserver->onRestore(data);
 			break;
-		// DEBUG
-		case DBG_REQ:
-			message = debugMethod();
+		// Запрос текущего времени и перезагрузка модуля
+		case NTP_REQ:
+			message = ntpclient->syncTime();
 			break;
+		case SYS_RES:
+			systemRestart();
+			break;
+		// Действие по-умолчанию
 		default:
 			message = "";
 			break;

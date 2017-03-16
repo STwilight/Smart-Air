@@ -148,3 +148,14 @@ void WebServer::onRestore(String filename) {
 
 	Settings.restore(filename);
 }
+
+void WebServer::stopModule() {
+	/* Метод, выполняющий остановку процессов внутри модуля */
+
+	webServer.close();
+}
+void WebServer::onSystemRestart() {
+	/* Метод, выполняющий подготовку модуля для перезагрузки системы */
+
+	this->stopModule();
+}

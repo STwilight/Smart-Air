@@ -32,6 +32,43 @@ void TimeClient::updateSystemClock(NtpClient& client, time_t timestamp) {
 	current_year = currentDateTime.Year;
 }
 
+String TimeClient::syncTime() {
+	/* Метод синхронизации времени */
+
+	String year, month, day, hour, minute, second, timestamp, jsonString;
+	DateTime currentDateTime = SystemClock.now(eTZ_UTC);
+	char buffer[5];
+
+	sprintf(buffer, "%04u", currentDateTime.Year);
+	year = buffer;
+	sprintf(buffer, "%02u", currentDateTime.Month);
+	month = buffer;
+	sprintf(buffer, "%02u", currentDateTime.Day);
+	day = buffer;
+	sprintf(buffer, "%02u", currentDateTime.Hour);
+	hour = buffer;
+	sprintf(buffer, "%02u", currentDateTime.Minute);
+	minute = buffer;
+	sprintf(buffer, "%02u", currentDateTime.Second);
+	second = buffer;
+
+	timestamp = day + "." + month + "." + year + ", " + hour + ":" + minute + ":" + second;
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+	JsonObject& info = jsonBuffer.createObject();
+		root["info"] = info;
+
+	info["cur_datetime"] = timestamp;
+
+	root.printTo(jsonString);
+
+	ntpClient->requestTime();
+
+	return jsonString;
+}
+
 String TimeClient::getSettings() {
 	/* Получение конфигурации NTP-клиента в формате JSON-строки */
 

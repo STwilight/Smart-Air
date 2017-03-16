@@ -510,12 +510,12 @@ String WiFi::convertSN(String macAddress)
 void WiFi::stopModule() {
 	/* Метод, выполняющий остановку процессов внутри модуля */
 
-	if(WifiAccessPoint.isEnabled())
-		WifiAccessPoint.enable(false);
 	if(WifiStation.isConnected())
 		WifiStation.disconnect();
 	if(WifiStation.isEnabled())
 		WifiStation.enable(false);
+	if(WifiAccessPoint.isEnabled())
+		WifiAccessPoint.enable(false);
 }
 void WiFi::saveConfig() {
 	/* Метод, выполняющий сохранение конфигурации модуля в файл */
