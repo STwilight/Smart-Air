@@ -14,7 +14,7 @@
 				font-size: 24px;
 			}		
 		</style>
-		<script src="about.js"></script>
+		<script src="update.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -25,7 +25,7 @@
 						<li role="presentation"><a href="config">Configuration</a></li>
 						<li role="presentation"><a href="network">Network</a></li>
 						<li role="presentation"><a href="services">Services</a></li>
-						<li role="presentation"><a href="security">Security</a></li>
+						<!-- <li role="presentation"><a href="security">Security</a></li> -->
 						<li role="presentation" class="active"><a href="update">Update</a></li>
 						<li role="presentation"><a href="about">About</a></li>
 					</ul>
@@ -65,8 +65,8 @@
 						<h4 style="margin-left: 7%" class="panel-body">
 							<div class="form-inline">
 								<label>Firmware:&nbsp;&nbsp;</label>
-								<input type="url" id="fw_url" class="form-control" style="width: 100px">&nbsp;
-								<input type="button" class="btn btn-default" name="fw_update" value="Update" onclick="onUpdateButton()">
+								<input type="url" id="fw_url" class="form-control" style="width: 100px" disabled>&nbsp;
+								<input type="button" class="btn btn-default" name="fw_update" value="Update" onclick="onUpdateButton()" disabled>
 							</div>
 						</h4>
 					</div>

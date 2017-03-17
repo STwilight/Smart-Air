@@ -40,6 +40,7 @@
 /* Определение типов команд для сохранения и восстановления конфигурации */
 #define BAK_CFG  0xA0
 #define RES_CFG  0xB0
+#define FSF_LST  0xB1
 #define SAV_CFG  0xC0
 #define STP_ALL  0xD0
 

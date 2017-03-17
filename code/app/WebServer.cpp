@@ -143,10 +143,18 @@ String WebServer::onBackup() {
 
 	return file;
 }
-void WebServer::onRestore(String filename) {
+void WebServer::onRestore(String jsonString) {
 	/* Метод для получения файла с конфигурацией устройства */
 
-	Settings.restore(filename);
+	if(jsonString.length() != 0) {
+		DynamicJsonBuffer jsonBuffer;
+		JsonObject& root = jsonBuffer.parseObject(jsonString);
+		if(root.containsKey("res_file") && root.get("res_file").size() != 0) {
+			JsonObject& res_file = root["res_file"];
+			if(res_file.containsKey("file_name") && ((String) res_file.get("file_name").asString()).length() !=0)
+				Settings.restore(res_file["file_name"].asString());
+		}
+	}
 }
 
 void WebServer::stopModule() {

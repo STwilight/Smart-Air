@@ -38,7 +38,7 @@ public:
 
 	/* Методы для выдачи/получения файла с текущей конфигурацией устройства */
 	static String onBackup();
-	static void onRestore(String filename);
+	static void onRestore(String jsonString);
 
 	/* Метод, выполняющий остановку процессов внутри модуля */
 	void stopModule();

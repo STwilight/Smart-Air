@@ -103,7 +103,7 @@ struct SettingsStorage
 
 			JsonObject& settings = root["settings"];
 
-			for(uint8_t i = 0; i < sizeof(set_files); i++) {
+			for(uint8_t i = 0; i < FILES_COUNT; i++) {
 				writeJSONFile(settings[set_files[i]].asString(), set_files[i]);
 			}
 		}

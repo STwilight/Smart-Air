@@ -30,6 +30,9 @@ void vars_init();
 String getSysInfo();
 void setSysInfo(String jsonString);
 
+/* Метод получения списка файлов для восстановления конфигурации */
+String getRestoreFilesList();
+
 /* Отладочный метод */
 String debugMethod();
 

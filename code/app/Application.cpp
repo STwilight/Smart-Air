@@ -106,6 +106,7 @@ void vars_init() {
 	device_sn = wifi->getSN();
 	current_year = START_YEAR;
 }
+
 String getSysInfo() {
 	/* Метод применения конфигурации системы */
 
@@ -135,6 +136,29 @@ void setSysInfo(String jsonString) {
 				device_name = sys_info["dev_name"].asString();
 		}
 	}
+}
+
+String getRestoreFilesList() {
+	/* Метод получения списка файлов для восстановления конфигурации */
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+
+  JsonObject& files = jsonBuffer.createObject();
+	  root["files"] = files;
+
+	Vector<String> files_list = fileList();
+
+	for(uint8_t i=0,j=0; i<files_list.count(); i++)
+		if(files_list.at(i).endsWith(BAK_SETTINGS)) {
+			files[(String) j] = files_list.at(i);
+			j++;
+		}
+
+	String jsonString;
+	root.printTo(jsonString);
+
+	return jsonString;
 }
 
 extern void stopModules() {
@@ -173,6 +197,13 @@ extern void systemRestart() {
 	spiffs_unmount();
 	System.restart();
 }
+
+extern bool getSchedulerStatus() {
+	/* Метод, вызываемый внешним модулем при необходимости получения флага срабатывания расписания планировщика */
+
+	return scheduler->getStatus();
+}
+
 extern String processData(byte type, String data) {
 	/* Метод, вызываемый внешними модулями при необходимости получения/установки настроек в формате JSON */
 
@@ -255,6 +286,9 @@ extern String processData(byte type, String data) {
 		case RES_CFG:
 			webserver->onRestore(data);
 			break;
+		case FSF_LST:
+			message = getRestoreFilesList();
+			break;
 		// Запрос текущего времени и перезагрузка модуля
 		case NTP_REQ:
 			message = ntpclient->syncTime();
@@ -269,9 +303,4 @@ extern String processData(byte type, String data) {
 	}
 
 	return message;
-}
-extern bool getSchedulerStatus() {
-	/* Метод, вызываемый внешним модулем при необходимости получения флага срабатывания расписания планировщика */
-
-	return scheduler->getStatus();
 }
