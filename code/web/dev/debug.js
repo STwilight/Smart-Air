@@ -39,6 +39,13 @@ function onClose(evt) {
 	writeToScreen('<span style="color: red; font-weight: bold;">DISCONNECTED.</span>');
 }
 
+function openURL() {
+	// Метод для открытия ссылки в новой вкладке
+	
+	var url = "http://" + location.host + "/dev-8732131.backup";
+	var win = window.open(url, '_blank');
+	win.focus();
+}
 function doSend(message) {
 	// Метод отправки информации в текстовом виде
 	
